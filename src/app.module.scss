@@ -1,0 +1,25 @@
+.nav {
+    height: 80px;
+    background: #f0f0f0;
+
+    > ul {
+        display: block;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        display: flex;
+
+        > li {
+            display: block;
+
+            > a {
+                display: flex;
+                align-items: center;
+                height: 100%;
+                padding: 0 20px;
+            }
+        }
+    }
+}

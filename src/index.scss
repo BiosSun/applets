@@ -1,0 +1,12 @@
+@import '~normalize.css/normalize.css';
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+body {
+    font: 14px/20px sans-serif;
+    color: #333;
+}

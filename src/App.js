@@ -1,26 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import JSSizeView from 'views/js-size'
+import QRCodeView from 'views/qrcode'
+
+import styles from 'app.module.scss'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <Router>
+            <div>
+                <nav className={styles.nav}>
+                    <ul>
+                        <li>
+                            <Link to="/">Home</Link>
+                        </li>
+                        <li>
+                            <Link to="/js-size">JS Size</Link>
+                        </li>
+                        <li>
+                            <Link to="/qrcode">QRCode</Link>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <Switch>
+                <Route path="/js-size">
+                    <JSSizeView />
+                </Route>
+                <Route path="/qrcode">
+                    <QRCodeView />
+                </Route>
+                <Route path="/">
+                    <p>一套简单的在线小工具</p>
+                </Route>
+            </Switch>
+        </Router>
+    )
 }
 
-export default App;
+export default App
