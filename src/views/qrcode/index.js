@@ -6,6 +6,11 @@ import styles from './index.module.scss'
 export default function QRCodeView() {
     const [text, setText] = useState('')
 
+    function handleTextareaChange(e) {
+        const text = (e.target.value || '').trim();
+        setText(text);
+    }
+
     return (
         <>
             <h1>QRCode</h1>
@@ -14,7 +19,7 @@ export default function QRCodeView() {
                 <textarea
                     className={styles.textarea}
                     value={text}
-                    onChange={e => setText(e.target.value)}
+                    onChange={handleTextareaChange}
                     placeholder="请输入文本"
                 />
                 {text ? <QRCode className={styles.qrcode} value={text} size={256} /> : null}
