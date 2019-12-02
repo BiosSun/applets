@@ -1,21 +1,26 @@
 .container {
     display: flex;
+}
 
-    .textarea {
-        flex: 0 0 50%;
-        max-width: 50%;
-        min-width: 50%;
-        height: 256px;
-        padding: 12px;
+.textarea {
+    flex: 0 0 50%;
+    max-width: 50%;
+    min-width: 50%;
+    height: 256px;
+    padding: 12px;
 
-        font-size: 14px;
-        line-height: 24px;
-        font-family: monospace;
+    font-size: 14px;
+    line-height: 24px;
+    font-family: monospace;
 
-        word-break: break-all;
-    }
+    word-break: break-all;
+}
 
-    .qrcode {
-        margin-left: 20px;
-    }
+.qrcode,
+.dangerMessage {
+    margin-left: 20px;
+}
+
+.dangerMessage {
+    color: #b00;
 }
