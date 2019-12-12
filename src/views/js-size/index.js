@@ -40,7 +40,7 @@ export default function JSSizeView() {
     return (
         <>
             <h1>JS Size</h1>
-            <p>该工具用于计算某个 JS 文件的源文件大小，压缩后大小及 gzip 之后的大小</p>
+            <p>计算某段 JS 代码的源文件大小，压缩后大小及 gzip 之后的大小</p>
             <SizesInfo sourceCode={sourceCode} minifiedCode={minifiedCode} />
             <div className={styles.codeareas}>
                 <div className={styles.codearea}>

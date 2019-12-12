@@ -16,7 +16,7 @@ export default function QRCodeView() {
     return (
         <>
             <h1>QRCode</h1>
-            <p>该工具用于生成一个二维码</p>
+            <p>生成一个二维码</p>
             <div className={styles.container}>
                 <Input value={text} onChange={setText} height={size} />
                 <Display value={payload} size={size} />
