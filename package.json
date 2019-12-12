@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "classnames": "^2.2.6",
+    "lodash": "^4.17.15",
     "nojiko": "^1.1.1",
     "normalize.css": "^8.0.1",
     "pako": "^1.0.10",
@@ -10,8 +12,11 @@
     "react-dom": "^16.10.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.1.2",
+    "react-textarea-autosize": "^7.1.2",
+    "react-use": "^13.12.2",
     "terser": "^4.4.1",
-    "uglify-js": "^3.6.0"
+    "uglify-js": "^3.6.0",
+    "urijs": "^1.19.2"
   },
   "scripts": {
     "start": "react-app-rewired start",

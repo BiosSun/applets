@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import JSSizeView from 'views/js-size'
 import QRCodeView from 'views/qrcode'
+import URLView from 'views/url'
 
 import styles from 'app.module.scss'
 
@@ -20,6 +21,9 @@ function App() {
                         <li>
                             <Link to="/qrcode">QRCode</Link>
                         </li>
+                        <li>
+                            <Link to="/url">URL</Link>
+                        </li>
                     </ul>
                 </nav>
             </div>
@@ -30,6 +34,9 @@ function App() {
                 </Route>
                 <Route path="/qrcode">
                     <QRCodeView />
+                </Route>
+                <Route path="/url">
+                    <URLView />
                 </Route>
                 <Route path="/">
                     <p>一套简单的在线小工具</p>
