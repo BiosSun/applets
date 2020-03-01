@@ -21,14 +21,13 @@
         border-left: 1px solid #ddd;
     }
 
-    .input,
-    .textarea {
-        border: 0;
-        background: transparent;
-    }
-
     .fieldName {
         width: 200px;
+    }
+
+    .fieldContent {
+        display: flex;
+        width: 100%;
     }
 
     .emptyFieldItem {
@@ -90,13 +89,17 @@
 }
 
 .input {
+    flex: 1 1 0;
+
     display: block;
 
     width: 100%;
+    min-width: 0;
     height: 40px;
     padding: 8px;
 
-    border: 1px solid #ddd;
+    border: 0;
+    background: transparent;
 
     font-size: 14px;
     line-height: 20px;
@@ -104,15 +107,17 @@
 }
 
 .textarea {
+    flex: 1 1 0;
+
     display: block;
 
     width: 100%;
-    max-width: 100%;
-    min-width: 100%;
-
+    min-width: 0;
     height: 122px;
     padding: 12px;
-    border: 1px solid #ddd;
+
+    border: 0;
+    background: transparent;
 
     font-size: 14px;
     line-height: 24px;
@@ -120,6 +125,44 @@
 
     word-break: break-all;
     resize: none;
+}
+
+.qrcode {
+    position: relative;
+
+    &Button {
+        width: 80px;
+        height: 40px;
+
+        background: transparent;
+        border: 0;
+
+        color: #999;
+
+        &:hover {
+            color: #333;
+        }
+
+        &:disabled {
+            color: #ddd;
+        }
+    }
+
+    &Popover {
+        display: none;
+
+        position: absolute;
+        top: 40px;
+        right: 0;
+
+        padding: 10px;
+        background: #fff;
+        border: 1px solid #ddd;
+    }
+
+    &Button:focus + &Popover {
+        display: block;
+    }
 }
 
 .json {

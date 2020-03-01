@@ -3,6 +3,7 @@ import TextareaAutosize from 'react-textarea-autosize'
 import _ from 'lodash'
 import classnames from 'classnames'
 import URI from 'urijs'
+import QRCode from 'qrcode.react'
 import { useUpdate } from 'react-use'
 
 import styles from './index.module.scss'
@@ -36,7 +37,20 @@ export default function URLView() {
                             getValue={() => uri.toString()}
                             onChange={set}
                             textarea
-                        />
+                        >
+                            <div className={styles.qrcode}>
+                                <button className={styles.qrcodeButton} disabled={!uri.toString()}>
+                                    二维码
+                                </button>
+                                <div className={styles.qrcodePopover}>
+                                    <QRCode
+                                        className={styles.qrcodePayload}
+                                        value={uri.toString()}
+                                        size={300}
+                                    />
+                                </div>
+                            </div>
+                        </Field>
                     </thead>
                     <tbody>
                         <Field indent={1} name="origin" uri={uri} onChange={set} />
@@ -109,6 +123,7 @@ function Field({
     textarea,
     indent,
     invisibleFieldName,
+    children,
 }) {
     const [focused, setFocus] = useState(false)
     const [value, setValue] = useState('')
@@ -147,13 +162,16 @@ function Field({
     return (
         <tr className={className}>
             <th className={styles.fieldName}>{!invisibleFieldName ? `${name}:` : ' '}</th>
-            <td className={styles.fieldContent}>
-                <Control
-                    value={value}
-                    onChange={handleChange}
-                    onFocus={() => setFocus(true)}
-                    onBlur={() => setFocus(false)}
-                />
+            <td>
+                <div className={styles.fieldContent}>
+                    <Control
+                        value={value}
+                        onChange={handleChange}
+                        onFocus={() => setFocus(true)}
+                        onBlur={() => setFocus(false)}
+                    />
+                    {children}
+                </div>
                 {error ? <span className={styles.errorMessage}>{error.message}</span> : null}
             </td>
         </tr>
