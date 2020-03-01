@@ -58,7 +58,7 @@
         .input,
         .textarea {
             color: #b13333;
-           
+
             &::placeholder {
                 color: #f19999;
             }
@@ -119,6 +119,7 @@
     font-family: monospace;
 
     word-break: break-all;
+    resize: none;
 }
 
 .json {
