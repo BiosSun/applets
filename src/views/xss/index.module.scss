@@ -1,0 +1,18 @@
+.container {
+    height: 100%;
+}
+
+.originalTextarea {
+    display: block;
+    resize: none;
+}
+
+.transformedTextarea {
+    display: block;
+    resize: none;
+}
+
+.previewPanel {
+    background: #f0f1f2;
+    overflow: auto;
+}

@@ -1,11 +1,4 @@
-.container {
-    display: flex;
-}
-
 .textarea {
-    flex: 0 0 50%;
-    max-width: 50%;
-    min-width: 50%;
     height: 256px;
     padding: 12px;
 
@@ -14,11 +7,8 @@
     font-family: monospace;
 
     word-break: break-all;
-}
 
-.qrcode,
-.dangerMessage {
-    margin-left: 20px;
+    resize: none;
 }
 
 .dangerMessage {

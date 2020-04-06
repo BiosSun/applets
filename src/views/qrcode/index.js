@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import clsx from 'clsx'
+import { VLinear, HLinear } from '@biossun/nami'
 import QRCode from 'qrcode.react'
 
 import styles from './index.module.scss'
@@ -14,21 +16,21 @@ export default function QRCodeView() {
     const size = isShort ? 256 : 512
 
     return (
-        <>
+        <VLinear className={styles.container} padding="large" spacing>
             <h1>QRCode</h1>
             <p>生成一个二维码</p>
-            <div className={styles.container}>
-                <Input value={text} onChange={setText} height={size} />
+            <HLinear spacing>
+                <Input $col={12} value={text} onChange={setText} height={size} />
                 <Display value={payload} size={size} />
-            </div>
-        </>
+            </HLinear>
+        </VLinear>
     )
 }
 
-function Input({ value, onChange, height }) {
+function Input({ value, onChange, height, className }) {
     return (
         <textarea
-            className={styles.textarea}
+            className={clsx(className, styles.textarea)}
             value={value}
             onChange={e => onChange(e.target.value)}
             placeholder="请输入文本"
@@ -37,12 +39,12 @@ function Input({ value, onChange, height }) {
     )
 }
 
-function Display({ value, size }) {
+function Display({ value, size, className }) {
     if (!value) {
         return null
     } else if (value.length > MAX_TEXT_LENGTH) {
-        return <span className={styles.dangerMessage}>不可超过 1024 个字符</span>
+        return <span className={clsx(className, styles.dangerMessage)}>不可超过 1024 个字符</span>
     } else {
-        return <QRCode className={styles.qrcode} value={value} size={size} />
+        return <QRCode className={clsx(className, styles.qrcode)} value={value} size={size} />
     }
 }
