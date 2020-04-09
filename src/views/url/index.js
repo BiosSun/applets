@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
-import clsx from 'clsx'
-import { VLinear, HLinear } from '@biossun/nami'
+import React, { useState, useEffect, useCallback } from 'react'
+import { VLinear } from '@biossun/nami'
 import TextareaAutosize from 'react-textarea-autosize'
 import _ from 'lodash'
 import classnames from 'classnames'
@@ -77,19 +76,6 @@ export default function URLView() {
     )
 }
 
-function ArrayField({ name, uri, onChange, ...otherProps }) {
-    return (
-        <Field
-            name={name}
-            uri={uri}
-            onChange={onChange}
-            parse={(value) => value.split(',').map((item) => _.trim(item))}
-            serialize={(value) => value.join(', ')}
-            {...otherProps}
-        />
-    )
-}
-
 function SearchField({ uri, onChange, ...otherProps }) {
     return (
         <Field
@@ -138,7 +124,7 @@ function Field({
 
         setValue(currentValue)
         setError(null)
-    }, [currentValue])
+    }, [focused, currentValue])
 
     function handleChange(value) {
         setValue(value)
