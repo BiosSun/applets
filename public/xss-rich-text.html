@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>XSS Rich Text</title>
+        <style>
+            body {
+                margin: 0;
+            }
+
+            #container {
+                box-sizing: border-box;
+                padding: 10px;
+                min-height: 100vh;
+            }
+
+            #container:empty:after {
+                content: '在这里查看处理后的结果';
+                color: #999;
+            }
+
+            #container[contentEditable]:empty:after {
+                content: '你可以直接复制网页、Word文档或其它富文本内容并粘贴在这里（如果支持的话）';
+                color: #999;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container"></div>
+        <script>
+            ;(() => {
+                const containerEl = document.getElementById('container')
+                const readOnly = new URL(window.location.href).searchParams.get('readonly') === '1'
+
+                let source
+                let origin
+
+                if (readOnly) {
+                    containerEl.contentEditable = 'true'
+
+                    containerEl.addEventListener('input', () => {
+                        source.postMessage({ value: containerEl.innerHTML }, origin)
+                    })
+                }
+
+                window.addEventListener('message', function (e) {
+                    source = e.source
+                    origin = e.origin
+
+                    const activeElement = document.activeElement
+
+                    if (activeElement !== containerEl && !containerEl.contains(activeElement)) {
+                        const { value } = e.data
+                        containerEl.innerHTML = value
+                    }
+                })
+            })()
+        </script>
+    </body>
+</html>

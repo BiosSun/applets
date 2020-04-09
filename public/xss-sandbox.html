@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>XSS Code Eval</title>
+    </head>
+    <body>
+        <script src="https://unpkg.com/xss@1.0.6/dist/xss.js"></script>
+        <script>
+            window.addEventListener('message', function (e) {
+                const mainWindow = e.source
+                let transformedHTML
+                let error
+
+                try {
+                    const { optionsCode, originalHTML } = e.data
+                    const options = eval(`( ${(optionsCode || '').trim()} )`)
+
+                    transformedHTML = filterXSS(originalHTML, options)
+                } catch (e) {
+                    error = e.message
+                }
+
+                e.source.postMessage(
+                    {
+                        type: 'xss-sandbox-result',
+                        transformedHTML,
+                        error,
+                    },
+                    e.origin,
+                )
+            })
+        </script>
+    </body>
+</html>

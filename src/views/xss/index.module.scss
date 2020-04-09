@@ -1,18 +1,23 @@
 .container {
     flex: 1 1 auto;
+
+    :global {
+        .nami-divider {
+            --nami-divider--color: #333;
+            position: relative;
+        }
+    }
 }
 
-.originalTextarea {
-    display: block;
-    resize: none;
-}
-
+.originalTextarea,
 .transformedTextarea {
     display: block;
     resize: none;
+    border: 0;
 }
 
-.previewPanel {
-    background: #f0f1f2;
+.originalRichTextPanel,
+.transformedRichTextPanel {
+    background: #f7f8fa;
     overflow: auto;
 }
