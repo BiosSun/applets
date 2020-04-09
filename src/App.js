@@ -5,6 +5,7 @@ import QRCodeView from 'views/qrcode'
 import { VLinear } from '@biossun/nami'
 import URLView from 'views/url'
 import XSSView from 'views/xss'
+import JSONView from 'views/json'
 
 import styles from 'app.module.scss'
 
@@ -27,6 +28,9 @@ function App() {
                             <Link to="/url">URL</Link>
                         </li>
                         <li>
+                            <Link to="/json">JSON</Link>
+                        </li>
+                        <li>
                             <Link to="/xss">XSS</Link>
                         </li>
                     </ul>
@@ -41,6 +45,9 @@ function App() {
                     </Route>
                     <Route path="/url">
                         <URLView />
+                    </Route>
+                    <Route path="/json">
+                        <JSONView />
                     </Route>
                     <Route path="/xss">
                         <XSSView />

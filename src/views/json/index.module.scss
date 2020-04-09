@@ -1,0 +1,73 @@
+.container {
+    flex: 1 1 auto;
+}
+
+.input {
+    display: block;
+    padding: 0px;
+    border: 0;
+    background: transparent;
+    font-size: 13px;
+    line-height: 23px;
+    font-family: monospace;
+    resize: none;
+    opacity: 0.3;
+    word-break: break-all;
+
+    &:focus {
+        outline: 0;
+        opacity: 1;
+    }
+}
+
+.dangerMessage {
+    color: #b00;
+    background: #fff0f0;
+}
+
+.display {
+    font-size: 13px;
+    line-height: 23px;
+    font-family: monospace;
+}
+
+// json items
+// ---------------------------
+
+.items {
+    padding-left: 4em;
+}
+
+.item {
+    &:not(:last-child):after {
+        content: ','
+    }
+}
+
+.array > .bracket {
+    color: #a40000;
+}
+
+.object > .bracket {
+    color: #729fcf;
+}
+
+.property {
+    color: #204a87;
+}
+
+.string {
+    color: #4e9a06;
+}
+
+.number {
+    color: #ad7fa8;
+}
+
+.null {
+    color: #babdb6;
+}
+
+.boolean {
+    color: #c4a000;
+}
