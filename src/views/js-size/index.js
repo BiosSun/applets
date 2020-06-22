@@ -4,10 +4,10 @@ import FileSize from 'components/file-size'
 import styles from './index.module.scss'
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import UglifyWorker from 'workerize-loader!./uglify-worker'
+import UglifyWorker from 'workerize-loader?inline!./uglify-worker'
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import FileSizeWorker from 'workerize-loader!./file-size-worker'
+import FileSizeWorker from 'workerize-loader?inline!./file-size-worker'
 
 const uglifyWorker = UglifyWorker()
 const fileSizeWorker = FileSizeWorker()
