@@ -2,7 +2,7 @@ import React, { useRef, lazy, Suspense } from 'react'
 import ReactResizeDetector from 'react-resize-detector'
 
 const MonacoEditor = lazy(() =>
-    import(/* webpackChunkName: "venders_react-monaco-editor" */ 'react-monaco-editor'),
+    import(/* webpackChunkName: "venders_react-monaco-editor", webpackPreload: true */ 'react-monaco-editor'),
 )
 
 export default function FlexibleMonocoEditor({

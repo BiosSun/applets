@@ -4,12 +4,12 @@ import { VLinear } from '@biossun/nami'
 
 import styles from 'app.module.scss'
 
-const JSSizeView = lazy(() => import(/* webpackChunkName: "views_js-size" */ './views/js-size'))
-const QRCodeView = lazy(() => import(/* webpackChunkName: "views_qrcode" */ './views/qrcode'))
-const URLView = lazy(() => import(/* webpackChunkName: "views_url" */ './views/url'))
-const XSSView = lazy(() => import(/* webpackChunkName: "views_xss" */ './views/xss'))
-const JSONView = lazy(() => import(/* webpackChunkName: "views_json" */ './views/json'))
-const TimeView = lazy(() => import(/* webpackChunkName: "views_json" */ './views/time'))
+const JSSizeView = lazy(() => import(/* webpackChunkName: "views_js-size", webpackPrefetch: true */ './views/js-size'))
+const QRCodeView = lazy(() => import(/* webpackChunkName: "views_qrcode", webpackPrefetch: true */ './views/qrcode'))
+const URLView = lazy(() => import(/* webpackChunkName: "views_url", webpackPrefetch: true */ './views/url'))
+const XSSView = lazy(() => import(/* webpackChunkName: "views_xss", webpackPrefetch: true */ './views/xss'))
+const JSONView = lazy(() => import(/* webpackChunkName: "views_json", webpackPrefetch: true */ './views/json'))
+const TimeView = lazy(() => import(/* webpackChunkName: "views_json", webpackPrefetch: true */ './views/time'))
 
 function App() {
     return (
