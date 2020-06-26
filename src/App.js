@@ -9,6 +9,7 @@ const QRCodeView = lazy(() => import(/* webpackChunkName: "views_qrcode" */ './v
 const URLView = lazy(() => import(/* webpackChunkName: "views_url" */ './views/url'))
 const XSSView = lazy(() => import(/* webpackChunkName: "views_xss" */ './views/xss'))
 const JSONView = lazy(() => import(/* webpackChunkName: "views_json" */ './views/json'))
+const TimeView = lazy(() => import(/* webpackChunkName: "views_json" */ './views/time'))
 
 function App() {
     return (
@@ -32,6 +33,9 @@ function App() {
                             <Link to="/json">JSON</Link>
                         </li>
                         <li>
+                            <Link to="/time">Time</Link>
+                        </li>
+                        <li>
                             <Link to="/xss">XSS</Link>
                         </li>
                     </ul>
@@ -50,6 +54,9 @@ function App() {
                         </Route>
                         <Route path="/json">
                             <JSONView />
+                        </Route>
+                        <Route path="/time">
+                            <TimeView />
                         </Route>
                         <Route path="/xss">
                             <XSSView />

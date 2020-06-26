@@ -1,0 +1,21 @@
+.input {
+    height: 44px;
+    padding: 0 12px;
+}
+
+.label {
+    font-family: Hack, Monaco, 'Courier New', monospace, 'Apple Color Emoji';
+    min-height: 32px;
+    line-height: 32px;
+
+    &Title {
+        width: 140px;
+        text-align: right;
+    }
+
+    &PreValue {
+        white-space: pre;
+        line-height: 22px;
+        padding: 5px 0;
+    }
+}
