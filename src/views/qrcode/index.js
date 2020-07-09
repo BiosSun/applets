@@ -1,15 +1,16 @@
-import React, { useState } from 'react'
+import React from 'react'
 import clsx from 'clsx'
 import { VLinear, HLinear } from '@biossun/nami'
 import QRCode from 'qrcode.react'
 
 import styles from './index.module.scss'
+import useLocalState from 'utils/use-local-state'
 
 const MAX_TEXT_LENGTH = 1024
 const LONG_TEXT = 256
 
 export default function QRCodeView() {
-    const [text, setText] = useState('')
+    const [text, setText] = useLocalState('QRCode/text', '')
 
     const payload = text.trim()
     const isShort = payload.length < LONG_TEXT

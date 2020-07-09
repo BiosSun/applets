@@ -1,34 +1,22 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import { CheckBox, VLinear, HLinear, Divider, Button, Space } from '@biossun/nami'
 import { html as HTMLBeautify } from 'js-beautify'
 import useSandbox from './use-sandbox'
 import FlexibleMonacoEditor from './flexible-monaco-editor'
 import RichTextEditor from './rich-text-editor'
-import localStorage from '../../utils/local-storage'
 import styles from './index.module.scss'
 
 import DEFAULT_OPTIONS from './default-options-code'
-
-function useOptionsCode() {
-    const [optionsCode, setOptionsCode] = useState(() => {
-        return localStorage.get('xss/optionsCode', DEFAULT_OPTIONS)
-    })
-
-    useEffect(() => {
-        localStorage.set('xss/optionsCode', optionsCode)
-    }, [optionsCode])
-
-    return [optionsCode, setOptionsCode]
-}
+import useLocalState from 'utils/use-local-state'
 
 export default function XSSView() {
-    const [isEnabledXSS, setEnabledXSS] = useState(true)
-    const [isEnabledBeautify, setEnabledBeautify] = useState(false)
+    const [isEnabledXSS, setEnabledXSS] = useLocalState('XSS/isEnabledXSS', true)
+    const [isEnabledBeautify, setEnabledBeautify] = useLocalState('XSS/isEnabledBeautify', false)
     const [isDisplayOptionsEditer, setDisplayOptionsEditer] = useState(false)
-    const [optionsCode, setOptionsCode] = useOptionsCode()
-    const [originalHTML, setOriginalHTML] = useState('')
+    const [optionsCode, setOptionsCode] = useLocalState('XSS/optionsCode', DEFAULT_OPTIONS)
+    const [originalHTML, setOriginalHTML] = useLocalState('XSS/originalHTML', '')
 
-    const [xssedHTML, transformError] = useSandbox(originalHTML, optionsCode)
+    const [xssedHTML] = useSandbox(originalHTML, optionsCode)
 
     const transformedHTML = useMemo(() => {
         if (isEnabledBeautify) {
@@ -113,14 +101,6 @@ export default function XSSView() {
                             onChange={setOriginalHTML}
                         />
 
-                        {/* <div
-                            $flex
-                            className={styles.originalRichTextPanel}
-                            contentEditable
-                            onInput={handleOriginalRichTextChange}
-                            dangerouslySetInnerHTML={{ __html: originalHTML }}
-                        /> */}
-
                         <Divider />
 
                         <RichTextEditor
@@ -128,12 +108,6 @@ export default function XSSView() {
                             className={styles.transformedRichTextPanel}
                             value={transformedHTML}
                         />
-
-                        {/* <div
-                            $flex
-                            className={styles.transformedRichTextPanel}
-                            dangerouslySetInnerHTML={{ __html: transformedHTML }}
-                        /> */}
 
                         <Divider />
                     </VLinear>

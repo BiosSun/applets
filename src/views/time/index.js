@@ -1,10 +1,11 @@
-import React, { useState, useMemo, Fragment } from 'react'
+import React, { useMemo } from 'react'
 import clsx from 'clsx'
 import { VLinear, HLinear, Divider } from '@biossun/nami'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
 
 import styles from './index.module.scss'
+import useLocalState from 'utils/use-local-state'
 
 moment.locale('zh-cn')
 
@@ -20,7 +21,7 @@ export default function TimeView() {
 }
 
 function Time({ ...otherProps }) {
-    const [str, setStr] = useState('')
+    const [str, setStr] = useLocalState('Time/time', '')
 
     const time = useMemo(() => {
         const value = str.trim()
@@ -80,7 +81,7 @@ function Time({ ...otherProps }) {
 }
 
 function Duration({ ...otherProps }) {
-    const [str, setStr] = useState('')
+    const [str, setStr] = useLocalState('Time/duration', '')
 
     const duration = useMemo(() => {
         const value = str.trim()

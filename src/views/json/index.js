@@ -1,14 +1,16 @@
-import React, { useState, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import clsx from 'clsx'
 import { VLinear, HLinear, Divider } from '@biossun/nami'
 import _ from 'lodash'
 
 import styles from './index.module.scss'
+import useLocalState from 'utils/use-local-state'
+
+const DEFAULT_TEXT =
+    '{"ID":null,"name":"Doe","first-name":"John","age":25,"hobbies":["reading","cinema",{"sports":["volley-ball","badminton"]}],"address":{}}'
 
 export default function JSONView() {
-    const [text, setText] = useState(
-        '{"ID":null,"name":"Doe","first-name":"John","age":25,"hobbies":["reading","cinema",{"sports":["volley-ball","badminton"]}],"address":{}}',
-    )
+    const [text, setText] = useLocalState('JSON/text', DEFAULT_TEXT)
 
     return (
         <VLinear className={styles.container} padding="large" spacing>

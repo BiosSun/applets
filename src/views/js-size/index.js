@@ -8,12 +8,13 @@ import UglifyWorker from 'workerize-loader?inline!./uglify-worker'
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import FileSizeWorker from 'workerize-loader?inline!./file-size-worker'
+import useLocalState from 'utils/use-local-state'
 
 const uglifyWorker = UglifyWorker()
 const fileSizeWorker = FileSizeWorker()
 
 export default function JSSizeView() {
-    const [sourceCode, setSourceCode] = useState('')
+    const [sourceCode, setSourceCode] = useLocalState('JSSize/sourceCode', '')
     const [minifiedCode, setMinifiedCode] = useState('')
 
     const [minifiedError, setMinifiedError] = useState(null)
@@ -24,11 +25,11 @@ export default function JSSizeView() {
 
         uglifyWorker
             .minify(sourceCode)
-            .then(code => {
+            .then((code) => {
                 setMinifiedCode(code)
                 setMinifiedError(null)
             })
-            .catch(error => {
+            .catch((error) => {
                 setMinifiedCode('')
                 setMinifiedError(error)
             })
@@ -48,7 +49,7 @@ export default function JSSizeView() {
                     <textarea
                         value={sourceCode}
                         className={styles.code}
-                        onChange={e => setSourceCode(e.target.value)}
+                        onChange={(e) => setSourceCode(e.target.value)}
                         placeholder="请输入或粘贴 JS 源代码"
                     />
                 </div>

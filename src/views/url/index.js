@@ -8,10 +8,22 @@ import QRCode from 'qrcode.react'
 import { useUpdate } from 'react-use'
 
 import styles from './index.module.scss'
+import useLocalState from 'utils/use-local-state'
+
+// -----------------------------------------------------------------------------
+// - test data:
+//     https://biossun:password@www.biossun.xyz:80/docs/javascript/index.html?keyword=typescript&starttime=1995&endtime=2020#history
+// -----------------------------------------------------------------------------
 
 export default function URLView() {
     const update = useUpdate()
-    const [uri, setURI] = useState(() => URI(''))
+
+    const [uri, setURI] = useLocalState(
+        'URL/uri',
+        '',
+        (uri) => uri.toString(),
+        (str) => URI(str),
+    )
 
     const set = useCallback(
         function set(field, value) {
