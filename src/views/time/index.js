@@ -51,27 +51,27 @@ function Time({ ...otherProps }) {
                 <span>无效的时间</span>
             ) : (
                 <VLinear spacing>
-                    <Label key="unix" title="format">
+                    <Label title="format">
                         {time.format('YYYY-MM-DD ddd HH:mm:ss:SSS Z (DDDo wo)')}
                     </Label>
                     <Divider />
-                    <Label key="unix" title="ISO8601">
+                    <Label title="ISO8601">
                         {time.toISOString(true)}
                     </Label>
-                    <Label key="unix" title="ISO8601 (UTC)">
+                    <Label title="ISO8601 (UTC)">
                         {time.toISOString()}
                     </Label>
-                    <Label key="from-now" title="From Now">
+                    <Label title="From Now">
                         {time.fromNow()}
                     </Label>
-                    <Label key="unix" title="Unix">
+                    <Label title="Unix">
                         {time.valueOf()} <em>({time.unix()})</em>
                     </Label>
                     <Divider />
-                    <Label key="array" title="Array">
+                    <Label title="Array">
                         {JSON.stringify(time.toArray(), null, 4)}
                     </Label>
-                    <Label key="array" title="Object" pre>
+                    <Label title="Object" pre>
                         {JSON.stringify(time.toObject(), null, 4)}
                     </Label>
                 </VLinear>
@@ -111,30 +111,30 @@ function Duration({ ...otherProps }) {
                 <span>无效的时间</span>
             ) : (
                 <VLinear spacing>
-                    <Label key="unix" title="Humanize">
+                    <Label title="Humanize">
                         {duration.humanize()}
                     </Label>
                     <Divider />
-                    <Label key="unix" title="Years">
+                    <Label title="Years">
                         {duration.years()} <em>( as {Math.floor(duration.asYears())} )</em>
                     </Label>
-                    <Label key="unix" title="Months">
+                    <Label title="Months">
                         {duration.months()} <em>( as {Math.floor(duration.asMonths())} )</em>
                     </Label>
-                    <Label key="unix" title="Weeks">
+                    <Label title="Weeks">
                         {duration.weeks()} <em>( as {Math.floor(duration.asWeeks())} )</em>
                     </Label>
-                    <Label key="unix" title="Days">
+                    <Label title="Days">
                         {duration.days()} <em>( as {Math.floor(duration.asDays())} )</em>
                     </Label>
                     <Divider />
-                    <Label key="unix" title="Hours">
+                    <Label title="Hours">
                         {duration.hours()} <em>( as {Math.floor(duration.asHours())} )</em>
                     </Label>
-                    <Label key="unix" title="seconds">
+                    <Label title="seconds">
                         {duration.seconds()} <em>( as {Math.floor(duration.asSeconds())} )</em>
                     </Label>
-                    <Label key="unix" title="Milliseconds">
+                    <Label title="Milliseconds">
                         {duration.milliseconds()}{' '}
                         <em>( as {Math.floor(duration.asMilliseconds())} )</em>
                     </Label>
