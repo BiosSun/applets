@@ -2,12 +2,9 @@ import React, { useMemo } from 'react'
 import clsx from 'clsx'
 import { VLinear, HLinear, Divider } from '@biossun/nami'
 import moment from 'moment'
-import 'moment/locale/zh-cn'
 
 import styles from './index.module.scss'
 import useLocalState from 'utils/use-local-state'
-
-moment.locale('zh-cn')
 
 export default function TimeView() {
     return (
