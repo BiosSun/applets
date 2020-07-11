@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import { VLinear } from '@biossun/nami'
+import Loading from './components/loading'
 
 import styles from 'app.module.scss'
 
@@ -45,7 +46,7 @@ function App() {
                     </ul>
                 </nav>
 
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense fallback={<Loading />}>
                     <Switch>
                         <Route path="/js-size">
                             <JSSizeView />
