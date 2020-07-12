@@ -4,7 +4,7 @@
 
 .input {
     display: block;
-    padding: 0px;
+    padding: 20px;
     border: 0;
     background: transparent;
     font-size: 13px;
@@ -26,30 +26,87 @@
 }
 
 .display {
+    padding: 20px;
     font-size: 13px;
     line-height: 23px;
     font-family: monospace;
+    overflow: auto;
 }
 
 // json items
 // ---------------------------
 
 .items {
-    padding-left: 4em;
+    padding-left: 2.44em;
 }
 
 .item {
+    word-break: break-all;
+
     &:not(:last-child):after {
-        content: ','
+        content: ',';
     }
 }
 
-.array > .bracket {
-    color: #a40000;
+.array {
+    --bracket-color: #a40000;
 }
 
-.object > .bracket {
-    color: #729fcf;
+.object {
+    --bracket-color: #729fcf;
+}
+
+.array,
+.object {
+    > .length {
+        display: inline;
+    }
+
+    > .items {
+        display: none;
+    }
+
+    &.expand {
+        > .length {
+            display: none;
+        }
+
+        > .items {
+            display: block;
+        }
+    }
+}
+
+.bracket {
+    color: var(--bracket-color);
+}
+
+.leftBracket {
+    position: relative;
+    cursor: pointer;
+
+    &:after {
+        content: '';
+        position: absolute;
+        top: -3px;
+        bottom: -3px;
+        left: -7px;
+        right: -50px;
+    }
+
+    &:hover {
+        font-weight: 700;
+
+        ~ .items {
+            box-shadow: inset 1px 0 0 var(--bracket-color);
+            background: #f0f1f3;
+        }
+
+        ~ .length,
+        ~ .bracket {
+            font-weight: 700;
+        }
+    }
 }
 
 .property {
