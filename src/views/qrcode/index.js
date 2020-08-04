@@ -1,6 +1,8 @@
 import React from 'react'
 import clsx from 'clsx'
 import { VLinear, HLinear } from '@biossun/nami'
+import TextareaAutosize from 'react-textarea-autosize'
+import ReactResizeDetector from 'react-resize-detector'
 import QRCode from 'qrcode.react'
 
 import styles from './index.module.scss'
@@ -21,21 +23,21 @@ export default function QRCodeView() {
             <h1>QRCode</h1>
             <p>生成一个二维码</p>
             <HLinear spacing>
-                <Input $col={12} value={text} onChange={setText} height={size} />
+                <Input value={text} onChange={setText} />
                 <Display value={payload} size={size} />
             </HLinear>
         </VLinear>
     )
 }
 
-function Input({ value, onChange, height, className }) {
+function Input({ value, onChange, className }) {
     return (
-        <textarea
+        <TextareaAutosize
             className={clsx(className, styles.textarea)}
             value={value}
-            onChange={e => onChange(e.target.value)}
+            onChange={(e) => onChange(e.target.value)}
             placeholder="请输入文本"
-            style={{ height }}
+            minRows={5}
         />
     )
 }
@@ -46,6 +48,23 @@ function Display({ value, size, className }) {
     } else if (value.length > MAX_TEXT_LENGTH) {
         return <span className={clsx(className, styles.dangerMessage)}>不可超过 1024 个字符</span>
     } else {
-        return <QRCode className={clsx(className, styles.qrcode)} value={value} size={size} />
+        return (
+            <ReactResizeDetector handleHeight>
+                {({ width, height }) => {
+                    console.info(width, height)
+
+                    return (
+                        <VLinear>
+                            <QRCode
+                                $flex
+                                className={clsx(className, styles.qrcode)}
+                                value={value}
+                                size={height}
+                            />
+                        </VLinear>
+                    )
+                }}
+            </ReactResizeDetector>
+        )
     }
 }

@@ -41,7 +41,7 @@
         "react-resize-detector": "^4.2.1",
         "react-router-dom": "^5.1.2",
         "react-scripts": "^3.4.1",
-        "react-textarea-autosize": "^7.1.2",
+        "react-textarea-autosize": "^8.2.0",
         "react-use": "^13.12.2",
         "terser": "^4.4.1",
         "uglify-js": "^3.6.0",
