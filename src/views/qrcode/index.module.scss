@@ -1,3 +1,62 @@
+.track {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.addButton {
+    padding: 4px 8px;
+    background: transparent;
+    border: 0;
+    color: var(--link-color);
+    align-self: flex-end;
+
+    &:hover {
+        text-decoration: underline;
+    }
+
+    &:focus {
+        outline: none;
+        background: var(--background-color-quiet);
+    }
+
+    &:active {
+        color: var(--link-focus-color);
+    }
+}
+
+.card {
+    &DeleteButton {
+        padding: 4px 8px;
+        background: transparent;
+        border: 0;
+        color: var(--link-color);
+
+        &:not(:disabled) {
+            &:hover {
+                text-decoration: underline;
+            }
+
+            &:focus {
+                outline: none;
+                background: var(--background-color-quiet);
+            }
+
+            &:active {
+                color: var(--link-focus-color);
+            }
+        }
+
+        &:disabled {
+            color: #ddd;
+        }
+    }
+}
+
+.qrcodePlaceholder {
+    background: var(--background-color-loud);
+}
+
 .textarea {
     width: 360px;
     padding: 12px;

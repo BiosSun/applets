@@ -28,6 +28,7 @@
         "@biossun/nami": "^0.2.0",
         "classnames": "^2.2.6",
         "clsx": "^1.1.0",
+        "immer": "^7.0.7",
         "js-beautify": "^1.11.0",
         "localforage": "^1.7.4",
         "lodash": "^4.17.15",
@@ -46,6 +47,7 @@
         "terser": "^4.4.1",
         "uglify-js": "^3.6.0",
         "urijs": "^1.19.2",
+        "uuid": "^8.3.0",
         "xss": "^1.0.6"
     },
     "devDependencies": {

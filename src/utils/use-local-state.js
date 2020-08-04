@@ -28,7 +28,7 @@ class LocalState {
                 return null
             })
             .then((value) => {
-                value = value ?? this.defaultValue
+                value = value ?? this._getDefaultValue()
 
                 if (this.deserialize) {
                     value = this.deserialize(value)
@@ -56,6 +56,11 @@ class LocalState {
         localforage.setItem(this.key, this.serialize ? this.serialize(value) : value)
 
         this.forceUpdateComponent()
+    }
+
+    _getDefaultValue() {
+        const { defaultValue } = this
+        return typeof defaultValue === 'function' ? defaultValue() : defaultValue
     }
 }
 
