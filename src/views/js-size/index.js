@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
+import clsx from 'clsx'
+import { VLinear, HLinear, Divider } from '@biossun/nami'
 import FileSize from 'components/file-size'
 
 import styles from './index.module.scss'
@@ -39,41 +41,49 @@ export default function JSSizeView() {
     }, [sourceCode])
 
     return (
-        <>
-            <h1>JS Size</h1>
-            <p>计算某段 JS 代码的源文件大小，压缩后大小及 gzip 之后的大小</p>
-            <SizesInfo sourceCode={sourceCode} minifiedCode={minifiedCode} />
-            <div className={styles.codeareas}>
-                <div className={styles.codearea}>
+        <VLinear className={styles.container} spacing>
+            <VLinear spacing className={styles.header}>
+                <h1>JS Size</h1>
+                <p>计算某段 JS 代码的源文件大小，压缩后大小及 gzip 之后的大小</p>
+                <SizesInfo sourceCode={sourceCode} minifiedCode={minifiedCode} />
+            </VLinear>
+
+            <HLinear $flex className={styles.codeareas}>
+                <VLinear $flex className={styles.codearea}>
                     <strong className={styles.title}>Source Code</strong>
+                    <Divider />
                     <textarea
+                        $flex
                         value={sourceCode}
                         className={styles.code}
                         onChange={(e) => setSourceCode(e.target.value)}
                         placeholder="请输入或粘贴 JS 源代码"
                     />
-                </div>
-                <div className={styles.codearea}>
+                </VLinear>
+                <Divider />
+                <VLinear $flex className={styles.codearea}>
                     <strong className={styles.title}>Minified Code</strong>
+                    <Divider />
                     {isMinifying ? (
                         <textarea
+                            $flex
                             value={''}
                             className={styles.minCode}
                             placeholder="代码压缩中…"
                             readOnly
                         />
                     ) : !minifiedError ? (
-                        <textarea value={minifiedCode} className={styles.minCode} readOnly />
+                        <textarea $flex value={minifiedCode} className={styles.minCode} readOnly />
                     ) : (
-                        <ParseErrorInfo error={minifiedError} />
+                        <ParseErrorInfo $flex error={minifiedError} />
                     )}
-                </div>
-            </div>
-        </>
+                </VLinear>
+            </HLinear>
+        </VLinear>
     )
 }
 
-function SizesInfo({ sourceCode, minifiedCode }) {
+function SizesInfo({ className, sourceCode, minifiedCode, ...otherProps }) {
     const [sourceCodeSize, setSourceCodeSize] = useState({ original: 0, gzip: 0 })
     const [minifiedCodeSize, setMinifiedCodeSize] = useState({ original: 0, gzip: 0 })
 
@@ -96,7 +106,7 @@ function SizesInfo({ sourceCode, minifiedCode }) {
     }, [minifiedCode])
 
     return (
-        <>
+        <VLinear className={className} {...otherProps}>
             <dl className={styles.sizes}>
                 <dt>Source Code Size</dt>
                 <dd>
@@ -117,11 +127,11 @@ function SizesInfo({ sourceCode, minifiedCode }) {
                     <FileSize bytes={minifiedCodeSize.gzip} />
                 </dd>
             </dl>
-        </>
+        </VLinear>
     )
 }
 
-function ParseErrorInfo({ error }) {
+function ParseErrorInfo({ className, error, ...otherProps }) {
     const info = useMemo(() => {
         const message = error.message
 
@@ -133,7 +143,7 @@ function ParseErrorInfo({ error }) {
     }, [error.message])
 
     return (
-        <div className={styles.error}>
+        <div className={clsx(styles.error, className)} {...otherProps}>
             <strong>{info.name}:</strong>
             <p>{info.message}</p>
             <p>---------------------------</p>
