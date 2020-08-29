@@ -122,14 +122,27 @@ function SizesInfo({ sourceCode, minifiedCode }) {
 }
 
 function ParseErrorInfo({ error }) {
+    const info = useMemo(() => {
+        const message = error.message
+
+        try {
+            return JSON.parse(message)
+        } catch {
+            return { message: message }
+        }
+    }, [error.message])
+
     return (
         <div className={styles.error}>
-            <p>{error.message}</p>
+            <strong>{info.name}:</strong>
+            <p>{info.message}</p>
+            <p>---------------------------</p>
             <p>
-                line: {error.line}
+                line: {info.line}
                 <br />
-                col: {error.col}
+                col: {info.col}
                 <br />
+                pos: {info.pos}
             </p>
         </div>
     )
