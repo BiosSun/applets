@@ -36,15 +36,16 @@
         "nojiko": "^1.1.1",
         "normalize.css": "^8.0.1",
         "pako": "^1.0.10",
+        "qrcode.react": "^1.0.0",
         "react": "^16.10.1",
         "react-dom": "^16.10.1",
-        "react-monaco-editor": "^0.35.0",
-        "react-resize-detector": "^4.2.1",
+        "react-monaco-editor": "^0.40.0",
+        "react-resize-detector": "^5.0.7",
         "react-router-dom": "^5.1.2",
         "react-scripts": "^3.4.1",
         "react-textarea-autosize": "^8.2.0",
-        "react-use": "^13.12.2",
-        "terser": "^4.4.1",
+        "react-use": "^15.3.3",
+        "terser": "^5.2.1",
         "uglify-js": "^3.6.0",
         "urijs": "^1.19.2",
         "uuid": "^8.3.0",
@@ -52,11 +53,10 @@
     },
     "devDependencies": {
         "monaco-editor-webpack-plugin": "^1.9.0",
-        "qrcode.react": "^0.9.3",
         "react-app-rewired": "^2.1.3",
         "sass": "^1.26.3",
         "source-map-explorer": "^2.4.2",
-        "webpack-virtual-modules": "^0.1.12",
+        "webpack-virtual-modules": "^0.2.2",
         "workerize-loader": "^1.2.1"
     }
 }
