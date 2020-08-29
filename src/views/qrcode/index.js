@@ -38,11 +38,19 @@ export default function QRCodeView() {
         )
     }
 
-    function remove(id) {
-        if (textList.length === 1) {
-            return
-        }
+    function clean(id) {
+        setTextList(
+            produce(textList, (list) => {
+                const item = list.find((node) => node.id === id)
 
+                if (item) {
+                    item.text = ''
+                }
+            }),
+        )
+    }
+
+    function remove(id) {
         setTextList(
             produce(textList, (list) => {
                 return list.filter((node) => node.id !== id)
@@ -59,9 +67,9 @@ export default function QRCodeView() {
                     <Item
                         key={node.id}
                         text={node.text}
-                        disabledRemove={textList.length === 1}
+                        disabledRemove={textList.length === 1 && !textList[0].text.trim()}
                         onChange={(text) => change(node.id, text)}
-                        onRemove={() => remove(node.id)}
+                        onRemove={() => (textList.length > 1 ? remove(node.id) : clean(node.id))}
                     />
                 ))}
                 <button className={styles.addButton} onClick={add}>
