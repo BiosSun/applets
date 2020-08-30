@@ -21,7 +21,6 @@ export default function JSONView() {
 
                 <HLinear spacing align="center">
                     <Space $flex />
-
                 </HLinear>
             </VLinear>
 

@@ -12,6 +12,7 @@ const XSSView = lazy(() => import(/* webpackChunkName: "views_xss", webpackPrefe
 const JSONView = lazy(() => import(/* webpackChunkName: "views_json", webpackPrefetch: true */ './views/json'))
 const TimeView = lazy(() => import(/* webpackChunkName: "views_json", webpackPrefetch: true */ './views/time'))
 const ClockView = lazy(() => import(/* webpackChunkName: "views_json", webpackPrefetch: true */ './views/clock'))
+const Base64View = lazy(() => import(/* webpackChunkName: "base64", webpackPrefetch: true */ './views/base64'))
 
 function App() {
     return (
@@ -33,6 +34,9 @@ function App() {
                         </li>
                         <li>
                             <Link to="/json">JSON</Link>
+                        </li>
+                        <li>
+                            <Link to="/base64">Base64</Link>
                         </li>
                         <li>
                             <Link to="/clock">Clock</Link>
@@ -59,6 +63,9 @@ function App() {
                         </Route>
                         <Route path="/json">
                             <JSONView />
+                        </Route>
+                        <Route path="/base64">
+                            <Base64View />
                         </Route>
                         <Route path="/clock">
                             <ClockView />

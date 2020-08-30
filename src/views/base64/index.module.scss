@@ -1,0 +1,48 @@
+.container {
+    flex: 1 1 0;
+}
+
+.abstract {
+    margin-bottom: 0;
+}
+
+.header {
+    padding: {
+        top: calc(var(--distance-horizontal) * 2);
+        left: calc(var(--distance-horizontal) * 2);
+        right: calc(var(--distance-horizontal) * 2);
+    }
+}
+
+.label {
+    display: block;
+    padding: 0 10px;
+    height: 30px;
+    line-height: 30px;
+    background: #f6f6f7;
+}
+
+.textarea {
+    display: block;
+    padding: 12px;
+    border: 0;
+
+    font-size: 14px;
+    line-height: 24px;
+    font-family: monospace;
+
+    &:focus {
+        outline: 0;
+    }
+
+    &:read-only {
+        background: #f6f6f7;
+    }
+}
+
+.error {
+    padding: 12px;
+    background: #ffe3e3;
+    color: #c10000;
+    font-family: monospace;
+}
