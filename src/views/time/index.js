@@ -5,6 +5,7 @@ import moment from 'moment'
 
 import styles from './index.module.scss'
 import useLocalState from 'utils/use-local-state'
+import semanticTime from './semantic-time'
 
 export default function TimeView() {
     return (
@@ -31,7 +32,13 @@ function Time({ ...otherProps }) {
             return moment(Number(value))
         }
 
-        return moment(value)
+        let time = moment(value)
+
+        if (!time.isValid()) {
+            time = semanticTime(value) ?? time
+        }
+
+        return time
     }, [str])
 
     return (
@@ -52,22 +59,14 @@ function Time({ ...otherProps }) {
                         {time.format('YYYY-MM-DD ddd HH:mm:ss:SSS Z (DDDo wo)')}
                     </Label>
                     <Divider />
-                    <Label title="ISO8601">
-                        {time.toISOString(true)}
-                    </Label>
-                    <Label title="ISO8601 (UTC)">
-                        {time.toISOString()}
-                    </Label>
-                    <Label title="From Now">
-                        {time.fromNow()}
-                    </Label>
+                    <Label title="ISO8601">{time.toISOString(true)}</Label>
+                    <Label title="ISO8601 (UTC)">{time.toISOString()}</Label>
+                    <Label title="From Now">{time.fromNow()}</Label>
                     <Label title="Unix">
                         {time.valueOf()} <em>({time.unix()})</em>
                     </Label>
                     <Divider />
-                    <Label title="Array">
-                        {JSON.stringify(time.toArray(), null, 4)}
-                    </Label>
+                    <Label title="Array">{JSON.stringify(time.toArray(), null, 4)}</Label>
                     <Label title="Object" pre>
                         {JSON.stringify(time.toObject(), null, 4)}
                     </Label>
@@ -108,9 +107,7 @@ function Duration({ ...otherProps }) {
                 <span>无效的时间</span>
             ) : (
                 <VLinear spacing>
-                    <Label title="Humanize">
-                        {duration.humanize()}
-                    </Label>
+                    <Label title="Humanize">{duration.humanize()}</Label>
                     <Divider />
                     <Label title="Years">
                         {duration.years()} <em>( as {Math.floor(duration.asYears())} )</em>
