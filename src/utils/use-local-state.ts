@@ -2,15 +2,25 @@ import { useLayoutEffect } from 'react'
 import localforage from 'localforage'
 import useForceUpdate from './use-force-update'
 
-class LocalState {
-    // key: string
-    // value: any
-    // defaultValue: LocalForageValue
-    // serialize: (any) => LocalForageValue
-    // deserialize: (LocalForageValue) => any
-    // forceUpdateComponent: () => void
+const localStates = new Map()
 
-    constructor(key) {
+type Serialize<T> = (value: T) => any
+type Deserialize<T> = (innerValue: any) => T
+type StateSetter<T> = (newValue: T) => void
+
+const noop = () => {}
+
+class LocalState<T> {
+    key: string
+    value: T | null = null
+    defaultValue: T | null = null
+    serialize: Serialize<T> | null = null
+    deserialize: Deserialize<T> | null = null
+    forceUpdateComponent: () => void = noop
+
+    initPromise: any
+
+    constructor(key: string) {
         this.key = key
         this.init()
 
@@ -34,7 +44,7 @@ class LocalState {
                     value = this.deserialize(value)
                 }
 
-                this.value = value
+                this.value = value as T
             })
             .finally(() => (this.initPromise = undefined))
     }
@@ -47,7 +57,7 @@ class LocalState {
         }
     }
 
-    set(value) {
+    set(value: T) {
         if (value === this.value) {
             return
         }
@@ -64,8 +74,6 @@ class LocalState {
     }
 }
 
-const localStates = new Map()
-
 /**
  * 同 setState，但所设置的值会存储到本地，当再次访问该 state 时，使时会加载之间存储的值。
  *
@@ -74,7 +82,12 @@ const localStates = new Map()
  * @param {function} serialize 序列化，若调用 setStat 时传入的值不是所支持的类型，那么需要提供一个序列化方法用于将值转换成某个支持的类型
  * @param {*} deserialize 反序列化，serialize 的反向操作
  */
-export default function useLocalState(key, defaultValue = null, serialize, deserialize) {
+export default function useLocalState<T>(
+    key: string,
+    defaultValue: T | null = null,
+    serialize: Serialize<T> | null = null,
+    deserialize: Deserialize<T> | null = null,
+): [T, StateSetter<T>] {
     if (!localStates.has(key)) {
         localStates.set(key, new LocalState(key))
     }

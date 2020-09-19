@@ -10,7 +10,7 @@ import UglifyWorker from 'workerize-loader?inline!./uglify-worker'
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import FileSizeWorker from 'workerize-loader?inline!./file-size-worker'
-import useLocalState from 'utils/use-local-state'
+import useLocalState from 'utils/use-local-state.ts'
 
 const uglifyWorker = UglifyWorker()
 const fileSizeWorker = FileSizeWorker()

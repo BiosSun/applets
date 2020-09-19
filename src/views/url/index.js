@@ -8,7 +8,7 @@ import QRCode from 'qrcode.react'
 import { useUpdate } from 'react-use'
 
 import styles from './index.module.scss'
-import useLocalState from 'utils/use-local-state'
+import useLocalState from 'utils/use-local-state.ts'
 
 // -----------------------------------------------------------------------------
 // - test data:

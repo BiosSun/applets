@@ -4,7 +4,7 @@ import { VLinear, HLinear, Divider } from '@biossun/nami'
 import moment from 'moment'
 
 import styles from './index.module.scss'
-import useLocalState from 'utils/use-local-state'
+import useLocalState from 'utils/use-local-state.ts'
 import semanticTime from './semantic-time'
 
 export default function TimeView() {

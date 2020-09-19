@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { VLinear, HLinear, Divider, Space, Button } from '@biossun/nami'
 import _ from 'lodash'
 import { useToggle } from 'react-use'
-import useLocalState from 'utils/use-local-state'
+import useLocalState from 'utils/use-local-state.ts'
 
 import styles from './index.module.scss'
 

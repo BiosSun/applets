@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { VLinear, HLinear, Divider } from '@biossun/nami'
 
 import styles from './index.module.scss'
-import useLocalState from 'utils/use-local-state'
+import useLocalState from 'utils/use-local-state.ts'
 import codec from './codec'
 
 export default function Base64View() {

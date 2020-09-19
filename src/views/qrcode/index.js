@@ -8,7 +8,7 @@ import ReactResizeDetector from 'react-resize-detector'
 import QRCode from 'qrcode.react'
 
 import styles from './index.module.scss'
-import useLocalState from 'utils/use-local-state'
+import useLocalState from 'utils/use-local-state.ts'
 
 const MAX_TEXT_LENGTH = 1024
 

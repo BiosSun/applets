@@ -5,7 +5,7 @@ import { VLinear, HLinear } from '@biossun/nami'
 import moment from 'moment'
 
 import styles from './index.module.scss'
-import useForceUpdate from 'utils/use-force-update'
+import useForceUpdate from 'utils/use-force-update.ts'
 import { useWindowSize } from 'react-use'
 
 function useTicktock(delay = 20) {
