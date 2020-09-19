@@ -1,5 +1,3 @@
-import { decode } from 'urijs'
-
 export default {
     encode(source) {
         return window.btoa(source)
