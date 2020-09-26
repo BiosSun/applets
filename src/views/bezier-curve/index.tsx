@@ -278,8 +278,8 @@ function Canvas({
             const mode = MODES[nodesIndex === 0 ? 0 : ((nodesIndex - 1) % (MODES.length - 1)) + 1]
 
             const points = nodes.map(({ x, y }) => ({
-                x: Math.round(x * width),
-                y: Math.round(y * height),
+                x: x * width,
+                y: y * height,
             }))
 
             // 绘制路径
