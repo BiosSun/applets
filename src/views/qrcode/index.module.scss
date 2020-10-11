@@ -1,7 +1,7 @@
 .track {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 40px 20px;
 }
 
 .addButton {
@@ -26,8 +26,12 @@
 }
 
 .card {
+    &Actions {
+        width: 360px;
+    }
+
     &DeleteButton {
-        padding: 4px 8px;
+        padding: 0;
         background: transparent;
         border: 0;
         color: var(--link-color);

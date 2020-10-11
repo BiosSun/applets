@@ -82,18 +82,20 @@ export default function QRCodeView() {
 
 function Item({ text, onChange, onRemove, disabledRemove }) {
     return (
-        <VLinear className={styles.card} align="end" spacing="small">
+        <VLinear className={styles.card} spacing="small">
+            <HLinear className={styles.cardActions} justify="end">
+                <button
+                    className={styles.cardDeleteButton}
+                    onClick={onRemove}
+                    disabled={disabledRemove}
+                >
+                    删除 ↓
+                </button>
+            </HLinear>
             <HLinear className={styles.item} spacing>
                 <Input value={text} onChange={onChange} />
                 <Display value={text} />
             </HLinear>
-            <button
-                className={styles.cardDeleteButton}
-                onClick={onRemove}
-                disabled={disabledRemove}
-            >
-                删除
-            </button>
         </VLinear>
     )
 }
