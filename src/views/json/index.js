@@ -4,6 +4,7 @@ import { VLinear, HLinear, Divider, Space, Button } from '@biossun/nami'
 import _ from 'lodash'
 import { useToggle } from 'react-use'
 import useLocalState from 'utils/use-local-state.ts'
+import TextareaAutosize from 'react-autosize-textarea';
 
 import styles from './index.module.scss'
 
@@ -26,7 +27,7 @@ export default function JSONView() {
 
             <Divider />
 
-            <HLinear className={styles.content} $flex>
+            <HLinear style={{ flex: '1 0 auto' }} align="stretch">
                 <Input $flex $col={10} value={text} onChange={setText} />
 
                 <Divider />
@@ -49,7 +50,7 @@ function Input({ className, value, onChange }) {
     }
 
     return (
-        <textarea
+        <TextareaAutosize
             className={clsx(className, styles.input)}
             placeholder="请输入 JSON 内容"
             value={value}
