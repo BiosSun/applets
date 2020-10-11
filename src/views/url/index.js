@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { VLinear } from '@biossun/nami'
-import TextareaAutosize from 'react-textarea-autosize'
+import TextareaAutosize from 'react-autosize-textarea'
 import _ from 'lodash'
 import classnames from 'classnames'
 import URI from 'urijs'

@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { v4 as uuidv4 } from 'uuid'
 import produce from 'immer'
 import { VLinear, HLinear } from '@biossun/nami'
-import TextareaAutosize from 'react-textarea-autosize'
+import TextareaAutosize from 'react-autosize-textarea'
 import ReactResizeDetector from 'react-resize-detector'
 import QRCode from 'qrcode.react'
 
@@ -107,7 +107,7 @@ function Input({ value, onChange, className }) {
             value={value}
             onChange={(e) => onChange(e.target.value)}
             placeholder="请输入文本"
-            minRows={5}
+            rows={5}
         />
     )
 }
