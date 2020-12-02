@@ -14,6 +14,7 @@ const TimeView = lazy(() => import(/* webpackChunkName: "views_json", webpackPre
 const ClockView = lazy(() => import(/* webpackChunkName: "views_json", webpackPrefetch: true */ './views/clock'))
 const Base64View = lazy(() => import(/* webpackChunkName: "base64", webpackPrefetch: true */ './views/base64'))
 const BezierCurveView = lazy(() => import(/* webpackChunkName: "bezier-curve", webpackPrefetch: true */ './views/bezier-curve/index.tsx'))
+const DigitsView = lazy(() => import(/* webpackChunkName: "bezier-curve", webpackPrefetch: true */ './views/digits'))
 
 function App() {
     return (
@@ -49,6 +50,9 @@ function App() {
                             <Link to="/bezier-curve">Bezier Curve</Link>
                         </li>
                         <li>
+                            <Link to="/digits">Digits</Link>
+                        </li>
+                        <li>
                             <Link to="/xss">XSS</Link>
                         </li>
                     </ul>
@@ -79,6 +83,9 @@ function App() {
                         </Route>
                         <Route path="/bezier-curve">
                             <BezierCurveView />
+                        </Route>
+                        <Route path="/digits">
+                            <DigitsView />
                         </Route>
                         <Route path="/xss">
                             <XSSView />
