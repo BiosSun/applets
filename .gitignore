@@ -39,6 +39,9 @@ bower_components/
 # sass/scss 的编译缓存文件存储目录
 .sass-cache/
 
+# eslint 的缓存文件
+.eslintcache
+
 # 大多静态站点生成工具默认存放生成页面的目录
 _site/
 
