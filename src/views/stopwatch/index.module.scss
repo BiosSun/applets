@@ -40,6 +40,7 @@
 
 .timer {
     background: var(--background-color-loud);
+    border: 1px solid var(--background-color-loud);
     padding: 30px;
     border-radius: 10px;
 
@@ -49,6 +50,11 @@
         border: 0;
         border-radius: 0;
         color: var(--primary-color);
+    }
+
+    &.currentTimer {
+        box-shadow: 1px 0 3px rgba(0, 0, 0, 0.2);
+        border-color: #aaa;
     }
 }
 

@@ -1,4 +1,4 @@
-import React, { CSSProperties, useState } from 'react'
+import React, { CSSProperties, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import clsx from 'clsx'
 import dayjs, { Dayjs } from 'dayjs'
@@ -8,7 +8,7 @@ import { Button } from '@nami-ui/button'
 import { HStack, VStack, StackItemProps } from '@nami-ui/stack'
 import { Space } from '@nami-ui/space'
 import { TextBox } from '@nami-ui/textbox'
-import useLocalState from 'utils/use-local-state'
+import useLocalState, { updateLocalState } from 'utils/use-local-state'
 import useAnimationFrame from 'utils/use-animation-frame'
 import useNotification from 'utils/use-notification'
 import styles from './index.module.scss'
@@ -39,11 +39,16 @@ interface Timer {
     records: TimeRecord[]
 }
 
+interface Info {
+    timers: Timer[]
+    current: string
+}
+
 class InfoActions {
-    data: Timer[]
+    data: Info
 
     private getTimer(id: string | Timer): Timer | undefined {
-        return typeof id === 'string' ? this.data.find((v) => v.id === id) : id
+        return typeof id === 'string' ? this.data.timers.find((v) => v.id === id) : id
     }
 
     private getRecord(
@@ -61,26 +66,39 @@ class InfoActions {
             : recordId
     }
 
+    changeCurrent(id: string) {
+        this.data.current = id
+    }
+
     startTimer(id?: string | Timer) {
         if (!id) {
-            this.data.unshift({
-                id: uuid(),
+            id = uuid()
+            this.data.timers.unshift({
+                id,
                 ended: false,
                 paused: false,
                 desc: '',
                 ranges: [{ start: Date.now() }],
                 records: [],
             })
+            this.data.current = id
         } else {
             const timer = this.getTimer(id)
             if (timer) {
                 timer.ended = false
             }
+            this.data.current = timer.id
         }
     }
 
     removeTimer(id: string | Timer) {
-        this.data = this.data.filter((timer) => timer.id !== id)
+        const { timers } = this.data
+        const index = timers.findIndex((timer) => timer.id === id)
+
+        if (index !== -1) {
+            timers.splice(index, 1)
+            this.data.current = index === 0 ? timers[0]?.id : timers[index - 1].id
+        }
     }
 
     endTimer(id: string) {
@@ -130,7 +148,7 @@ class InfoActions {
     }
 
     insertRecord() {
-        this.data[0].records.unshift({ id: uuid(), time: Date.now(), desc: '' })
+        this.data.timers[0].records.unshift({ id: uuid(), time: Date.now(), desc: '' })
     }
 
     removeRecord(timerId: string, recordId: string) {
@@ -146,12 +164,29 @@ class InfoActions {
     }
 }
 
+updateLocalState('Stopwatch/info', (value: unknown) => {
+    if (Array.isArray(value)) {
+        return {
+            timers: value,
+            current: value[0]?.id ?? undefined,
+        }
+    } else {
+        return value
+    }
+})
+
 export default function StopwatchView() {
-    const [info, setInfo] = useLocalState<Timer[]>('Stopwatch/info', [])
+    const [info, setInfo] = useLocalState<Info>('Stopwatch/info', {
+        timers: [],
+        current: undefined,
+    })
     const actions = useActions(info, setInfo, InfoActions)
     const [isShowMillisecond, setShowMillisecond] = useLocalState('Stopwatch/showMillisecond', true)
     const [isNotification, setNotification] = useLocalState('Stopwatch/notification', false)
-    const currentTimer = info[0]
+
+    const currentTimer = useMemo(() => {
+        return info.timers.find((timer) => timer.id === info.current)
+    }, [info])
 
     return (
         <VStack className={styles.container} padding="large" spacing>
@@ -195,9 +230,15 @@ export default function StopwatchView() {
             </HStack>
 
             <VStack spacing>
-                {info.map((timer, timerIndex) => (
-                    <VStack className={styles.timer} spacing key={timer.id}>
-                        <HStack align="center" spacing>
+                {info.timers.map((timer, timerIndex) => (
+                    <VStack
+                        className={clsx(styles.timer, {
+                            [styles.currentTimer]: timer.id === currentTimer?.id,
+                        })}
+                        spacing
+                        key={timer.id}
+                    >
+                        <HStack align="center">
                             <TextBox
                                 placeholder="描述"
                                 $col={12}
@@ -205,6 +246,8 @@ export default function StopwatchView() {
                                 onChange={(value) => actions.changeTimerDesc(timer.id, value)}
                             />
                             <Space $flex />
+                            <CurrentButton onClick={() => actions.changeCurrent(timer.id)} />
+                            <Space />
                             <DeleteButton onClick={() => actions.removeTimer(timer.id)} />
                         </HStack>
                         <Timeline timer={timer} actions={actions} />
@@ -381,6 +424,14 @@ function TimeText({ time }: { time: Dayjs | number }) {
                     </span>
                 ))}
         </HStack>
+    )
+}
+
+function CurrentButton({ onClick }: { onClick: () => void }) {
+    return (
+        <button className={styles.delete} onClick={onClick}>
+            当前
+        </button>
     )
 }
 

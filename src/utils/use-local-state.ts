@@ -3,6 +3,7 @@ import localforage from 'localforage'
 import useForceUpdate from './use-force-update'
 
 const localStates = new Map()
+const updates = new Map<string, Promise<void>>()
 
 type Serialize<T> = (value: T) => any
 type Deserialize<T> = (innerValue: any) => T
@@ -28,8 +29,10 @@ class LocalState<T> {
     }
 
     init() {
-        this.initPromise = localforage
-            .getItem(this.key)
+        const updatePromise = updates.get(this.key)
+
+        this.initPromise = (updatePromise || Promise.resolve())
+            .then(() => localforage.getItem(this.key))
             .catch((err) => {
                 console.error(
                     `useLocalForage get value failed by key ${this.key}. error info:`,
@@ -51,6 +54,7 @@ class LocalState<T> {
 
     get() {
         if (this.initPromise) {
+            // NOTE 让 react 等待状态初始化完成后，再重新渲染相关组件
             throw this.initPromise
         } else {
             return this.value
@@ -112,4 +116,32 @@ export default function useLocalState<T>(
     }, [key, state])
 
     return [state.get(), state.set]
+}
+
+export function updateLocalState<T>(key: string, update: (value: T) => T | undefined | null) {
+    async function exec() {
+        const value = (await localforage.getItem(key)) as T
+        if (value != null) {
+            const newValue = update(value)
+
+            if (newValue !== value) {
+                await localforage.setItem(key, newValue)
+            }
+        }
+    }
+
+    if (localStates.has(key)) {
+        throw new Error('您应该在 React 组件开始渲染之前更新本地状态')
+    }
+
+    const prevPromise = updates.get(key)
+    const promise = prevPromise ? prevPromise.then(exec) : exec()
+
+    promise.finally(() => {
+        if (updates.get(key) === promise) {
+            updates.delete(key)
+        }
+    })
+
+    updates.set(key, promise)
 }
