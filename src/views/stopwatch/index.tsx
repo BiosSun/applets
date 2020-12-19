@@ -1,11 +1,13 @@
-import React, { CSSProperties, useEffect, useState } from 'react'
-import _ from 'lodash'
-import produce from 'immer'
+import React, { CSSProperties, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import clsx from 'clsx'
 import dayjs, { Dayjs } from 'dayjs'
 import duration, { Duration } from 'dayjs/plugin/duration'
-import { VLinear, HLinear, Space, TextBox, CheckBox, LinearItemProps, Button } from '@biossun/nami'
+import { CheckBox } from '@biossun/nami'
+import { Button } from '@nami-ui/button'
+import { HStack, VStack, StackItemProps } from '@nami-ui/stack'
+import { Space } from '@nami-ui/space'
+import { TextBox } from '@nami-ui/textbox'
 import useLocalState from 'utils/use-local-state'
 import useAnimationFrame from 'utils/use-animation-frame'
 import useNotification from 'utils/use-notification'
@@ -152,7 +154,7 @@ export default function StopwatchView() {
     const currentTimer = info[0]
 
     return (
-        <VLinear className={styles.container} padding="large" spacing>
+        <VStack className={styles.container} padding="large" spacing>
             <h1>计时器</h1>
             <p>记录并查看耗时</p>
 
@@ -162,21 +164,21 @@ export default function StopwatchView() {
                 notification={isNotification}
             />
 
-            <HLinear spacing align="center" justify="center">
+            <HStack spacing align="center" justify="center">
                 {!currentTimer || currentTimer?.ended ? (
-                    <button onClick={() => actions.startTimer()}>开始</button>
+                    <Button onClick={() => actions.startTimer()}>开始</Button>
                 ) : (
-                    <button onClick={() => actions.endTimer(currentTimer.id)}>结束</button>
+                    <Button onClick={() => actions.endTimer(currentTimer.id)}>结束</Button>
                 )}
                 {currentTimer?.paused ? (
-                    <button onClick={() => actions.playTimer(currentTimer.id)}>继续</button>
+                    <Button onClick={() => actions.playTimer(currentTimer.id)}>继续</Button>
                 ) : (
-                    <button onClick={() => actions.pauseTimer(currentTimer.id)}>暂停</button>
+                    <Button onClick={() => actions.pauseTimer(currentTimer.id)}>暂停</Button>
                 )}
-                <button onClick={() => actions.insertRecord()}>记录</button>
-            </HLinear>
+                <Button onClick={() => actions.insertRecord()}>记录</Button>
+            </HStack>
 
-            <HLinear spacing align="center" justify="center">
+            <HStack spacing align="center" justify="center">
                 <CheckBox
                     label="显示毫秒"
                     checked={isShowMillisecond}
@@ -190,28 +192,26 @@ export default function StopwatchView() {
                         Notification.requestPermission()
                     }}
                 />
-            </HLinear>
+            </HStack>
 
-            <VLinear spacing>
+            <VStack spacing>
                 {info.map((timer, timerIndex) => (
-                    <VLinear className={styles.timer} spacing key={timer.id}>
-                        <HLinear align="center" spacing>
+                    <VStack className={styles.timer} spacing key={timer.id}>
+                        <HStack align="center" spacing>
                             <TextBox
                                 placeholder="描述"
                                 $col={12}
                                 value={timer.desc}
-                                onChange={(event, value) =>
-                                    actions.changeTimerDesc(timer.id, value)
-                                }
+                                onChange={(value) => actions.changeTimerDesc(timer.id, value)}
                             />
                             <Space $flex />
                             <DeleteButton onClick={() => actions.removeTimer(timer.id)} />
-                        </HLinear>
+                        </HStack>
                         <Timeline timer={timer} actions={actions} />
-                    </VLinear>
+                    </VStack>
                 ))}
-            </VLinear>
-        </VLinear>
+            </VStack>
+        </VStack>
     )
 }
 
@@ -276,7 +276,7 @@ function DurationText({
     }
 
     return (
-        <HLinear className={clsx(styles.duration, className)}>
+        <HStack className={clsx(styles.duration, className)}>
             {duration
                 .format(format)
                 .split('')
@@ -285,7 +285,7 @@ function DurationText({
                         {char}
                     </span>
                 ))}
-        </HLinear>
+        </HStack>
     )
 }
 
@@ -293,7 +293,7 @@ function Timeline({
     timer,
     className,
     actions,
-}: { timer: Timer; className?: string; actions: InfoActions } & LinearItemProps) {
+}: { timer: Timer; className?: string; actions: InfoActions } & StackItemProps) {
     const start = timer.ranges[0].start
     const end = timer.ranges[timer.ranges.length - 1].end ?? Date.now()
     const duration = end - start
@@ -344,18 +344,18 @@ function TimelineRecord({
     onRemove: () => void
 }) {
     const content = (
-        <VLinear spacing="small">
+        <VStack spacing="small">
             <TextBox
                 value={record.desc}
-                onChange={(_, value) => onChangeDesc(value)}
+                onChange={(value) => onChangeDesc(value)}
                 placeholder="描述"
             />
-            <HLinear justify="end">
+            <HStack justify="end">
                 <Popconfirm title="你确认要删除该条记录吗？" onConfirm={onRemove}>
                     <button>删除</button>
                 </Popconfirm>
-            </HLinear>
-        </VLinear>
+            </HStack>
+        </VStack>
     )
 
     return (
@@ -371,7 +371,7 @@ function TimelineRecord({
 
 function TimeText({ time }: { time: Dayjs | number }) {
     return (
-        <HLinear className={styles.time}>
+        <HStack className={styles.time}>
             {dayjs(time)
                 .format('YYYY-MM-DD HH:mm:ss')
                 .split('')
@@ -380,7 +380,7 @@ function TimeText({ time }: { time: Dayjs | number }) {
                         {char}
                     </span>
                 ))}
-        </HLinear>
+        </HStack>
     )
 }
 
