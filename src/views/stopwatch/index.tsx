@@ -1,4 +1,5 @@
-import React, { CSSProperties, useMemo, useState } from 'react'
+import React, { CSSProperties, useCallback, useMemo, useState, MouseEvent, useRef } from 'react'
+import _ from 'lodash'
 import { v4 as uuid } from 'uuid'
 import clsx from 'clsx'
 import dayjs, { Dayjs } from 'dayjs'
@@ -11,11 +12,12 @@ import { TextBox } from '@nami-ui/textbox'
 import useLocalState, { updateLocalState } from 'utils/use-local-state'
 import useAnimationFrame from 'utils/use-animation-frame'
 import useNotification from 'utils/use-notification'
+import { useActions } from 'utils/use-actions'
+import { Popover, Popconfirm } from 'antd'
+import { useInterval } from 'react-use'
 import styles from './index.module.scss'
 import audioUrl from './audio.mp3'
-import { useActions } from 'utils/use-actions'
 import useForceUpdate from 'utils/use-force-update'
-import { Popover, Popconfirm } from 'antd'
 
 dayjs.extend(duration)
 
@@ -340,13 +342,37 @@ function Timeline({
     const start = timer.ranges[0].start
     const end = timer.ranges[timer.ranges.length - 1].end ?? Date.now()
     const duration = end - start
+    const lineRef = useRef<HTMLDivElement>(null)
+    const [timePercentByPointer, setTimePercentByPointer] = useState(undefined)
 
     const forceUpdate = useForceUpdate()
-    useAnimationFrame(forceUpdate, !timer.paused)
+    useInterval(forceUpdate, 1000)
+
+    const enableAndUpdateTimeByPointer = useCallback((event: MouseEvent<HTMLDivElement>) => {
+        const line = lineRef.current
+        const rect = line.getBoundingClientRect()
+        const percent = _.clamp((event.clientX - rect.left) / rect.width, 0, 1)
+        setTimePercentByPointer(percent)
+    }, [])
+
+    const disableTimeByPointer = useCallback(() => {
+        setTimePercentByPointer(undefined)
+    }, [])
+
+    const timeByPointer =
+        timePercentByPointer !== undefined
+            ? Math.round((end - start) * timePercentByPointer) + start
+            : undefined
 
     return (
         <div className={clsx(styles.timeline, className)}>
-            <div className={styles.ranges}>
+            <div
+                className={styles.line}
+                ref={lineRef}
+                onMouseEnter={enableAndUpdateTimeByPointer}
+                onMouseMove={enableAndUpdateTimeByPointer}
+                onMouseLeave={disableTimeByPointer}
+            >
                 {timer.ranges.map((range, index) => (
                     <div
                         key={index}
@@ -359,8 +385,6 @@ function Timeline({
                         }
                     ></div>
                 ))}
-            </div>
-            <div className={styles.records}>
                 {timer.records.map((record) => (
                     <TimelineRecord
                         key={record.id}
@@ -370,6 +394,17 @@ function Timeline({
                         onRemove={() => actions.removeRecord(timer.id, record.id)}
                     />
                 ))}
+            </div>
+            <div className={styles.time}>
+                <TimeText className={styles.start} time={start} />
+                <TimeText className={styles.end} time={end} />
+                {timeByPointer !== undefined ? (
+                    <TimeText
+                        className={styles.timeByPointer}
+                        style={{ '--percent': timePercentByPointer * 100 + '%' } as CSSProperties}
+                        time={timeByPointer}
+                    />
+                ) : null}
             </div>
         </div>
     )
@@ -412,9 +447,17 @@ function TimelineRecord({
     )
 }
 
-function TimeText({ time }: { time: Dayjs | number }) {
+function TimeText({
+    time,
+    className,
+    style,
+}: {
+    time: Dayjs | number
+    className?: string
+    style?: CSSProperties
+}) {
     return (
-        <HStack className={styles.time}>
+        <HStack className={clsx(styles.time, className)} style={style}>
             {dayjs(time)
                 .format('YYYY-MM-DD HH:mm:ss')
                 .split('')
