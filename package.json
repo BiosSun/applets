@@ -31,6 +31,7 @@
         "@nami-ui/stack": "^0.0.3",
         "@nami-ui/textbox": "^0.0.3",
         "antd": "^4.9.4",
+        "buffer": "^6.0.3",
         "classnames": "^2.2.6",
         "clsx": "^1.1.1",
         "consolidated-events": "^2.0.2",
