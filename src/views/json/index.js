@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react'
 import clsx from 'clsx'
-import { VLinear, HLinear, Divider, Space, Button } from '@biossun/nami'
+import { VLinear, HLinear, Divider, Space } from '@biossun/nami'
 import _ from 'lodash'
 import { useToggle } from 'react-use'
 import useLocalState from 'utils/use-local-state.ts'
-import TextareaAutosize from 'react-autosize-textarea';
+import TextareaAutosize from 'react-autosize-textarea'
 
 import styles from './index.module.scss'
 
@@ -106,7 +106,7 @@ function PropertyValue({ value }) {
     } else if (_.isNumber(value)) {
         content = <span className={styles.number}>{value}</span>
     } else if (_.isString(value)) {
-        content = <span className={styles.string}>"{value}"</span>
+        content = <StringPropertyValue value={value} />
     } else if (_.isArray(value)) {
         content = <ArrayPropertyValue value={value} />
     } else if (_.isObject(value)) {
@@ -116,6 +116,27 @@ function PropertyValue({ value }) {
     }
 
     return content
+}
+
+function StringPropertyValue({ value }) {
+    const [decode, toggleDecode] = useToggle(false)
+    const str = useMemo(() => {
+        if (decode) {
+            try {
+                return decodeURIComponent(value)
+            } catch {
+                return value
+            }
+        } else {
+            return value
+        }
+    }, [value, decode])
+
+    return (
+        <span className={styles.string} onDoubleClick={toggleDecode}>
+            "{str}"
+        </span>
+    )
 }
 
 function ArrayPropertyValue({ value }) {
