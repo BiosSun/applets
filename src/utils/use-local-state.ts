@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import localforage from 'localforage'
 import useForceUpdate from './use-force-update'
 
@@ -52,6 +52,7 @@ class LocalState<T> {
             .finally(() => (this.initPromise = undefined))
     }
 
+    // TODO 处理 updateLocalState
     get() {
         if (this.initPromise) {
             // NOTE 让 react 等待状态初始化完成后，再重新渲染相关组件
@@ -61,6 +62,7 @@ class LocalState<T> {
         }
     }
 
+    // TODO 处理 updateLocalState
     set(value: T) {
         if (value === this.value) {
             return
@@ -78,6 +80,8 @@ class LocalState<T> {
     }
 }
 
+let count = 1
+
 /**
  * 同 setState，但所设置的值会存储到本地，当再次访问该 state 时，使时会加载之间存储的值。
  *
@@ -92,6 +96,8 @@ export default function useLocalState<T>(
     serialize: Serialize<T> | null = null,
     deserialize: Deserialize<T> | null = null,
 ): [T, StateSetter<T>] {
+    const idRef = useRef(count++)
+
     if (!localStates.has(key)) {
         localStates.set(key, new LocalState(key))
     }
@@ -104,11 +110,11 @@ export default function useLocalState<T>(
     state.forceUpdateComponent = useForceUpdate()
 
     useLayoutEffect(() => {
-        if (state.__isBinded) {
+        if (state.__bindedId && state.__bindedId !== idRef.current) {
             throw new Error(`Duplicate key "${key}"`)
         }
 
-        state.__isBinded = true
+        state.__bindedId = idRef.current
 
         return () => {
             localStates.delete(key)
@@ -128,10 +134,6 @@ export function updateLocalState<T>(key: string, update: (value: T) => T | undef
                 await localforage.setItem(key, newValue)
             }
         }
-    }
-
-    if (localStates.has(key)) {
-        throw new Error('您应该在 React 组件开始渲染之前更新本地状态')
     }
 
     const prevPromise = updates.get(key)
