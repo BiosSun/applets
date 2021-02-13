@@ -15,11 +15,19 @@
 }
 
 .label {
-    display: block;
     padding: 0 10px;
     height: 30px;
     line-height: 30px;
     background: #f6f6f7;
+}
+
+.errorMessage {
+    padding: 3px 10px;
+    line-height: 24px;
+
+    background: #ffe3e3;
+    font-family: monospace;
+    color: #c10000;
 }
 
 .textarea {
@@ -40,9 +48,24 @@
     }
 }
 
-.error {
-    padding: 12px;
-    background: #ffe3e3;
-    color: #c10000;
-    font-family: monospace;
+.panels {
+    flex-basis: 0;
+}
+
+.panel {
+    &.error {
+        .label {
+            background: #ffe3e3;
+        }
+    }
+}
+
+.imageBox {
+    padding: 16px;
+    background: url(./image-bg.svg);
+    overflow: auto;
+}
+
+.image {
+    max-width: 100%;
 }
