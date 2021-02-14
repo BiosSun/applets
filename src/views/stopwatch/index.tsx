@@ -300,15 +300,15 @@ function DurationClock({
 }
 
 function DurationText({
-    duration,
+    duration: durationNum,
     className,
     millisecond = false,
 }: {
-    duration: Duration | number
+    duration: number
     millisecond?: boolean
     className?: string
 }) {
-    duration = dayjs.duration(duration)
+    const duration = dayjs.duration(durationNum)
 
     let format = 'mm:ss'
 
