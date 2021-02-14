@@ -14,7 +14,7 @@ const XSSView = lazy(() => import(/* webpackChunkName: "views_xss", webpackPrefe
 const JSONView = lazy(() => import(/* webpackChunkName: "views_json", webpackPrefetch: true */ './views/json')) // prettier-ignore
 const TimeView = lazy(() => import(/* webpackChunkName: "views_json", webpackPrefetch: true */ './views/time')) // prettier-ignore
 const ClockView = lazy(() => import(/* webpackChunkName: "views_json", webpackPrefetch: true */ './views/clock')) // prettier-ignore
-const StopwatchView = lazy(() => import(/* webpackChunkName: "views_json", webpackPrefetch: true */ './views/stopwatch/index.tsx')) // prettier-ignore
+// const StopwatchView = lazy(() => import(/* webpackChunkName: "views_json", webpackPrefetch: true */ './views/stopwatch/index.tsx')) // prettier-ignore
 const Base64View = lazy(() => import(/* webpackChunkName: "base64", webpackPrefetch: true */ './views/base64/index.tsx')) // prettier-ignore
 const BezierCurveView = lazy(() => import(/* webpackChunkName: "bezier-curve", webpackPrefetch: true */ './views/bezier-curve/index.tsx')) // prettier-ignore
 const DigitsView = lazy(() => import(/* webpackChunkName: "bezier-curve", webpackPrefetch: true */ './views/digits')) // prettier-ignore
@@ -47,9 +47,9 @@ function App() {
                             <li>
                                 <Link to="/clock">Clock</Link>
                             </li>
-                            <li>
+                            {/* <li>
                                 <Link to="/stopwatch">Stopwatch</Link>
-                            </li>
+                            </li> */}
                             <li>
                                 <Link to="/time">Time</Link>
                             </li>
@@ -85,9 +85,9 @@ function App() {
                             <Route path="/clock">
                                 <ClockView />
                             </Route>
-                            <Route path="/stopwatch">
+                            {/* <Route path="/stopwatch">
                                 <StopwatchView />
-                            </Route>
+                            </Route> */}
                             <Route path="/time">
                                 <TimeView />
                             </Route>
