@@ -55,7 +55,6 @@ const options = {
 }
 
 export default function parse(str = '') {
-    console.info('str: ', str)
     str = str.trim()
     return options[str]?.() ?? null
 }
