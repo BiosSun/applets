@@ -18,6 +18,7 @@ const ClockView = lazy(() => import(/* webpackChunkName: "views_json", webpackPr
 const Base64View = lazy(() => import(/* webpackChunkName: "base64", webpackPrefetch: true */ './views/base64/index.tsx')) // prettier-ignore
 const BezierCurveView = lazy(() => import(/* webpackChunkName: "bezier-curve", webpackPrefetch: true */ './views/bezier-curve/index.tsx')) // prettier-ignore
 const DigitsView = lazy(() => import(/* webpackChunkName: "bezier-curve", webpackPrefetch: true */ './views/digits')) // prettier-ignore
+const RegExpView = lazy(() => import(/* webpackChunkName: "bezier-curve", webpackPrefetch: true */ './views/regexp/index.tsx')) // prettier-ignore
 
 function App() {
     return (
@@ -43,6 +44,9 @@ function App() {
                             </li>
                             <li>
                                 <Link to="/base64">Base64</Link>
+                            </li>
+                            <li>
+                                <Link to="/regexp">RegExp</Link>
                             </li>
                             <li>
                                 <Link to="/clock">Clock</Link>
@@ -81,6 +85,9 @@ function App() {
                             </Route>
                             <Route path="/base64">
                                 <Base64View />
+                            </Route>
+                            <Route path="/regexp">
+                                <RegExpView />
                             </Route>
                             <Route path="/clock">
                                 <ClockView />

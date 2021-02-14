@@ -1,0 +1,56 @@
+.input {
+    height: 44px;
+    padding: 0 12px;
+    font-family: monospace;
+    font-size: 16px;
+}
+
+.diagramWrap {
+    position: relative;
+    min-height: 100px;
+    border: 1px solid #000;
+}
+
+.diagram {
+    position: relative;
+    overflow: auto;
+
+    .box {
+        &.rendering {
+            opacity: 0;
+            pointer-events: none;
+
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+        }
+    }
+}
+
+.error,
+.warnings {
+    padding: 20px;
+    font-family: monospace;
+    font-size: 15px;
+}
+
+.error {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    min-height: 100%;
+}
+
+.error {
+    background: hsla(349, 99%, 18%, 0.7);
+    backdrop-filter: blur(7px);
+    color: #fff;
+}
+
+.warnings {
+    background: hsla(48, 98%, 34%, 1.00);
+    border-top: 1px solid #000;
+    color: #fff;
+}
