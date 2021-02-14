@@ -42,10 +42,6 @@
 
 .item {
     word-break: break-all;
-
-    &:not(:last-child):after {
-        content: ',';
-    }
 }
 
 .array {

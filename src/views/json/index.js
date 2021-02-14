@@ -87,11 +87,12 @@ function Display({ className, text }) {
     )
 }
 
-function PropertyItem({ name, value }) {
+function PropertyItem({ name, value, last }) {
     return (
         <div className={styles.item}>
             {name ? <span className={styles.property}>{name}: </span> : null}
             <PropertyValue value={value} />
+            {!last ? ',' : null}
         </div>
     )
 }
@@ -100,7 +101,7 @@ function PropertyValue({ value }) {
     let content
 
     if (_.isNull(value)) {
-        content = <span className={styles.null}>NULL</span>
+        content = <span className={styles.null}>null</span>
     } else if (_.isBoolean(value)) {
         content = <span className={styles.boolean}>{value ? 'true' : 'false'}</span>
     } else if (_.isNumber(value)) {
@@ -152,7 +153,7 @@ function ArrayPropertyValue({ value }) {
 
             <div className={styles.items}>
                 {value.map((item, index) => (
-                    <PropertyItem key={index} value={item} />
+                    <PropertyItem key={index} value={item} last={index === value.length - 1} />
                 ))}
             </div>
 
@@ -175,8 +176,13 @@ function ObjectPropertyValue({ value }) {
             <div className={styles.length}>{entries.length}</div>
 
             <div className={styles.items}>
-                {entries.map(([key, value]) => (
-                    <PropertyItem key={key} name={key} value={value} />
+                {entries.map(([key, value], index) => (
+                    <PropertyItem
+                        key={key}
+                        name={key}
+                        value={value}
+                        last={index === entries.length - 1}
+                    />
                 ))}
             </div>
 
