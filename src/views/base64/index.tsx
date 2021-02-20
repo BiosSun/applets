@@ -176,10 +176,10 @@ export default function Base64View() {
     }
 
     return (
-        <VStack className={styles.container} spacing="large">
-            <VStack padding={{ top: 'huge', horizontal: 'big' }} spacing>
+        <VStack className={styles.container} spacing="huge">
+            <VStack spacing="large" padding={{ top: 'huge', horizontal: 'huge' }}>
                 <h1>Base64</h1>
-                <p className={styles.abstract}>编码/反编码 Base64 字符串</p>
+                <p>编码/反编码 Base64 字符串</p>
                 <HStack spacing align="center">
                     <HStack component="label" spacing="small" align="center">
                         <input

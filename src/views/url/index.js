@@ -38,7 +38,7 @@ export default function URLView() {
     )
 
     return (
-        <VStack padding="large" spacing>
+        <VStack padding="huge" spacing="large">
             <h1>URL</h1>
             <p>解析 URL</p>
             <table className={styles.fields}>

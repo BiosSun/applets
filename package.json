@@ -30,6 +30,7 @@
         "@nami-ui/divider": "^0.0.4",
         "@nami-ui/space": "^0.0.4",
         "@nami-ui/stack": "^0.0.5",
+        "@nami-ui/styles": "^0.0.4",
         "@nami-ui/textbox": "^0.0.5",
         "antd": "^4.12.3",
         "base64url": "^3.0.1",

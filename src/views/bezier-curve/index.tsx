@@ -2,7 +2,7 @@ import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 're
 import clsx from 'clsx'
 import { addEventListener } from 'consolidated-events'
 import useResizeObserver from 'use-resize-observer'
-import { VStack, HStack, StackItemProps } from "@nami-ui/stack";
+import { VStack, HStack, StackItemProps } from '@nami-ui/stack'
 
 import styles from './index.module.scss'
 import useLocalState from 'utils/use-local-state'
@@ -151,7 +151,7 @@ export default function BezierCurveView() {
     }
 
     return (
-        <VStack className={styles.container} spacing padding="large">
+        <VStack className={styles.container} spacing="large" padding="huge">
             <h1>贝塞尔曲线（Bézier curve）</h1>
             <p>定义结点，绘制曲线</p>
             <HStack spacing>
@@ -206,8 +206,9 @@ function Canvas({
     controlNodes: Node[]
     onChangeControlNodes: (nodes: Node[]) => void
 }) {
+    const containerRef = useRef<HTMLDivElement>(null)
     const canvasRef = useRef<HTMLCanvasElement>(null)
-    const { width = 1, height = 1 } = useResizeObserver({ ref: canvasRef })
+    const { width = 1, height = 1 } = useResizeObserver({ ref: containerRef })
     const scale = window.devicePixelRatio
 
     // 计算 1001 个时间点
@@ -215,7 +216,6 @@ function Canvas({
         const momentNodeGroups = []
 
         for (let i = 0; i <= 1000; i++) {
-            const t = i / 1000
             momentNodeGroups.push(calcMomentNodeGroups(controlNodes, i / 1000))
         }
 
@@ -225,6 +225,10 @@ function Canvas({
     // canvas resize
     useLayoutEffect(() => {
         const el = canvasRef.current
+
+        el.style.width = width + 'px'
+        el.style.height = height + 'px'
+
         el.width = Math.floor(width * scale)
         el.height = Math.floor(height * scale)
 
@@ -299,7 +303,11 @@ function Canvas({
         }
     }, [width, height, controlNodes, progress])
 
-    return <canvas className={clsx(styles.canvas, className)} ref={canvasRef} {...otherProps} />
+    return (
+        <div className={clsx(styles.canvasContainer, className)} ref={containerRef}>
+            <canvas className={styles.canvas} ref={canvasRef} {...otherProps} />
+        </div>
+    )
 }
 
 /**

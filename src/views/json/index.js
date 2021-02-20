@@ -17,8 +17,8 @@ export default function JSONView() {
     const [text, setText] = useLocalState('JSON/text', DEFAULT_TEXT)
 
     return (
-        <VStack className={styles.container}>
-            <VStack padding="large" spacing>
+        <VStack className={styles.container} spacing="huge">
+            <VStack spacing="large" padding={{ top: 'huge', horizontal: 'huge' }}>
                 <h1>JSON</h1>
                 <p>解析 JSON 字符串</p>
 

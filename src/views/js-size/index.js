@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import clsx from 'clsx'
-import { VStack, HStack } from "@nami-ui/stack";
-import { Divider } from "@nami-ui/divider";
+import { VStack, HStack } from '@nami-ui/stack'
+import { Divider } from '@nami-ui/divider'
 import FileSize from 'components/file-size'
 
 import styles from './index.module.scss'
@@ -42,8 +42,8 @@ export default function JSSizeView() {
     }, [sourceCode])
 
     return (
-        <VStack className={styles.container} spacing>
-            <VStack spacing className={styles.header}>
+        <VStack className={styles.container} spacing="huge">
+            <VStack spacing="large" padding={{ top: 'huge', horizontal: 'huge' }}>
                 <h1>JS Size</h1>
                 <p>计算某段 JS 代码的源文件大小，压缩后大小及 gzip 之后的大小</p>
                 <SizesInfo sourceCode={sourceCode} minifiedCode={minifiedCode} />

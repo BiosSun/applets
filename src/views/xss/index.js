@@ -31,7 +31,7 @@ export default function XSSView() {
     }, [isEnabledBeautify, xssedHTML])
 
     return (
-        <VStack className={styles.container} padding="large" spacing>
+        <VStack className={styles.container} spacing="large" padding="huge">
             <h1>XSS</h1>
             <p>为 HTML 添加 XSS 过滤</p>
 

@@ -24,7 +24,7 @@ console.info(FORMATS)
 
 export default function TimeView() {
     return (
-        <HStack padding={{ horizontal: 'big', vertical: 'huge' }} spacing="large">
+        <HStack padding="huge" spacing="large">
             <Time $flex />
             <Duration $flex />
         </HStack>

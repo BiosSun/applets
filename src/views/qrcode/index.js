@@ -59,7 +59,7 @@ export default function QRCodeView() {
     }
 
     return (
-        <VStack className={styles.container} padding="large" spacing>
+        <VStack className={styles.container} padding="huge" spacing="large">
             <h1>QRCode</h1>
             <p>生成一个二维码</p>
             <div className={styles.track}>

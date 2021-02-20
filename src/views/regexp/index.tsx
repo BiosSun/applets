@@ -78,7 +78,7 @@ export default function RegExpView() {
     console.info(render.rendering)
 
     return (
-        <VStack padding={{ horizontal: 'big', vertical: 'huge' }} spacing="big">
+        <VStack padding="huge" spacing="big">
             <h1>RegExp</h1>
             <p>
                 正则表达式，

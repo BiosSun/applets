@@ -2,18 +2,6 @@
     flex: 1 1 0;
 }
 
-.abstract {
-    margin-bottom: 0;
-}
-
-.header {
-    padding: {
-        top: calc(var(--distance-horizontal) * 2);
-        left: calc(var(--distance-horizontal) * 2);
-        right: calc(var(--distance-horizontal) * 2);
-    }
-}
-
 .label {
     padding: 0 10px;
     height: 30px;

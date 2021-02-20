@@ -1,5 +1,11 @@
+@use '~@nami-ui/styles/index' as nami;
+
 @import '~normalize.css/normalize.css';
 @import '~antd/dist/antd.css';
+
+:root {
+    @include nami.variables();
+}
 
 *,
 *:before,

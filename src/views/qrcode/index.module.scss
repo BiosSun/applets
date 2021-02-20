@@ -8,7 +8,7 @@
     padding: 4px 8px;
     background: transparent;
     border: 0;
-    color: var(--link-color);
+    color: var(--nami-primary-700);
     align-self: flex-end;
 
     &:hover {
@@ -17,11 +17,11 @@
 
     &:focus {
         outline: none;
-        background: var(--background-color-quiet);
+        background: var(--nami-paper-200);
     }
 
     &:active {
-        color: var(--link-focus-color);
+        color: var(--nami-primary-800);
     }
 }
 
@@ -34,7 +34,7 @@
         padding: 0;
         background: transparent;
         border: 0;
-        color: var(--link-color);
+        color: var(--nami-primary-700);
 
         &:not(:disabled) {
             &:hover {
@@ -43,11 +43,11 @@
 
             &:focus {
                 outline: none;
-                background: var(--background-color-quiet);
+                background: var(--nami-paper-200);
             }
 
             &:active {
-                color: var(--link-focus-color);
+                color: var(--nami-primary-800);
             }
         }
 
@@ -58,7 +58,7 @@
 }
 
 .qrcodePlaceholder {
-    background: var(--background-color-loud);
+    background: var(--nami-paper-200);
 }
 
 .textarea {
