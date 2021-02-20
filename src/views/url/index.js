@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { VLinear } from '@biossun/nami'
+import { VStack } from "@nami-ui/stack";
 import TextareaAutosize from 'react-autosize-textarea'
 import _ from 'lodash'
 import classnames from 'classnames'
@@ -38,7 +38,7 @@ export default function URLView() {
     )
 
     return (
-        <VLinear padding="large" spacing>
+        <VStack padding="large" spacing>
             <h1>URL</h1>
             <p>解析 URL</p>
             <table className={styles.fields}>
@@ -84,7 +84,7 @@ export default function URLView() {
                     <Field indent={1} name="hash" uri={uri} onChange={set} />
                 </tbody>
             </table>
-        </VLinear>
+        </VStack>
     )
 }
 

@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react'
 import clsx from 'clsx'
-import { VLinear, HLinear, Divider, Space } from '@biossun/nami'
+import { VStack, HStack } from '@nami-ui/stack'
+import { Divider } from '@nami-ui/divider'
+import { Space } from '@nami-ui/space'
 import _ from 'lodash'
 import { useToggle } from 'react-use'
 import useLocalState from 'utils/use-local-state.ts'
@@ -15,26 +17,26 @@ export default function JSONView() {
     const [text, setText] = useLocalState('JSON/text', DEFAULT_TEXT)
 
     return (
-        <VLinear className={styles.container}>
-            <VLinear padding="large" spacing>
+        <VStack className={styles.container}>
+            <VStack padding="large" spacing>
                 <h1>JSON</h1>
                 <p>解析 JSON 字符串</p>
 
-                <HLinear spacing align="center">
+                <HStack spacing align="center">
                     <Space $flex />
-                </HLinear>
-            </VLinear>
+                </HStack>
+            </VStack>
 
             <Divider />
 
-            <HLinear style={{ flex: '1 0 auto' }} align="stretch">
+            <HStack style={{ flex: '1 0 auto' }} align="stretch">
                 <Input $flex $col={10} value={text} onChange={setText} />
 
                 <Divider />
 
                 <Display $flex $col={14} text={text} />
-            </HLinear>
-        </VLinear>
+            </HStack>
+        </VStack>
     )
 }
 

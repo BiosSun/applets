@@ -3,8 +3,8 @@ import _ from 'lodash'
 import { v4 as uuid } from 'uuid'
 import clsx from 'clsx'
 import dayjs, { Dayjs } from 'dayjs'
-import duration, { Duration } from 'dayjs/plugin/duration'
-import { CheckBox } from '@biossun/nami'
+import duration from 'dayjs/plugin/duration'
+import { CheckBox } from '@nami-ui/checkbox'
 import { Button } from '@nami-ui/button'
 import { HStack, VStack, StackItemProps } from '@nami-ui/stack'
 import { Space } from '@nami-ui/space'
@@ -219,12 +219,12 @@ export default function StopwatchView() {
                 <CheckBox
                     label="显示毫秒"
                     checked={isShowMillisecond}
-                    onChange={(_, __, checked) => setShowMillisecond(checked)}
+                    onChange={setShowMillisecond}
                 />
                 <CheckBox
                     label="每 30分钟 提醒一次"
                     checked={isNotification}
-                    onChange={(_, __, checked) => {
+                    onChange={(checked) => {
                         setNotification(checked)
                         Notification.requestPermission()
                     }}

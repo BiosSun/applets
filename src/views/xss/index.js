@@ -1,5 +1,9 @@
 import React, { useState, useMemo } from 'react'
-import { CheckBox, VLinear, HLinear, Divider, Button, Space } from '@biossun/nami'
+import { VStack, HStack } from '@nami-ui/stack'
+import { CheckBox } from '@nami-ui/checkbox'
+import { Divider } from '@nami-ui/divider'
+import { Space } from '@nami-ui/space'
+import { Button } from '@nami-ui/button'
 import { html as HTMLBeautify } from 'js-beautify'
 import useSandbox from './use-sandbox'
 import FlexibleMonacoEditor from './flexible-monaco-editor'
@@ -27,21 +31,17 @@ export default function XSSView() {
     }, [isEnabledBeautify, xssedHTML])
 
     return (
-        <VLinear className={styles.container} padding="large" spacing>
+        <VStack className={styles.container} padding="large" spacing>
             <h1>XSS</h1>
             <p>为 HTML 添加 XSS 过滤</p>
 
-            <HLinear spacing align="center">
-                <CheckBox
-                    label="enabled xss"
-                    checked={isEnabledXSS}
-                    onChange={(event) => setEnabledXSS(event.target.checked)}
-                />
+            <HStack spacing align="center">
+                <CheckBox label="enabled xss" checked={isEnabledXSS} onChange={setEnabledXSS} />
 
                 <CheckBox
                     label="enabled beautify"
                     checked={isEnabledBeautify}
-                    onChange={(event) => setEnabledBeautify(event.target.checked)}
+                    onChange={setEnabledBeautify}
                 />
 
                 <Space $flex />
@@ -49,13 +49,13 @@ export default function XSSView() {
                 <Button onClick={() => setDisplayOptionsEditer(!isDisplayOptionsEditer)}>
                     {isDisplayOptionsEditer ? '关闭' : '打开'} XSS 配置编辑器
                 </Button>
-            </HLinear>
+            </HStack>
 
-            <HLinear $flex>
+            <HStack $flex>
                 {isDisplayOptionsEditer ? <Divider /> : null}
 
                 {isDisplayOptionsEditer ? (
-                    <VLinear $flex $col={14}>
+                    <VStack $flex $col={14}>
                         <Divider />
 
                         <FlexibleMonacoEditor
@@ -66,12 +66,12 @@ export default function XSSView() {
                         />
 
                         <Divider />
-                    </VLinear>
+                    </VStack>
                 ) : null}
 
                 <Divider />
 
-                <VLinear $flex>
+                <VStack $flex>
                     <Divider />
 
                     <FlexibleMonacoEditor
@@ -86,12 +86,12 @@ export default function XSSView() {
                     <FlexibleMonacoEditor $flex language="html" readOnly value={transformedHTML} />
 
                     <Divider />
-                </VLinear>
+                </VStack>
 
                 <Divider />
 
                 {!isDisplayOptionsEditer ? (
-                    <VLinear $flex>
+                    <VStack $flex>
                         <Divider />
 
                         <RichTextEditor
@@ -110,11 +110,11 @@ export default function XSSView() {
                         />
 
                         <Divider />
-                    </VLinear>
+                    </VStack>
                 ) : null}
 
                 {!isDisplayOptionsEditer ? <Divider /> : null}
-            </HLinear>
-        </VLinear>
+            </HStack>
+        </VStack>
     )
 }

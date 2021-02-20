@@ -2,16 +2,11 @@ import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 're
 import clsx from 'clsx'
 import { addEventListener } from 'consolidated-events'
 import useResizeObserver from 'use-resize-observer'
-import { VLinear, HLinear, LinearItemProps } from '@biossun/nami'
+import { VStack, HStack, StackItemProps } from "@nami-ui/stack";
 
 import styles from './index.module.scss'
 import useLocalState from 'utils/use-local-state'
 import Pen from 'utils/pen'
-
-declare module 'react' {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    interface HTMLAttributes<T> extends LinearItemProps {}
-}
 
 // 控制点坐标（结点）
 interface Node {
@@ -156,21 +151,21 @@ export default function BezierCurveView() {
     }
 
     return (
-        <VLinear className={styles.container} spacing padding="large">
+        <VStack className={styles.container} spacing padding="large">
             <h1>贝塞尔曲线（Bézier curve）</h1>
             <p>定义结点，绘制曲线</p>
-            <HLinear spacing>
+            <HStack spacing>
                 <button onClick={resetControlNodes}>重置</button>
                 <span>{controlNodes.length}个控制点</span>
                 <Slide $flex value={progress} onChange={setProgress} />
-            </HLinear>
+            </HStack>
             <Canvas
                 $flex
                 controlNodes={controlNodes}
                 progress={progress}
                 onChangeControlNodes={setControlNodes}
             />
-        </VLinear>
+        </VStack>
     )
 }
 
@@ -179,13 +174,13 @@ function Slide({
     value,
     onChange,
     ...otherProps
-}: LinearItemProps & {
+}: StackItemProps & {
     className?: string
     value: number
     onChange(value: number): void
 }) {
     return (
-        <HLinear spacing="small" className={className} {...otherProps}>
+        <HStack spacing="small" className={className} {...otherProps}>
             <input
                 $flex
                 type="range"
@@ -195,7 +190,7 @@ function Slide({
                 value={value}
                 onChange={(e) => onChange(e.target.valueAsNumber)}
             />
-        </HLinear>
+        </HStack>
     )
 }
 
@@ -205,7 +200,7 @@ function Canvas({
     controlNodes,
     onChangeControlNodes,
     ...otherProps
-}: LinearItemProps & {
+}: StackItemProps & {
     className?: string
     progress: number
     controlNodes: Node[]

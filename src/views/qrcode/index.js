@@ -2,7 +2,7 @@ import React from 'react'
 import clsx from 'clsx'
 import { v4 as uuidv4 } from 'uuid'
 import produce from 'immer'
-import { VLinear, HLinear } from '@biossun/nami'
+import { VStack, HStack } from "@nami-ui/stack";
 import TextareaAutosize from 'react-autosize-textarea'
 import ReactResizeDetector from 'react-resize-detector'
 import QRCode from 'qrcode.react'
@@ -59,7 +59,7 @@ export default function QRCodeView() {
     }
 
     return (
-        <VLinear className={styles.container} padding="large" spacing>
+        <VStack className={styles.container} padding="large" spacing>
             <h1>QRCode</h1>
             <p>生成一个二维码</p>
             <div className={styles.track}>
@@ -76,14 +76,14 @@ export default function QRCodeView() {
                     + 添加
                 </button>
             </div>
-        </VLinear>
+        </VStack>
     )
 }
 
 function Item({ text, onChange, onRemove, disabledRemove }) {
     return (
-        <VLinear className={styles.card} spacing="small">
-            <HLinear className={styles.cardActions} justify="end">
+        <VStack className={styles.card} spacing="small">
+            <HStack className={styles.cardActions} justify="end">
                 <button
                     className={styles.cardDeleteButton}
                     onClick={onRemove}
@@ -91,12 +91,12 @@ function Item({ text, onChange, onRemove, disabledRemove }) {
                 >
                     删除 ↓
                 </button>
-            </HLinear>
-            <HLinear className={styles.item} spacing>
+            </HStack>
+            <HStack className={styles.item} spacing>
                 <Input value={text} onChange={onChange} />
                 <Display value={text} />
-            </HLinear>
-        </VLinear>
+            </HStack>
+        </VStack>
     )
 }
 
@@ -118,7 +118,7 @@ function Display({ value = '', className }) {
     return (
         <ReactResizeDetector handleHeight>
             {({ width, height }) => (
-                <VLinear>
+                <VStack>
                     {!value ? (
                         <div $flex className={styles.qrcodePlaceholder} style={{ width: height }} />
                     ) : value.length > MAX_TEXT_LENGTH ? (
@@ -135,7 +135,7 @@ function Display({ value = '', className }) {
                             size={height}
                         />
                     )}
-                </VLinear>
+                </VStack>
             )}
         </ReactResizeDetector>
     )

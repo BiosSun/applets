@@ -289,10 +289,10 @@ function Panel({ title, children, error, className = undefined, ...otherProps })
             className={clsx(styles.panel, { [styles.error]: error }, className)}
             {...otherProps}
         >
-            {/* <Divider /> */}
+            <Divider />
             <div className={styles.label}>{title}</div>
             {error ? <div className={styles.errorMessage}>{error}</div> : null}
-            {/* <Divider /> */}
+            <Divider />
             {children}
         </VStack>
     )

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import clsx from 'clsx'
-import { VLinear, HLinear, Divider } from '@biossun/nami'
+import { VStack, HStack } from "@nami-ui/stack";
+import { Divider } from "@nami-ui/divider";
 import FileSize from 'components/file-size'
 
 import styles from './index.module.scss'
@@ -41,15 +42,15 @@ export default function JSSizeView() {
     }, [sourceCode])
 
     return (
-        <VLinear className={styles.container} spacing>
-            <VLinear spacing className={styles.header}>
+        <VStack className={styles.container} spacing>
+            <VStack spacing className={styles.header}>
                 <h1>JS Size</h1>
                 <p>计算某段 JS 代码的源文件大小，压缩后大小及 gzip 之后的大小</p>
                 <SizesInfo sourceCode={sourceCode} minifiedCode={minifiedCode} />
-            </VLinear>
+            </VStack>
 
-            <HLinear $flex className={styles.codeareas}>
-                <VLinear $flex className={styles.codearea}>
+            <HStack $flex className={styles.codeareas}>
+                <VStack $flex className={styles.codearea}>
                     <strong className={styles.title}>Source Code</strong>
                     <Divider />
                     <textarea
@@ -59,9 +60,9 @@ export default function JSSizeView() {
                         onChange={(e) => setSourceCode(e.target.value)}
                         placeholder="请输入或粘贴 JS 源代码"
                     />
-                </VLinear>
+                </VStack>
                 <Divider />
-                <VLinear $flex className={styles.codearea}>
+                <VStack $flex className={styles.codearea}>
                     <strong className={styles.title}>Minified Code</strong>
                     <Divider />
                     {isMinifying ? (
@@ -77,9 +78,9 @@ export default function JSSizeView() {
                     ) : (
                         <ParseErrorInfo $flex error={minifiedError} />
                     )}
-                </VLinear>
-            </HLinear>
-        </VLinear>
+                </VStack>
+            </HStack>
+        </VStack>
     )
 }
 
@@ -106,7 +107,7 @@ function SizesInfo({ className, sourceCode, minifiedCode, ...otherProps }) {
     }, [minifiedCode])
 
     return (
-        <VLinear className={className} {...otherProps}>
+        <VStack className={className} {...otherProps}>
             <dl className={styles.sizes}>
                 <dt>Source Code Size</dt>
                 <dd>
@@ -127,7 +128,7 @@ function SizesInfo({ className, sourceCode, minifiedCode, ...otherProps }) {
                     <FileSize bytes={minifiedCodeSize.gzip} />
                 </dd>
             </dl>
-        </VLinear>
+        </VStack>
     )
 }
 

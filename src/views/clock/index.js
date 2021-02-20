@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import _ from 'lodash'
 import clsx from 'clsx'
-import { VLinear, HLinear } from '@biossun/nami'
+import { VStack, HStack } from "@nami-ui/stack";
 import moment from 'moment'
 
 import styles from './index.module.scss'
@@ -36,15 +36,15 @@ export default function Clock({ ...otherProps }) {
     }
 
     return (
-        <VLinear className={styles.container} justify="center" align="center">
-            <HLinear className={styles.time} style={timeStyle}>
+        <VStack className={styles.container} justify="center" align="center">
+            <HStack className={styles.time} style={timeStyle}>
                 <span className={clsx(styles.num)}>{now.format('HH')}</span>
                 <span className={styles.sep}>:</span>
                 <span className={clsx(styles.num)}>{now.format('mm')}</span>
                 <span className={styles.sep}>:</span>
                 <span className={clsx(styles.num)}>{now.format('ss')}</span>
-            </HLinear>
-            <HLinear className={styles.date} style={dateStyle}>
+            </HStack>
+            <HStack className={styles.date} style={dateStyle}>
                 <span className={clsx(styles.num)}>{now.format('YYYY')}</span>
                 <span className={styles.sep}>年</span>
                 <span className={clsx(styles.num)}>{now.format('MM')}</span>
@@ -53,7 +53,7 @@ export default function Clock({ ...otherProps }) {
                 <span className={styles.sep}>日</span>
                 <span className={styles.sep}>　</span>
                 <span className={clsx(styles.num)}>{now.format('dddd')}</span>
-            </HLinear>
-        </VLinear>
+            </HStack>
+        </VStack>
     )
 }

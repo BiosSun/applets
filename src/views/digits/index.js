@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import clsx from 'clsx'
 import produce from 'immer'
-import { VLinear, HLinear, Divider, Button, TextBox } from '@biossun/nami'
-import FileSize from 'components/file-size'
+import { TextBox } from '@nami-ui/textbox'
+import { Button } from '@nami-ui/button'
+import { VStack, HStack } from '@nami-ui/stack'
 import useLocalState from 'utils/use-local-state'
 
 import styles from './index.module.scss'
@@ -34,28 +35,28 @@ export default function DigitsView() {
     }
 
     return (
-        <VLinear spacing padding="large">
+        <VStack spacing padding="large">
             {numbers.map((num, index) => (
-                <HLinear key={index} align="center" spacing>
+                <HStack key={index} align="center" spacing>
                     <TextBox
                         className={styles.numberInput}
                         $col={2}
                         value={num}
-                        onChange={(event, value) => changeNumber(index, value)}
+                        onChange={(value) => changeNumber(index, value)}
                     />
                     <BinaryBar
                         $flex
                         value={binaries[index]}
                         onChange={(value) => changeNumber(index, parseInt(value.join(''), 2) + '')}
                     />
-                </HLinear>
+                </HStack>
             ))}
-            <HLinear>
+            <HStack>
                 <Button type="primary" onClick={addNewItem}>
                     添加
                 </Button>
-            </HLinear>
-        </VLinear>
+            </HStack>
+        </VStack>
     )
 }
 

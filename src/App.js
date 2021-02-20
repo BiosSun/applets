@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
-import { VLinear } from '@biossun/nami'
+import { VStack } from '@nami-ui/stack'
 import Loading from './components/loading'
 import { ConfigProvider } from 'antd'
 import zhCN from 'antd/lib/locale/zh_CN'
@@ -24,7 +24,7 @@ function App() {
     return (
         <ConfigProvider locale={zhCN}>
             <Router>
-                <VLinear className={styles.view}>
+                <VStack className={styles.view}>
                     <nav className={styles.nav}>
                         <ul>
                             <li>
@@ -112,7 +112,7 @@ function App() {
                             </Route>
                         </Switch>
                     </Suspense>
-                </VLinear>
+                </VStack>
             </Router>
         </ConfigProvider>
     )
