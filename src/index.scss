@@ -7,6 +7,12 @@
     @include nami.variables();
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    @include nami.light-variables();
+  }
+}
+
 *,
 *:before,
 *:after {
