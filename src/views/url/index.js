@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { VStack } from "@nami-ui/stack";
+import { VStack } from '@nami-ui/stack'
 import TextareaAutosize from 'react-autosize-textarea'
 import _ from 'lodash'
-import classnames from 'classnames'
+import clsx from 'clsx'
 import URI from 'urijs'
 import QRCode from 'qrcode.react'
 import { useUpdate } from 'react-use'
@@ -150,7 +150,7 @@ function Field({
     }
 
     const Control = textarea ? Textarea : Input
-    const className = classnames(styles.fieldItem, {
+    const className = clsx(styles.fieldItem, {
         [styles.emptyFieldItem]: _.isEmpty(value),
         [styles.focusedFieldItem]: focused,
         [styles[`fieldItemIndent${indent}`]]: indent,
