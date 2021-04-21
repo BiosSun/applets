@@ -149,7 +149,7 @@ function ArrayPropertyValue({ value }) {
     const [on, toggle] = useToggle(true)
 
     return (
-        <span className={clsx(styles.array, { [styles.expand]: on })}>
+        <span className={clsx(styles.array, { [styles.fold]: !on })}>
             <span className={clsx(styles.bracket, styles.leftBracket)} onClick={toggle}>
                 [
             </span>
@@ -173,7 +173,7 @@ function ObjectPropertyValue({ value }) {
     const entries = Object.entries(value)
 
     return (
-        <span className={clsx(styles.object, { [styles.expand]: on })}>
+        <span className={clsx(styles.object, { [styles.fold]: !on })}>
             <span className={clsx(styles.bracket, styles.leftBracket)} onClick={toggle}>
                 {'{'}
             </span>
