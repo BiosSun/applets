@@ -29,15 +29,16 @@ export default function JSONView() {
                 </HStack>
             </VStack>
 
-            <Divider />
-
-            <HStack style={{ flex: '1 0 auto' }} align="stretch">
-                <Input $flex $col={10} value={text} onChange={setText} />
-
+            <VStack $flex>
                 <Divider />
+                <HStack $flex align="stretch">
+                    <Input $flex $col={10} value={text} onChange={setText} />
 
-                <Display $flex $col={14} text={text} decode={decode} />
-            </HStack>
+                    <Divider />
+
+                    <Display $flex $col={14} text={text} decode={decode} />
+                </HStack>
+            </VStack>
         </VStack>
     )
 }
