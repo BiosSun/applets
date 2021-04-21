@@ -1,7 +1,7 @@
 import { Buffer } from 'buffer'
 import clsx from 'clsx'
 import toArrayBuffer from 'to-arraybuffer'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { VStack, HStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
 

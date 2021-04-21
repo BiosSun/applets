@@ -1,12 +1,13 @@
-import React, { useMemo } from 'react'
+import { useMemo, createContext, useContext } from 'react'
+import _ from 'lodash'
 import clsx from 'clsx'
+import { useToggle } from 'react-use'
 import { VStack, HStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
 import { Space } from '@nami-ui/space'
-import _ from 'lodash'
-import { useToggle } from 'react-use'
-import useLocalState from 'utils/use-local-state.ts'
+import { CheckBox } from '@nami-ui/checkbox'
 import TextareaAutosize from 'react-autosize-textarea'
+import useLocalState from 'utils/use-local-state.ts'
 
 import styles from './index.module.scss'
 
@@ -15,6 +16,7 @@ const DEFAULT_TEXT =
 
 export default function JSONView() {
     const [text, setText] = useLocalState('JSON/text', DEFAULT_TEXT)
+    const [decode, setDecode] = useLocalState('JSON/decode', false)
 
     return (
         <VStack className={styles.container} spacing="huge">
@@ -23,7 +25,7 @@ export default function JSONView() {
                 <p>解析 JSON 字符串</p>
 
                 <HStack spacing align="center">
-                    <Space $flex />
+                    <CheckBox label="解码字符串" checked={decode} onChange={setDecode} />
                 </HStack>
             </VStack>
 
@@ -34,7 +36,7 @@ export default function JSONView() {
 
                 <Divider />
 
-                <Display $flex $col={14} text={text} />
+                <Display $flex $col={14} text={text} decode={decode} />
             </HStack>
         </VStack>
     )
@@ -61,7 +63,9 @@ function Input({ className, value, onChange }) {
     )
 }
 
-function Display({ className, text }) {
+const DisplayContext = createContext({ decode: false })
+
+function Display({ className, text, decode }) {
     const [value, error] = useMemo(() => {
         const trimedText = _.trim(text)
 
@@ -76,16 +80,18 @@ function Display({ className, text }) {
         }
     }, [text])
 
+    const context = useMemo(() => ({ decode }), [decode])
+
     if (error) {
         return <div className={clsx(className, styles.dangerMessage)}>{error.message}</div>
     }
 
-    console.info(value)
-
     return (
-        <div className={clsx(className, styles.display)}>
-            <PropertyValue value={value} />
-        </div>
+        <DisplayContext.Provider value={context}>
+            <div className={clsx(className, styles.display)}>
+                <PropertyValue value={value} />
+            </div>
+        </DisplayContext.Provider>
     )
 }
 
@@ -122,7 +128,8 @@ function PropertyValue({ value }) {
 }
 
 function StringPropertyValue({ value }) {
-    const [decode, toggleDecode] = useToggle(false)
+    const { decode } = useContext(DisplayContext)
+
     const str = useMemo(() => {
         if (decode) {
             try {
@@ -135,11 +142,7 @@ function StringPropertyValue({ value }) {
         }
     }, [value, decode])
 
-    return (
-        <span className={styles.string} onDoubleClick={toggleDecode}>
-            "{str}"
-        </span>
-    )
+    return <span className={styles.string}>"{str}"</span>
 }
 
 function ArrayPropertyValue({ value }) {
