@@ -10,11 +10,11 @@ const QRCodeView = lazy(() => import(/* webpackChunkName: "views_qrcode", webpac
 const URLView = lazy(() => import(/* webpackChunkName: "views_url", webpackPrefetch: true */ './views/url')) // prettier-ignore
 const XSSView = lazy(() => import(/* webpackChunkName: "views_xss", webpackPrefetch: true */ './views/xss')) // prettier-ignore
 const JSONView = lazy(() => import(/* webpackChunkName: "views_json", webpackPrefetch: true */ './views/json')) // prettier-ignore
-const TimeView = lazy(() => import(/* webpackChunkName: "views_json", webpackPrefetch: true */ './views/time')) // prettier-ignore
-const ClockView = lazy(() => import(/* webpackChunkName: "views_json", webpackPrefetch: true */ './views/clock')) // prettier-ignore
-const Base64View = lazy(() => import(/* webpackChunkName: "base64", webpackPrefetch: true */ './views/base64/index.tsx')) // prettier-ignore
-const BezierCurveView = lazy(() => import(/* webpackChunkName: "bezier-curve", webpackPrefetch: true */ './views/bezier-curve/index.tsx')) // prettier-ignore
-const RegExpView = lazy(() => import(/* webpackChunkName: "bezier-curve", webpackPrefetch: true */ './views/regexp/index.tsx')) // prettier-ignore
+const TimeView = lazy(() => import(/* webpackChunkName: "views_time", webpackPrefetch: true */ './views/time')) // prettier-ignore
+const ClockView = lazy(() => import(/* webpackChunkName: "views_clock", webpackPrefetch: true */ './views/clock')) // prettier-ignore
+const Base64View = lazy(() => import(/* webpackChunkName: "views_base64", webpackPrefetch: true */ './views/base64/index.tsx')) // prettier-ignore
+const BezierCurveView = lazy(() => import(/* webpackChunkName: "views_bezier-curve", webpackPrefetch: true */ './views/bezier-curve/index.tsx')) // prettier-ignore
+const RegExpView = lazy(() => import(/* webpackChunkName: "views_regexp", webpackPrefetch: true */ './views/regexp/index.tsx')) // prettier-ignore
 
 function App() {
     return (
