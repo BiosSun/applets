@@ -3,26 +3,26 @@
 }
 
 .nav {
-    height: 80px;
+    padding: 20px 0;
     background: #f0f0f0;
 
     > ul {
         display: block;
-        height: 100%;
         margin: 0;
         padding: 0;
         list-style: none;
 
         display: flex;
+        flex-wrap: wrap;
 
         > li {
             display: block;
 
             > a {
-                display: flex;
-                align-items: center;
-                height: 100%;
-                padding: 0 20px;
+                display: block;
+                padding: 10px 20px;
+                font-size: 14px;
+                line-height: 20px;
             }
         }
     }
