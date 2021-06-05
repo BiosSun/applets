@@ -17,6 +17,7 @@ const DEFAULT_TEXT =
 export default function JSONView() {
     const [text, setText] = useLocalState('JSON/text', DEFAULT_TEXT)
     const [decode, setDecode] = useLocalState('JSON/decode', false)
+    const [deep, setDeep] = useLocalState('JSON/deep', false)
 
     return (
         <VStack className={styles.container} spacing="huge">
@@ -26,6 +27,7 @@ export default function JSONView() {
 
                 <HStack spacing align="center">
                     <CheckBox label="解码字符串" checked={decode} onChange={setDecode} />
+                    <CheckBox label="深层解析" checked={deep} onChange={setDeep} />
                 </HStack>
             </VStack>
 
@@ -36,7 +38,7 @@ export default function JSONView() {
 
                     <Divider />
 
-                    <Display $flex $col={14} text={text} decode={decode} />
+                    <Display $flex $col={14} text={text} decode={decode} deep={deep} />
                 </HStack>
             </VStack>
         </VStack>
@@ -66,25 +68,56 @@ function Input({ className, value, onChange }) {
 
 const DisplayContext = createContext({ decode: false })
 
-function Display({ className, text, decode }) {
-    const [value, error] = useMemo(() => {
-        const trimedText = _.trim(text)
+function parseJSON(text) {
+    const trimedText = _.trim(text)
 
-        if (!trimedText) {
-            return []
-        }
+    if (!trimedText) {
+        return [undefined, undefined]
+    }
 
-        try {
-            return [JSON.parse(trimedText)]
-        } catch (error) {
-            return [undefined, error]
-        }
-    }, [text])
+    try {
+        return [JSON.parse(trimedText)]
+    } catch (error) {
+        return [undefined, error]
+    }
+}
 
-    const context = useMemo(() => ({ decode }), [decode])
+function tryParseJSONIfNeed(text, parse) {
+    if (!parse) {
+        return [text, 'text']
+    }
+
+    const [value, error] = parseJSON(text)
+
+    if (error || value === undefined) {
+        return [text, 'text']
+    } else {
+        return [value, 'json']
+    }
+}
+
+function tryDecodeURIComponentIfNeed(text, decode) {
+    if (!decode) {
+        return text
+    }
+
+    try {
+        return decodeURIComponent(text)
+    } catch {
+        return text
+    }
+}
+
+function Display({ className, text, decode, deep }) {
+    const [value, error] = useMemo(() => parseJSON(text), [text])
+    const context = useMemo(() => ({ decode, deep }), [decode, deep])
 
     if (error) {
         return <div className={clsx(className, styles.dangerMessage)}>{error.message}</div>
+    }
+
+    if (value === undefined) {
+        return null
     }
 
     return (
@@ -128,22 +161,19 @@ function PropertyValue({ value }) {
     return content
 }
 
-function StringPropertyValue({ value }) {
-    const { decode } = useContext(DisplayContext)
+function StringPropertyValue({ value: str }) {
+    const { decode, deep } = useContext(DisplayContext)
 
-    const str = useMemo(() => {
-        if (decode) {
-            try {
-                return decodeURIComponent(value)
-            } catch {
-                return value
-            }
-        } else {
-            return value
-        }
-    }, [value, decode])
+    let val, type
 
-    return <span className={styles.string}>"{str}"</span>
+    val = useMemo(() => tryDecodeURIComponentIfNeed(str, decode), [str, decode])
+    ;[val, type] = useMemo(() => tryParseJSONIfNeed(val, deep), [val, deep])
+
+    if (type === 'text') {
+        return <span className={styles.string}>"{str}"</span>
+    } else {
+        return <PropertyValue value={val} />
+    }
 }
 
 function ArrayPropertyValue({ value }) {
