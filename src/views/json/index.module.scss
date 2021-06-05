@@ -42,6 +42,7 @@
 
 .item {
     word-break: break-all;
+    position: relative;
 }
 
 .array {
@@ -75,6 +76,10 @@
             width: 0;
             height: 0;
             pointer-events: none;
+        }
+
+        .index {
+            display: none;
         }
     }
 }
@@ -113,6 +118,20 @@
 
 .property {
     color: #204a87;
+}
+
+.index {
+    width: 40px;
+
+    position: absolute;
+    left: -44px;
+
+    font-size: 10px;
+    font-style: italic;
+    color: #babdb6;
+
+    text-align: right;
+    user-select: none;
 }
 
 .string {

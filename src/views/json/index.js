@@ -32,6 +32,7 @@ export default function JSONView() {
     const [text, setText] = useLocalState('JSON/text', DEFAULT_TEXT)
     const [decode, setDecode] = useLocalState('JSON/decode', false)
     const [deep, setDeep] = useLocalState('JSON/deep', false)
+    const [arrayIndex, setArrayIndex] = useLocalState('JSON/arrayIndex', false)
 
     return (
         <VStack className={styles.container} spacing="huge">
@@ -42,6 +43,7 @@ export default function JSONView() {
                 <HStack spacing align="center">
                     <CheckBox label="解码字符串" checked={decode} onChange={setDecode} />
                     <CheckBox label="深层解析" checked={deep} onChange={setDeep} />
+                    <CheckBox label="数组索引" checked={arrayIndex} onChange={setArrayIndex} />
                 </HStack>
             </VStack>
 
@@ -52,7 +54,14 @@ export default function JSONView() {
 
                     <Divider />
 
-                    <Display $flex $col={14} text={text} decode={decode} deep={deep} />
+                    <Display
+                        $flex
+                        $col={14}
+                        text={text}
+                        decode={decode}
+                        deep={deep}
+                        arrayIndex={arrayIndex}
+                    />
                 </HStack>
             </VStack>
         </VStack>
@@ -122,9 +131,9 @@ function tryDecodeURIComponentIfNeed(text, decode) {
     }
 }
 
-function Display({ className, text, decode, deep }) {
+function Display({ className, text, decode, deep, arrayIndex }) {
     const [value, error] = useMemo(() => parseJSON(text), [text])
-    const context = useMemo(() => ({ decode, deep }), [decode, deep])
+    const context = useMemo(() => ({ decode, deep, arrayIndex }), [decode, deep, arrayIndex])
 
     if (error) {
         return <div className={clsx(className, styles.dangerMessage)}>{error.message}</div>
@@ -143,9 +152,10 @@ function Display({ className, text, decode, deep }) {
     )
 }
 
-function PropertyItem({ name, value, last }) {
+function PropertyItem({ index, name, value, last }) {
     return (
         <div className={styles.item}>
+            {_.isNumber(index) ? <span className={styles.index}>{index}. </span> : null}
             {name ? <span className={styles.property}>{name}: </span> : null}
             <PropertyValue value={value} />
             {!last ? ',' : null}
@@ -191,6 +201,7 @@ function StringPropertyValue({ value: str }) {
 }
 
 function ArrayPropertyValue({ value }) {
+    const { arrayIndex } = useContext(DisplayContext)
     const [on, toggle] = useToggle(true)
 
     return (
@@ -203,7 +214,12 @@ function ArrayPropertyValue({ value }) {
 
             <div className={styles.items}>
                 {value.map((item, index) => (
-                    <PropertyItem key={index} value={item} last={index === value.length - 1} />
+                    <PropertyItem
+                        key={index}
+                        index={arrayIndex ? index : undefined}
+                        value={item}
+                        last={index === value.length - 1}
+                    />
                 ))}
             </div>
 
