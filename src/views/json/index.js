@@ -4,15 +4,29 @@ import clsx from 'clsx'
 import { useToggle } from 'react-use'
 import { VStack, HStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
-import { Space } from '@nami-ui/space'
 import { CheckBox } from '@nami-ui/checkbox'
 import TextareaAutosize from 'react-autosize-textarea'
 import useLocalState from 'utils/use-local-state.ts'
 
 import styles from './index.module.scss'
 
-const DEFAULT_TEXT =
-    '{"ID":null,"name":"Doe","first-name":"John","age":25,"hobbies":["reading","cinema",{"sports":["volley-ball","badminton"]}],"address":{}}'
+const DEFAULT_TEXT = `{
+    "ID": null,
+    "name": "Doe",
+    "first-name": "John",
+    "age": 25,
+    "hobbies": [
+        "reading",
+        "cinema",
+        {
+            "sports": [
+                "volley-ball",
+                "badminton"
+            ]
+        }
+    ],
+    "address": {}
+}`
 
 export default function JSONView() {
     const [text, setText] = useLocalState('JSON/text', DEFAULT_TEXT)
