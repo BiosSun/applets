@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import _ from 'lodash'
 import clsx from 'clsx'
 import { VStack, HStack } from '@nami-ui/stack'
@@ -52,8 +52,26 @@ export default function Clock({ ...otherProps }) {
                 <span className={clsx(styles.num)}>{now.format('DD')}</span>
                 <span className={styles.sep}>日</span>
                 <span className={styles.sep}>　</span>
-                <span className={clsx(styles.num)}>{now.format('dddd')}</span>
+                <Week className={clsx(styles.num)} time={now} />
             </HStack>
         </VStack>
+    )
+}
+
+function Week({ time, ...otherProps }) {
+    const [mode, setMode] = useState('theNameOfDayOfWeek')
+
+    function switchMode() {
+        if (mode === 'theNameOfDayOfWeek') {
+            setMode('weekOfYear')
+        } else {
+            setMode('theNameOfDayOfWeek')
+        }
+    }
+
+    return (
+        <span {...otherProps} onDoubleClick={switchMode}>
+            {mode === 'theNameOfDayOfWeek' ? time.format('dddd') : `今年第 ${time.week()} 周`}
+        </span>
     )
 }
