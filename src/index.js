@@ -8,10 +8,20 @@ import 'moment/locale/zh-cn'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
+import duration from 'dayjs/plugin/duration'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import toArray from 'dayjs/plugin/toArray'
+import toObject from 'dayjs/plugin/toObject'
+import dayOfYear from 'dayjs/plugin/dayOfYear'
 
 moment.locale('zh-cn')
 dayjs.locale('zh-cn')
 dayjs.extend(weekOfYear)
+dayjs.extend(duration)
+dayjs.extend(relativeTime)
+dayjs.extend(toArray)
+dayjs.extend(toObject)
+dayjs.extend(dayOfYear)
 
 ReactDOM.render(<App />, document.getElementById('root'))
 

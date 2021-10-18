@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import clsx from 'clsx'
 import { VStack, HStack } from '@nami-ui/stack'
 import moment from 'moment'
+import dayjs from 'dayjs'
 
 import styles from './index.module.scss'
 import useLocalState from 'utils/use-local-state.ts'
@@ -35,7 +36,7 @@ function Time({ ...otherProps }) {
     const [str, setStr] = useLocalState('Time/time', '')
     const [isMillisecondTimestamp, setIsMillisecondTimestamp] = useLocalState(
         'Time/isMillisecondTimestamp',
-        false,
+        false
     )
 
     const isStrChanged = useChanged(str)
@@ -60,13 +61,13 @@ function Time({ ...otherProps }) {
                 timestamp *= 1000
             }
 
-            return [moment(timestamp), 'timestamp']
+            return [dayjs(timestamp), 'timestamp']
         }
 
-        let time = moment(value)
+        let time = dayjs(value)
 
         if (!time.isValid()) {
-            time = moment(value, FORMATS)
+            time = dayjs(value, FORMATS)
         }
 
         if (!time.isValid()) {
@@ -103,13 +104,13 @@ function Time({ ...otherProps }) {
                 <span>无效的时间</span>
             ) : (
                 <VStack spacing>
-                    <Label title="format">
-                        {time.format('YYYY-MM-DD ddd HH:mm:ss:SSS Z (DDDo wo)')}
-                    </Label>
+                    <Label title="format">{time.format('YYYY-MM-DD ddd HH:mm:ss:SSS Z')}</Label>
                     <hr />
                     <Label title="ISO8601">{time.toISOString(true)}</Label>
                     <Label title="ISO8601 (UTC)">{time.toISOString()}</Label>
                     <Label title="From Now">{time.fromNow()}</Label>
+                    <Label title="Week Of Year">{time.week()}</Label>
+                    <Label title="Day Of Year">{time.dayOfYear()}</Label>
                     <Label title="Unix">
                         {time.valueOf()} <em>({time.unix()})</em>
                     </Label>
@@ -135,10 +136,10 @@ function Duration({ ...otherProps }) {
         }
 
         if (/^\d+$/.test(value)) {
-            return moment.duration(Number(value), 'ms')
+            return dayjs.duration(Number(value), 'ms')
         }
 
-        return moment.duration(value)
+        return dayjs.duration(value)
     }, [str])
 
     return (
@@ -151,7 +152,7 @@ function Duration({ ...otherProps }) {
                 value={str}
                 onChange={(event) => setStr(event.target.value)}
             />
-            {!duration ? null : !duration.isValid() ? (
+            {!duration ? null : !Number.isFinite(duration.milliseconds()) ? (
                 <span>无效的时间</span>
             ) : (
                 <VStack spacing>
