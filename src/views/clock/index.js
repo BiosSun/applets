@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import _ from 'lodash'
 import clsx from 'clsx'
-import { VStack, HStack } from "@nami-ui/stack";
-import moment from 'moment'
+import { VStack, HStack } from '@nami-ui/stack'
+import dayjs from 'dayjs'
 
 import styles from './index.module.scss'
 import useForceUpdate from 'utils/use-force-update.ts'
@@ -16,9 +16,9 @@ function useTicktock(delay = 20) {
             const timer = setInterval(forceUpdate, delay)
             return () => clearInterval(timer)
         }
-    }, [delay])
+    }, [delay, forceUpdate])
 
-    return moment()
+    return dayjs()
 }
 
 export default function Clock({ ...otherProps }) {

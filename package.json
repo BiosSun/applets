@@ -36,6 +36,7 @@
         "buffer": "^6.0.3",
         "clsx": "^1.1.1",
         "consolidated-events": "^2.0.2",
+        "dayjs": "^1.10.7",
         "immer": "^8.0.1",
         "js-beautify": "^1.13.5",
         "localforage": "^1.9.0",
