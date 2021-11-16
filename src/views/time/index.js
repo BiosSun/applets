@@ -1,7 +1,6 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import clsx from 'clsx'
 import { VStack, HStack } from '@nami-ui/stack'
-import moment from 'moment'
 import dayjs from 'dayjs'
 
 import styles from './index.module.scss'
@@ -21,18 +20,7 @@ const FORMATS = [
     'Ahh:mm YYYY年MM月DD日',
 ]
 
-console.info(FORMATS)
-
 export default function TimeView() {
-    return (
-        <HStack padding="huge" spacing="large">
-            <Time $flex />
-            <Duration $flex />
-        </HStack>
-    )
-}
-
-function Time({ ...otherProps }) {
     const [str, setStr] = useLocalState('Time/time', '')
     const [isMillisecondTimestamp, setIsMillisecondTimestamp] = useLocalState(
         'Time/isMillisecondTimestamp',
@@ -78,7 +66,7 @@ function Time({ ...otherProps }) {
     }, [str, isStrChanged, isMillisecondTimestamp, setIsMillisecondTimestamp])
 
     return (
-        <VStack {...otherProps} spacing="big">
+        <VStack padding="huge" spacing="large">
             <h1>Time</h1>
             <p>解析时间</p>
             <HStack align="center" spacing>
@@ -118,68 +106,6 @@ function Time({ ...otherProps }) {
                     <Label title="Array">{JSON.stringify(time.toArray(), null, 4)}</Label>
                     <Label title="Object" pre>
                         {JSON.stringify(time.toObject(), null, 4)}
-                    </Label>
-                </VStack>
-            )}
-        </VStack>
-    )
-}
-
-function Duration({ ...otherProps }) {
-    const [str, setStr] = useLocalState('Time/duration', '')
-
-    const duration = useMemo(() => {
-        const value = str.trim()
-
-        if (!value) {
-            return null
-        }
-
-        if (/^\d+$/.test(value)) {
-            return dayjs.duration(Number(value), 'ms')
-        }
-
-        return dayjs.duration(value)
-    }, [str])
-
-    return (
-        <VStack {...otherProps} spacing="big">
-            <h1>Duration</h1>
-            <p>解析时长</p>
-            <input
-                className={styles.input}
-                placeholder="输入一个时长，单位：毫秒"
-                value={str}
-                onChange={(event) => setStr(event.target.value)}
-            />
-            {!duration ? null : !Number.isFinite(duration.milliseconds()) ? (
-                <span>无效的时间</span>
-            ) : (
-                <VStack spacing>
-                    <Label title="Humanize">{duration.humanize()}</Label>
-                    <hr />
-                    <Label title="Years">
-                        {duration.years()} <em>( as {Math.floor(duration.asYears())} )</em>
-                    </Label>
-                    <Label title="Months">
-                        {duration.months()} <em>( as {Math.floor(duration.asMonths())} )</em>
-                    </Label>
-                    <Label title="Weeks">
-                        {duration.weeks()} <em>( as {Math.floor(duration.asWeeks())} )</em>
-                    </Label>
-                    <Label title="Days">
-                        {duration.days()} <em>( as {Math.floor(duration.asDays())} )</em>
-                    </Label>
-                    <hr />
-                    <Label title="Hours">
-                        {duration.hours()} <em>( as {Math.floor(duration.asHours())} )</em>
-                    </Label>
-                    <Label title="seconds">
-                        {duration.seconds()} <em>( as {Math.floor(duration.asSeconds())} )</em>
-                    </Label>
-                    <Label title="Milliseconds">
-                        {duration.milliseconds()}{' '}
-                        <em>( as {Math.floor(duration.asMilliseconds())} )</em>
                     </Label>
                 </VStack>
             )}

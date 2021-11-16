@@ -1,4 +1,3 @@
-import React from 'react'
 import clsx from 'clsx'
 import { v4 as uuidv4 } from 'uuid'
 import produce from 'immer'
@@ -59,7 +58,7 @@ export default function QRCodeView() {
     }
 
     return (
-        <VStack className={styles.container} padding="huge" spacing="large">
+        <VStack padding="huge" spacing="large">
             <h1>QRCode</h1>
             <p>生成一个二维码</p>
             <div className={styles.track}>
