@@ -83,7 +83,7 @@ class LocalState<T> {
 let count = 1
 
 /**
- * 同 setState，但所设置的值会存储到本地，当再次访问该 state 时，使时会加载之间存储的值。
+ * 同 setState，但所设置的值会存储到本地，当再次访问该 state 时，会加载之前所存储的值。
  *
  * @param {string} key 用于标识状态的 key，应用内全局唯一
  * @param {LocalForageValue} defaultValue 默认值，在加载到本地存储的值之前，将使用该默认值

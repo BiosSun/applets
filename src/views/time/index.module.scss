@@ -1,21 +1,84 @@
+.track {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px 20px;
+}
+
+.button {
+    padding: 0;
+    background: transparent;
+    border: 0;
+    color: var(--nami-primary-700);
+    font-size: 14px;
+    line-height: 20px;
+
+    &:not(:disabled) {
+        &:hover {
+            text-decoration: underline;
+        }
+
+        &:active {
+            color: var(--nami-primary-800);
+        }
+    }
+
+    &:disabled {
+        color: #ddd;
+    }
+}
+
+.addButton {
+    @extend .button;
+    padding: 4px 8px;
+    align-self: flex-end;
+}
+
+.item {
+    width: 430px;
+}
+
+.card {
+    border: 1px solid #000;
+    border-radius: 4px;
+    box-shadow: 0 3px 0 #000;
+    min-height: 232px;
+
+    .cardExpandButton {
+        @extend .button;
+        font-size: 12px;
+    }
+}
+
 .input {
-    height: 44px;
-    padding: 0 12px;
+    height: 32px;
+    padding: 4px 5px;
+    border-radius: 2px;
+    border: 1px solid #000;
+
+    font-size: 12px;
+    font-family: Hack, Monaco, 'Courier New', monospace, 'Apple Color Emoji';
+}
+
+.times {
+    height: 162px;
+    overflow: hidden;
+}
+
+.expandedTimes {
+    height: auto;
 }
 
 .label {
+    font-size: 12px;
     font-family: Hack, Monaco, 'Courier New', monospace, 'Apple Color Emoji';
-    min-height: 22px;
-    line-height: 22px;
 
     &Title {
-        width: 140px;
+        width: 130px;
         text-align: right;
     }
 
     &PreValue {
         white-space: pre;
-        line-height: 22px;
         padding: 0;
     }
 }

@@ -1,10 +1,10 @@
-import moment from 'moment'
+import dayjs from 'dayjs'
 
-const now = () => moment()
-const today = () => moment()
-const tomorrow = () => moment().add(1, 'days')
-const yesterday = () => moment().add(-1, 'days')
-const beforeYesterday = () => moment().add(-2, 'days')
+const now = () => dayjs()
+const today = () => dayjs()
+const tomorrow = () => dayjs().add(1, 'days')
+const yesterday = () => dayjs().subtract(1, 'days')
+const beforeYesterday = () => dayjs().subtract(-2, 'days')
 
 const options = {
     n: now,
