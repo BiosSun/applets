@@ -189,7 +189,7 @@ function StringPropertyValue({ value: str }) {
     ;[val, type] = useMemo(() => tryParseJSONIfNeed(val, deep), [val, deep])
 
     if (type === 'text') {
-        return <span className={styles.string}>"{str}"</span>
+        return <span className={styles.string}>"{val}"</span>
     } else {
         return <PropertyValue value={val} />
     }
