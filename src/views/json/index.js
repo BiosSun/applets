@@ -65,16 +65,6 @@ export default function JSONView() {
 }
 
 function Input({ value, onChange, ...otherProps }) {
-    function handleChange(e) {
-        let val = e.target.value
-
-        try {
-            val = JSON.stringify(JSON.parse(val), null, 4)
-        } catch {}
-
-        onChange(val)
-    }
-
     return (
         <Panel title="源码" {...otherProps}>
             <TextareaAutosize
@@ -82,7 +72,7 @@ function Input({ value, onChange, ...otherProps }) {
                 className={styles.input}
                 placeholder="请输入 JSON 内容"
                 value={value}
-                onChange={handleChange}
+                onChange={(event) => onChange(event.target.value)}
             />
         </Panel>
     )
