@@ -35,6 +35,26 @@ export default function JSONView() {
     const [deep, setDeep] = useLocalState('JSON/deep', false)
     const [arrayIndex, setArrayIndex] = useLocalState('JSON/arrayIndex', false)
 
+    function formatText() {
+        const [json, error] = parseJSON(text)
+
+        if (error) {
+            alert(error.message)
+        } else {
+            setText(JSON.stringify(json, null, 4))
+        }
+    }
+
+    function compressText() {
+        const [json, error] = parseJSON(text)
+
+        if (error) {
+            alert(error.message)
+        } else {
+            setText(JSON.stringify(json, null, 0))
+        }
+    }
+
     return (
         <VStack className={styles.container} spacing="huge">
             <VStack spacing="large" padding={{ top: 'huge', horizontal: 'huge' }}>
@@ -42,24 +62,47 @@ export default function JSONView() {
                 <p>解析 JSON 字符串</p>
 
                 <HStack spacing align="center">
-                    <CheckBox
-                        label="解码字符串"
+                    <HStack
+                        component="label"
+                        spacing="small"
+                        align="center"
                         title="对于字符串类型的值，尝试使用 decodeURIComponent 进行解码"
-                        checked={decode}
-                        onChange={setDecode}
-                    />
-                    <CheckBox
-                        label="深层解析"
+                    >
+                        <input
+                            type="checkbox"
+                            checked={decode}
+                            onChange={(event) => setDecode(event.target.checked)}
+                        />
+                        解码字符串
+                    </HStack>
+                    <HStack
+                        component="label"
+                        spacing="small"
+                        align="center"
                         title="对于 JSON 格式的字符串类型的值，直接解析并渲染其 JSON 数据"
-                        checked={deep}
-                        onChange={setDeep}
-                    />
-                    <CheckBox
-                        label="数组索引"
+                    >
+                        <input
+                            type="checkbox"
+                            checked={deep}
+                            onChange={(event) => setDeep(event.target.checked)}
+                        />
+                        深层解析
+                    </HStack>
+                    <HStack
+                        component="label"
+                        spacing="small"
+                        align="center"
                         title="显示数组元素的索引"
-                        checked={arrayIndex}
-                        onChange={setArrayIndex}
-                    />
+                    >
+                        <input
+                            type="checkbox"
+                            checked={arrayIndex}
+                            onChange={(event) => setArrayIndex(event.target.checked)}
+                        />
+                        数组索引
+                    </HStack>
+                    <button onClick={formatText}>格式化源码</button>
+                    <button onClick={compressText}>压缩源码源码</button>
                 </HStack>
             </VStack>
 
