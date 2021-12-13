@@ -40,7 +40,7 @@
 }
 
 .item {
-    word-break: break-all;
+    overflow-wrap: break-word;
     position: relative;
 }
 
