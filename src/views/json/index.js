@@ -88,6 +88,7 @@ function Input({ value, onChange, ...otherProps }) {
                 placeholder="请输入 JSON 内容"
                 value={value}
                 onChange={(event) => onChange(event.target.value)}
+                spellCheck={false}
             />
         </Panel>
     )
