@@ -42,9 +42,24 @@ export default function JSONView() {
                 <p>解析 JSON 字符串</p>
 
                 <HStack spacing align="center">
-                    <CheckBox label="解码字符串" title="对于字符串类型的值，尝试使用 decodeURIComponent 进行解码" checked={decode} onChange={setDecode} />
-                    <CheckBox label="深层解析" title="对于 JSON 格式的字符串类型的值，直接解析并渲染其 JSON 数据" checked={deep} onChange={setDeep} />
-                    <CheckBox label="数组索引" title="显示数组元素的索引" checked={arrayIndex} onChange={setArrayIndex} />
+                    <CheckBox
+                        label="解码字符串"
+                        title="对于字符串类型的值，尝试使用 decodeURIComponent 进行解码"
+                        checked={decode}
+                        onChange={setDecode}
+                    />
+                    <CheckBox
+                        label="深层解析"
+                        title="对于 JSON 格式的字符串类型的值，直接解析并渲染其 JSON 数据"
+                        checked={deep}
+                        onChange={setDeep}
+                    />
+                    <CheckBox
+                        label="数组索引"
+                        title="显示数组元素的索引"
+                        checked={arrayIndex}
+                        onChange={setArrayIndex}
+                    />
                 </HStack>
             </VStack>
 
