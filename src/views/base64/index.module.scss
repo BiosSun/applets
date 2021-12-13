@@ -2,20 +2,8 @@
     flex: 1 1 0;
 }
 
-.label {
-    padding: 0 10px;
-    height: 30px;
-    line-height: 30px;
-    background: #f6f6f7;
-}
-
-.errorMessage {
-    padding: 3px 10px;
-    line-height: 24px;
-
-    background: #ffe3e3;
-    font-family: monospace;
-    color: #c10000;
+.panels {
+    flex-basis: 0;
 }
 
 .textarea {
@@ -33,18 +21,6 @@
 
     &:read-only {
         background: #f6f6f7;
-    }
-}
-
-.panels {
-    flex-basis: 0;
-}
-
-.panel {
-    &.error {
-        .label {
-            background: #ffe3e3;
-        }
     }
 }
 

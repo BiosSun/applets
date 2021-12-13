@@ -1,9 +1,9 @@
 import { Buffer } from 'buffer'
-import clsx from 'clsx'
 import toArrayBuffer from 'to-arraybuffer'
 import { useMemo } from 'react'
 import { VStack, HStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
+import Panel from '../../components/panel'
 
 import styles from './index.module.scss'
 import useLocalState, { updateLocalState } from 'utils/use-local-state'
@@ -155,7 +155,7 @@ export default function Base64View() {
         reader.addEventListener(
             'load',
             () => updateBySource(file.type, reader.result as ArrayBuffer),
-            false,
+            false
         )
 
         reader.readAsArrayBuffer(file)
@@ -280,20 +280,5 @@ function Base64Panel(props: {
                 onChange={(e) => onChange(e.target.value)}
             />
         </Panel>
-    )
-}
-
-function Panel({ title, children, error, className = undefined, ...otherProps }) {
-    return (
-        <VStack
-            className={clsx(styles.panel, { [styles.error]: error }, className)}
-            {...otherProps}
-        >
-            <Divider />
-            <div className={styles.label}>{title}</div>
-            {error ? <div className={styles.errorMessage}>{error}</div> : null}
-            <Divider />
-            {children}
-        </VStack>
     )
 }
