@@ -6,11 +6,20 @@
     }
 }
 
-.label {
-    padding: 0 10px;
+.titleBar {
     height: 30px;
-    line-height: 30px;
+    display: flex;
+    align-items: center;
     background: #f6f6f7;
+    padding: 0 10px;
+}
+
+.title {
+    line-height: 30px;
+}
+
+.note {
+    margin-left: auto;
 }
 
 .errorMessage {

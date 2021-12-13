@@ -15,13 +15,17 @@
     line-height: 23px;
     font-family: monospace;
     resize: none;
-    opacity: 0.3;
     word-break: break-all;
 
     &:focus {
-        outline: 0;
-        opacity: 1;
+        outline: none;
     }
+}
+
+.sizes {
+    margin: 0;
+    font-family: monospace;
+    font-size: 13px;
 }
 
 .display {

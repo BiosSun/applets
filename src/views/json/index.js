@@ -1,15 +1,19 @@
-import { useMemo, createContext, useContext } from 'react'
+import { useMemo, createContext, useContext, useState, useEffect } from 'react'
 import _ from 'lodash'
 import clsx from 'clsx'
 import { useToggle } from 'react-use'
 import { VStack, HStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
-import { CheckBox } from '@nami-ui/checkbox'
-import TextareaAutosize from 'react-autosize-textarea'
 import useLocalState from 'utils/use-local-state.ts'
-import Panel from '../../components/panel'
+import Panel from 'components/panel'
+import FileSize from 'components/file-size'
 
 import styles from './index.module.scss'
+
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import FileSizeWorker from 'workerize-loader?inline!../../utils/file-size-worker'
+
+const fileSizeWorker = FileSizeWorker()
 
 const DEFAULT_TEXT = `{
     "ID": null,
@@ -124,7 +128,7 @@ export default function JSONView() {
 
 function Input({ value, onChange, ...otherProps }) {
     return (
-        <Panel title="源码" {...otherProps}>
+        <Panel title="源码" note={<SizesInfo sourceCode={value} />} {...otherProps}>
             <textarea
                 $flex
                 className={styles.input}
@@ -134,6 +138,27 @@ function Input({ value, onChange, ...otherProps }) {
                 spellCheck={false}
             />
         </Panel>
+    )
+}
+
+function SizesInfo({ className, sourceCode, ...otherProps }) {
+    const [sourceCodeSize, setSourceCodeSize] = useState({ original: 0, gzip: 0 })
+
+    useEffect(() => {
+        fileSizeWorker
+            .size(sourceCode)
+            .then(setSourceCodeSize)
+            .catch(() => {
+                setSourceCodeSize({ original: 0, gzip: 0 })
+            })
+    }, [sourceCode])
+
+    return (
+        <span className={styles.sizes}>
+            <span>size: </span>
+            <FileSize bytes={sourceCodeSize.original} />, <span>gzip: </span>
+            <FileSize bytes={sourceCodeSize.gzip} />
+        </span>
     )
 }
 
