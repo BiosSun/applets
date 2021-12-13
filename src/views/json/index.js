@@ -7,6 +7,7 @@ import { Divider } from '@nami-ui/divider'
 import { CheckBox } from '@nami-ui/checkbox'
 import TextareaAutosize from 'react-autosize-textarea'
 import useLocalState from 'utils/use-local-state.ts'
+import Panel from '../../components/panel'
 
 import styles from './index.module.scss'
 
@@ -41,34 +42,29 @@ export default function JSONView() {
                 <p>解析 JSON 字符串</p>
 
                 <HStack spacing align="center">
-                    <CheckBox label="解码字符串" checked={decode} onChange={setDecode} />
-                    <CheckBox label="深层解析" checked={deep} onChange={setDeep} />
-                    <CheckBox label="数组索引" checked={arrayIndex} onChange={setArrayIndex} />
+                    <CheckBox label="解码字符串" title="对于字符串类型的值，尝试使用 decodeURIComponent 进行解码" checked={decode} onChange={setDecode} />
+                    <CheckBox label="深层解析" title="对于 JSON 格式的字符串类型的值，直接解析并渲染其 JSON 数据" checked={deep} onChange={setDeep} />
+                    <CheckBox label="数组索引" title="显示数组元素的索引" checked={arrayIndex} onChange={setArrayIndex} />
                 </HStack>
             </VStack>
 
-            <VStack $flex>
+            <HStack $flex className={styles.panels}>
+                <Input $flex $col={10} value={text} onChange={setText} />
                 <Divider />
-                <HStack $flex align="stretch">
-                    <Input $flex $col={10} value={text} onChange={setText} />
-
-                    <Divider />
-
-                    <Display
-                        $flex
-                        $col={14}
-                        text={text}
-                        decode={decode}
-                        deep={deep}
-                        arrayIndex={arrayIndex}
-                    />
-                </HStack>
-            </VStack>
+                <Display
+                    $flex
+                    $col={14}
+                    text={text}
+                    decode={decode}
+                    deep={deep}
+                    arrayIndex={arrayIndex}
+                />
+            </HStack>
         </VStack>
     )
 }
 
-function Input({ className, value, onChange }) {
+function Input({ value, onChange, ...otherProps }) {
     function handleChange(e) {
         let val = e.target.value
 
@@ -80,12 +76,15 @@ function Input({ className, value, onChange }) {
     }
 
     return (
-        <TextareaAutosize
-            className={clsx(className, styles.input)}
-            placeholder="请输入 JSON 内容"
-            value={value}
-            onChange={handleChange}
-        />
+        <Panel title="源码" {...otherProps}>
+            <TextareaAutosize
+                $flex
+                className={styles.input}
+                placeholder="请输入 JSON 内容"
+                value={value}
+                onChange={handleChange}
+            />
+        </Panel>
     )
 }
 
@@ -131,23 +130,19 @@ function tryDecodeURIComponentIfNeed(text, decode) {
     }
 }
 
-function Display({ className, text, decode, deep, arrayIndex }) {
+function Display({ text, decode, deep, arrayIndex, ...otherProps }) {
     const [value, error] = useMemo(() => parseJSON(text), [text])
     const context = useMemo(() => ({ decode, deep, arrayIndex }), [decode, deep, arrayIndex])
 
-    if (error) {
-        return <div className={clsx(className, styles.dangerMessage)}>{error.message}</div>
-    }
-
-    if (value === undefined) {
-        return null
-    }
-
     return (
         <DisplayContext.Provider value={context}>
-            <div className={clsx(className, styles.display)}>
-                <PropertyValue value={value} />
-            </div>
+            <Panel title="显示" error={error?.message} {...otherProps}>
+                {!error && value !== undefined ? (
+                    <div $flex className={styles.display}>
+                        <PropertyValue value={value} />
+                    </div>
+                ) : null}
+            </Panel>
         </DisplayContext.Provider>
     )
 }

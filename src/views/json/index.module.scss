@@ -1,5 +1,9 @@
 .container {
-    flex: 1 1 auto;
+    flex: 1 1 0;
+}
+
+.panels {
+    flex-basis: 0;
 }
 
 .input {
@@ -18,11 +22,6 @@
         outline: 0;
         opacity: 1;
     }
-}
-
-.dangerMessage {
-    color: #b00;
-    background: #fff0f0;
 }
 
 .display {
