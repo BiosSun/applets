@@ -153,11 +153,26 @@ function parseJSON(text) {
     }
 }
 
-function tryParseJSONIfNeed(text, parse) {
-    if (!parse) {
-        return [text, 'text']
+function parseString(string, decode, deep) {
+    let value = string
+    let type = 'text'
+
+    if (decode) {
+        value = tryDecodeURIComponent(value)
     }
 
+    if (deep) {
+        ;[value, type] = tryParseJSON(value)
+    }
+
+    if (type === 'text') {
+        ;[value, type] = tryParseURL(value)
+    }
+
+    return [value, type]
+}
+
+function tryParseJSON(text) {
     const [value, error] = parseJSON(text)
 
     if (error || value === undefined) {
@@ -167,15 +182,19 @@ function tryParseJSONIfNeed(text, parse) {
     }
 }
 
-function tryDecodeURIComponentIfNeed(text, decode) {
-    if (!decode) {
-        return text
-    }
-
+function tryDecodeURIComponent(text, decode) {
     try {
         return decodeURIComponent(text)
     } catch {
         return text
+    }
+}
+
+function tryParseURL(text) {
+    try {
+        return [new URL(text), 'url']
+    } catch {
+        return [text, 'text']
     }
 }
 
@@ -232,15 +251,21 @@ function PropertyValue({ value }) {
 function StringPropertyValue({ value: str }) {
     const { decode, deep } = useContext(DisplayContext)
 
-    let val, type
+    const [value, type] = useMemo(() => parseString(str, decode, deep), [str, decode, deep])
 
-    val = useMemo(() => tryDecodeURIComponentIfNeed(str, decode), [str, decode])
-    ;[val, type] = useMemo(() => tryParseJSONIfNeed(val, deep), [val, deep])
-
-    if (type === 'text') {
-        return <span className={styles.string}>"{val}"</span>
-    } else {
-        return <PropertyValue value={val} />
+    switch (type) {
+        case 'text':
+            return <span className={styles.string}>"{value}"</span>
+        case 'url':
+            return (
+                <a className={styles.string} href={value.toString()} target="_blank" rel="noreferrer">
+                    {value.toString()}
+                </a>
+            )
+        case 'json':
+            return <PropertyValue value={value} />
+        default:
+            throw new Error('无效的字符串值类型')
     }
 }
 
