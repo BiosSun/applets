@@ -125,7 +125,7 @@ export default function JSONView() {
 function Input({ value, onChange, ...otherProps }) {
     return (
         <Panel title="源码" {...otherProps}>
-            <TextareaAutosize
+            <textarea
                 $flex
                 className={styles.input}
                 placeholder="请输入 JSON 内容"
@@ -139,10 +139,12 @@ function Input({ value, onChange, ...otherProps }) {
 
 const DisplayContext = createContext({ decode: false })
 
+const r_valid_json = /^[{["\-\ntfn]/
+
 function parseJSON(text) {
     const trimedText = _.trim(text)
 
-    if (!trimedText) {
+    if (!trimedText || !r_valid_json.test(trimedText)) {
         return [undefined, undefined]
     }
 
@@ -191,6 +193,19 @@ function tryDecodeURIComponent(text, decode) {
 }
 
 function tryParseURL(text) {
+    if (
+        !(
+            text &&
+            text.length >= 11 && // 世界上最短的有效 url 是什么？暂时定为 http://a.io
+            text[0]?.toLowerCase() === 'h' &&
+            text[1]?.toLowerCase() === 't' &&
+            text[2]?.toLowerCase() === 't' &&
+            text[3]?.toLowerCase() === 'p'
+        )
+    ) {
+        return [text, 'text']
+    }
+
     try {
         return [new URL(text), 'url']
     } catch {
@@ -258,7 +273,12 @@ function StringPropertyValue({ value: str }) {
             return <span className={styles.string}>"{value}"</span>
         case 'url':
             return (
-                <a className={styles.string} href={value.toString()} target="_blank" rel="noreferrer">
+                <a
+                    className={styles.string}
+                    href={value.toString()}
+                    target="_blank"
+                    rel="noreferrer"
+                >
                     {value.toString()}
                 </a>
             )
