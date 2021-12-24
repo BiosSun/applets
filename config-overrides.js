@@ -51,11 +51,6 @@ module.exports = function override(config, env) {
                     path: 'lodash.min.js',
                 },
                 {
-                    name: 'moment',
-                    var: 'moment',
-                    path: 'min/moment.min.js',
-                },
-                {
                     name: 'pako',
                     var: 'pako',
                     path: 'dist/pako.min.js',
