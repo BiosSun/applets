@@ -147,11 +147,19 @@
         color: #999;
 
         &:hover {
-            color: #333;
+            color: inherit;
         }
 
         &:disabled {
             color: #ddd;
+        }
+    }
+
+    &ButtonDanger {
+        color: #c10000;
+
+        &:hover {
+            color: #c10000;
         }
     }
 
@@ -165,6 +173,14 @@
         padding: 10px;
         background: #fff;
         border: 1px solid #ddd;
+    }
+
+    &Error {
+        margin: -10px;
+        padding: 10px;
+        background: #ffe3e3;
+        color: #c10000;
+        white-space: nowrap;
     }
 
     &Button:focus + &Popover {

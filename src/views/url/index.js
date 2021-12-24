@@ -37,6 +37,9 @@ export default function URLView() {
         [uri, update]
     )
 
+    const uriString = uri.toString()
+    const isLongURI = uriString.length > 2000
+
     return (
         <div className={styles.container}>
             <table className={styles.fields}>
@@ -49,15 +52,24 @@ export default function URLView() {
                         textarea
                     >
                         <div className={styles.qrcode}>
-                            <button className={styles.qrcodeButton} disabled={!uri.toString()}>
+                            <button
+                                className={clsx(styles.qrcodeButton, {
+                                    [styles.qrcodeButtonDanger]: isLongURI,
+                                })}
+                                disabled={!uri.toString()}
+                            >
                                 二维码
                             </button>
                             <div className={styles.qrcodePopover}>
-                                <QRCode
-                                    className={styles.qrcodePayload}
-                                    value={uri.toString()}
-                                    size={300}
-                                />
+                                {isLongURI ? (
+                                    <p className={styles.qrcodeError}>URL 过长，无法生成二维码</p>
+                                ) : (
+                                    <QRCode
+                                        className={styles.qrcodePayload}
+                                        value={uriString}
+                                        size={300}
+                                    />
+                                )}
                             </div>
                         </div>
                     </Field>
