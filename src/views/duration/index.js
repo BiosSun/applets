@@ -24,9 +24,7 @@ export default function DurationView() {
     }, [str])
 
     return (
-        <VStack padding="huge" spacing="large">
-            <h1>Duration</h1>
-            <p>解析时长</p>
+        <VStack padding spacing>
             <input
                 className={styles.input}
                 placeholder="输入一个时长，单位：毫秒"

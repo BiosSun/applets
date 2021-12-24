@@ -1,8 +1,9 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import clsx from 'clsx'
 import { addEventListener } from 'consolidated-events'
 import useResizeObserver from 'use-resize-observer'
 import { VStack, HStack, StackItemProps } from '@nami-ui/stack'
+import { Divider } from '@nami-ui/divider'
 
 import styles from './index.module.scss'
 import useLocalState from 'utils/use-local-state'
@@ -151,14 +152,19 @@ export default function BezierCurveView() {
     }
 
     return (
-        <VStack className={styles.container} spacing="large" padding="huge">
-            <h1>贝塞尔曲线（Bézier curve）</h1>
-            <p>定义结点，绘制曲线</p>
-            <HStack spacing>
-                <button onClick={resetControlNodes}>重置</button>
-                <span>{controlNodes.length}个控制点</span>
-                <Slide $flex value={progress} onChange={setProgress} />
-            </HStack>
+        <VStack className={styles.container}>
+            {controlNodes.length === 0 ? (
+                <HStack spacing padding>
+                    <em>随便在下面点几个点试试~~~</em>
+                </HStack>
+            ) : (
+                <HStack spacing padding>
+                    <button onClick={resetControlNodes}>重置</button>
+                    <span>{controlNodes.length}个控制点</span>
+                    <Slide $flex value={progress} onChange={setProgress} />
+                </HStack>
+            )}
+            <Divider />
             <Canvas
                 $flex
                 controlNodes={controlNodes}

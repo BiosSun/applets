@@ -1,7 +1,8 @@
 import clsx from 'clsx'
 import { v4 as uuidv4 } from 'uuid'
 import produce from 'immer'
-import { VStack, HStack } from "@nami-ui/stack";
+import { VStack, HStack } from '@nami-ui/stack'
+import { Divider } from '@nami-ui/divider'
 import TextareaAutosize from 'react-autosize-textarea'
 import ReactResizeDetector from 'react-resize-detector'
 import QRCode from 'qrcode.react'
@@ -21,12 +22,13 @@ function createNode() {
 
 export default function QRCodeView() {
     const [textList, setTextList] = useLocalState('QRCode/textList', () => [createNode()])
+    const [level, setLevel] = useLocalState('QRCode/level', () => 'L')
 
     function add() {
         setTextList(
             produce(textList, (list) => {
                 list.push(createNode())
-            }),
+            })
         )
     }
 
@@ -34,7 +36,7 @@ export default function QRCodeView() {
         setTextList(
             produce(textList, (list) => {
                 list.find((node) => node.id === id).text = text
-            }),
+            })
         )
     }
 
@@ -46,7 +48,7 @@ export default function QRCodeView() {
                 if (item) {
                     item.text = ''
                 }
-            }),
+            })
         )
     }
 
@@ -54,19 +56,34 @@ export default function QRCodeView() {
         setTextList(
             produce(textList, (list) => {
                 return list.filter((node) => node.id !== id)
-            }),
+            })
         )
     }
 
     return (
-        <VStack padding="huge" spacing="large">
-            <h1>QRCode</h1>
-            <p>生成一个二维码</p>
+        <VStack>
+            <HStack spacing padding align="center">
+                容错：
+                <HStack component="label" spacing="small" align="center">
+                    <input type="radio" checked={level === 'L'} onChange={() => setLevel('L')} />L
+                </HStack>
+                <HStack component="label" spacing="small" align="center">
+                    <input type="radio" checked={level === 'M'} onChange={() => setLevel('M')} />M
+                </HStack>
+                <HStack component="label" spacing="small" align="center">
+                    <input type="radio" checked={level === 'Q'} onChange={() => setLevel('Q')} />Q
+                </HStack>
+                <HStack component="label" spacing="small" align="center">
+                    <input type="radio" checked={level === 'H'} onChange={() => setLevel('H')} />H
+                </HStack>
+            </HStack>
+            <Divider />
             <div className={styles.track}>
                 {textList.map((node) => (
                     <Item
                         key={node.id}
                         text={node.text}
+                        level={level}
                         disabledRemove={textList.length === 1 && !textList[0].text.trim()}
                         onChange={(text) => change(node.id, text)}
                         onRemove={() => (textList.length > 1 ? remove(node.id) : clean(node.id))}
@@ -80,21 +97,17 @@ export default function QRCodeView() {
     )
 }
 
-function Item({ text, onChange, onRemove, disabledRemove }) {
+function Item({ text, level, onChange, onRemove, disabledRemove }) {
     return (
         <VStack className={styles.card} spacing="small">
             <HStack className={styles.cardActions} justify="end">
-                <button
-                    className={styles.cardDeleteButton}
-                    onClick={onRemove}
-                    disabled={disabledRemove}
-                >
+                <button className={styles.button} onClick={onRemove} disabled={disabledRemove}>
                     删除 ↓
                 </button>
             </HStack>
             <HStack className={styles.item} spacing>
                 <Input value={text} onChange={onChange} />
-                <Display value={text} />
+                <Display value={text} level={level} />
             </HStack>
         </VStack>
     )
@@ -112,12 +125,12 @@ function Input({ value, onChange, className }) {
     )
 }
 
-function Display({ value = '', className }) {
+function Display({ value = '', level, className }) {
     value = value.trim()
 
     return (
         <ReactResizeDetector handleHeight>
-            {({ width, height }) => (
+            {({ height }) => (
                 <VStack>
                     {!value ? (
                         <div $flex className={styles.qrcodePlaceholder} style={{ width: height }} />
@@ -133,6 +146,9 @@ function Display({ value = '', className }) {
                             className={clsx(className, styles.qrcode)}
                             value={value}
                             size={height}
+                            level={level}
+                            renderAs="svg"
+                            bgColor="transparent"
                         />
                     )}
                 </VStack>

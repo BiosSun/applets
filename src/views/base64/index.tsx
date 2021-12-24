@@ -176,32 +176,28 @@ export default function Base64View() {
     }
 
     return (
-        <VStack className={styles.container} spacing="huge">
-            <VStack spacing="large" padding={{ top: 'huge', horizontal: 'huge' }}>
-                <h1>Base64</h1>
-                <p>编码/反编码 Base64 字符串</p>
-                <HStack spacing align="center">
-                    <HStack component="label" spacing="small" align="center">
-                        <input
-                            type="checkbox"
-                            checked={isDataUrl}
-                            onChange={(event) => setIsDataUrl(event.target.checked)}
-                        />
-                        Data URLs
-                    </HStack>
-                    <Divider />
+        <VStack className={styles.container}>
+            <HStack spacing padding align="center">
+                <HStack component="label" spacing="small" align="center">
                     <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(event) => fromFile(event.target.files[0])}
-                        onClick={(event) => ((event.target as HTMLInputElement).value = null)}
+                        type="checkbox"
+                        checked={isDataUrl}
+                        onChange={(event) => setIsDataUrl(event.target.checked)}
                     />
-                    <Divider />
-                    type: {mime.type}
-                    <Divider />
-                    <button onClick={clean}>Clean</button>
+                    Data URLs
                 </HStack>
-            </VStack>
+                <Divider />
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(event) => fromFile(event.target.files[0])}
+                    onClick={(event) => ((event.target as HTMLInputElement).value = null)}
+                />
+                <Divider />
+                type: {mime.type}
+                <Divider />
+                <button onClick={clean}>Clean</button>
+            </HStack>
 
             <HStack $flex className={styles.panels}>
                 <SourcePanel $flex {...source} mime={mime} onChange={fromText} />

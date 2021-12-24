@@ -1,59 +1,42 @@
 .track {
     display: flex;
     flex-wrap: wrap;
-    gap: 40px 20px;
+    gap: 12px 14px;
+    padding: 12px;
 }
 
-.addButton {
-    padding: 4px 8px;
+.button {
+    padding: 0;
     background: transparent;
     border: 0;
     color: var(--nami-primary-700);
+    font-size: 14px;
+    line-height: 20px;
+
+    &:not(:disabled) {
+        &:hover {
+            text-decoration: underline;
+        }
+
+        &:active {
+            color: var(--nami-primary-800);
+        }
+    }
+
+    &:disabled {
+        color: #ddd;
+    }
+}
+
+.addButton {
+    @extend .button;
+    padding: 4px 8px;
     align-self: flex-end;
-
-    &:hover {
-        text-decoration: underline;
-    }
-
-    &:focus {
-        outline: none;
-        background: var(--nami-paper-200);
-    }
-
-    &:active {
-        color: var(--nami-primary-800);
-    }
 }
 
 .card {
     &Actions {
         width: 360px;
-    }
-
-    &DeleteButton {
-        padding: 0;
-        background: transparent;
-        border: 0;
-        color: var(--nami-primary-700);
-
-        &:not(:disabled) {
-            &:hover {
-                text-decoration: underline;
-            }
-
-            &:focus {
-                outline: none;
-                background: var(--nami-paper-200);
-            }
-
-            &:active {
-                color: var(--nami-primary-800);
-            }
-        }
-
-        &:disabled {
-            color: #ddd;
-        }
     }
 }
 
@@ -61,9 +44,16 @@
     background: var(--nami-paper-200);
 }
 
+.qrcode {
+    border-radius: 4px;
+}
+
 .textarea {
     width: 360px;
     padding: 12px;
+
+    border-radius: 4px;
+    border: 1px solid #000;
 
     font-size: 14px;
     line-height: 24px;

@@ -3,8 +3,8 @@
 }
 
 .nav {
-    padding: 20px 0;
-    background: #f0f0f0;
+    padding: 0;
+    background: #f0f1f2;
 
     > ul {
         display: block;
@@ -14,16 +14,24 @@
 
         display: flex;
         flex-wrap: wrap;
+    }
+}
 
-        > li {
-            display: block;
+.navItem {
+    display: block;
+    padding: 6px 10px;
 
-            > a {
-                display: block;
-                padding: 10px 20px;
-                font-size: 14px;
-                line-height: 20px;
-            }
-        }
+    > a {
+        display: block;
+        padding: 4px 10px;
+        text-decoration: none;
+        color: inherit;
+    }
+}
+
+.navItem.active {
+    > a {
+        background: #242629;
+        color: #fff;
     }
 }

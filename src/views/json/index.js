@@ -63,81 +63,66 @@ export default function JSONView() {
     }
 
     return (
-        <VStack className={styles.container} spacing="huge">
-            <VStack spacing="large" padding={{ top: 'huge', horizontal: 'huge' }}>
-                <h1>JSON</h1>
-                <p>解析 JSON 字符串</p>
-
-                <HStack spacing align="center">
-                    <HStack
-                        component="label"
-                        spacing="small"
-                        align="center"
-                        title="对于字符串类型的值，尝试使用 decodeURIComponent 进行解码"
-                    >
-                        <input
-                            type="checkbox"
-                            checked={decode}
-                            onChange={(event) => setDecode(event.target.checked)}
-                        />
-                        解码字符串
-                    </HStack>
-                    <HStack
-                        component="label"
-                        spacing="small"
-                        align="center"
-                        title="对于数值类型的值，若其值大于等于 1 年前的 Unix 时间戳，且小于等于 1 年后的 Unix 时间戳，则将其当作 Unix 时间戳进行解析"
-                    >
-                        <input
-                            type="checkbox"
-                            checked={!!timestamp}
-                            onChange={(event) => setTimestamp(event.target.checked ? 'ms' : false)}
-                        />
-                        解码时间戳（毫秒）
-                    </HStack>
-                    <HStack
-                        component="label"
-                        spacing="small"
-                        align="center"
-                        title="对于 JSON 格式的字符串类型的值，直接解析并渲染其 JSON 数据"
-                    >
-                        <input
-                            type="checkbox"
-                            checked={deep}
-                            onChange={(event) => setDeep(event.target.checked)}
-                        />
-                        深层解析
-                    </HStack>
-                    <HStack
-                        component="label"
-                        spacing="small"
-                        align="center"
-                        title="显示数组元素的索引"
-                    >
-                        <input
-                            type="checkbox"
-                            checked={arrayIndex}
-                            onChange={(event) => setArrayIndex(event.target.checked)}
-                        />
-                        数组索引
-                    </HStack>
-                    <HStack
-                        component="label"
-                        spacing="small"
-                        align="center"
-                        title="按属性值进行排序"
-                    >
-                        <input
-                            type="checkbox"
-                            checked={sortProps}
-                            onChange={(event) => setSortProps(event.target.checked)}
-                        />
-                        排序属性
-                    </HStack>
-                    <button onClick={formatText}>格式化源码</button>
-                    <button onClick={compressText}>压缩源码源码</button>
+        <VStack className={styles.container}>
+            <HStack spacing padding align="center">
+                <HStack
+                    component="label"
+                    spacing="small"
+                    align="center"
+                    title="对于字符串类型的值，尝试使用 decodeURIComponent 进行解码"
+                >
+                    <input
+                        type="checkbox"
+                        checked={decode}
+                        onChange={(event) => setDecode(event.target.checked)}
+                    />
+                    解码字符串
                 </HStack>
-            </VStack>
+                <HStack
+                    component="label"
+                    spacing="small"
+                    align="center"
+                    title="对于数值类型的值，若其值大于等于 1 年前的 Unix 时间戳，且小于等于 1 年后的 Unix 时间戳，则将其当作 Unix 时间戳进行解析"
+                >
+                    <input
+                        type="checkbox"
+                        checked={!!timestamp}
+                        onChange={(event) => setTimestamp(event.target.checked ? 'ms' : false)}
+                    />
+                    解码时间戳（毫秒）
+                </HStack>
+                <HStack
+                    component="label"
+                    spacing="small"
+                    align="center"
+                    title="对于 JSON 格式的字符串类型的值，直接解析并渲染其 JSON 数据"
+                >
+                    <input
+                        type="checkbox"
+                        checked={deep}
+                        onChange={(event) => setDeep(event.target.checked)}
+                    />
+                    深层解析
+                </HStack>
+                <HStack component="label" spacing="small" align="center" title="显示数组元素的索引">
+                    <input
+                        type="checkbox"
+                        checked={arrayIndex}
+                        onChange={(event) => setArrayIndex(event.target.checked)}
+                    />
+                    数组索引
+                </HStack>
+                <HStack component="label" spacing="small" align="center" title="按属性值进行排序">
+                    <input
+                        type="checkbox"
+                        checked={sortProps}
+                        onChange={(event) => setSortProps(event.target.checked)}
+                    />
+                    排序属性
+                </HStack>
+                <button onClick={formatText}>格式化源码</button>
+                <button onClick={compressText}>压缩源码源码</button>
+            </HStack>
 
             <HStack $flex className={styles.panels}>
                 <Input $flex $col={10} value={text} onChange={setText} />
@@ -172,7 +157,7 @@ function Input({ value, onChange, ...otherProps }) {
     )
 }
 
-function SizesInfo({ className, sourceCode, ...otherProps }) {
+function SizesInfo({ sourceCode }) {
     const [sourceCodeSize, setSourceCodeSize] = useState({ original: 0, gzip: 0 })
 
     useEffect(() => {

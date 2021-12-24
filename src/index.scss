@@ -7,9 +7,9 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    @include nami.light-variables();
-  }
+    :root {
+        @include nami.light-variables();
+    }
 }
 
 *,
@@ -20,7 +20,7 @@
 
 body {
     font: 14px/20px sans-serif;
-    color: #333;
+    color: #242629;
 }
 
 h1,
@@ -31,4 +31,8 @@ h2 {
 em {
     font-style: normal;
     opacity: 0.5;
+}
+
+input {
+    accent-color: #242629;
 }

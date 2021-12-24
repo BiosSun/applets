@@ -78,18 +78,14 @@ export default function RegExpView() {
     console.info(render.rendering)
 
     return (
-        <VStack padding="huge" spacing="big">
-            <h1>RegExp</h1>
-            <p>
-                正则表达式，
-                <strong>
-                    绘制语法图的代码是直接从 Jeff Avallone 的{' '}
-                    <a href="https://regexper.com/" target="__blank">
-                        regexper
-                    </a>{' '}
-                    项目中搬运过来的，如果你认为这个东西很好用，那么感谢他吧。
-                </strong>
-            </p>
+        <VStack padding spacing>
+            <strong>
+                绘制语法图的代码是直接从 Jeff Avallone 的{' '}
+                <a href="https://regexper.com/" target="__blank">
+                    regexper
+                </a>{' '}
+                项目中搬运过来的，如果你认为这个东西很好用，那么感谢他吧。
+            </strong>
             <HStack align="center">
                 <input
                     $flex

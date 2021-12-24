@@ -1,53 +1,40 @@
+import clsx from 'clsx'
 import { Suspense } from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet, useResolvedPath, useMatch } from 'react-router-dom'
 import { VStack } from '@nami-ui/stack'
+import { Divider } from '@nami-ui/divider'
 import Loading from './components/loading'
 
-import styles from 'app.module.scss'
+import styles from './app.module.scss'
 
-function App() {
+export default function App() {
     return (
         <VStack className={styles.view}>
             <nav className={styles.nav}>
                 <ul>
-                    <li>
-                        <Link to="/">Home</Link>
-                    </li>
-                    <li>
-                        <Link to="/js-size">JS Size</Link>
-                    </li>
-                    <li>
-                        <Link to="/qrcode">QRCode</Link>
-                    </li>
-                    <li>
-                        <Link to="/url">URL</Link>
-                    </li>
-                    <li>
-                        <Link to="/json">JSON</Link>
-                    </li>
-                    <li>
-                        <Link to="/base64">Base64</Link>
-                    </li>
-                    <li>
-                        <Link to="/regexp">RegExp</Link>
-                    </li>
-                    <li>
-                        <Link to="/clock">Clock</Link>
-                    </li>
-                    <li>
-                        <Link to="/time">Time</Link>
-                    </li>
-                    <li>
-                        <Link to="/duration">Duration</Link>
-                    </li>
-                    <li>
-                        <Link to="/bezier-curve">Bezier Curve</Link>
-                    </li>
-                    <li>
-                        <Link to="/xss">XSS</Link>
-                    </li>
+                    <NavItem to="/" title="Home" />
+                    <NavItem
+                        to="/js-size"
+                        title="JS Size"
+                        description="计算某段 JS 代码的源文件大小，压缩后大小及 gzip 之后的大小"
+                    />
+                    <NavItem to="/qrcode" title="QRCode" description="生成二维码" />
+                    <NavItem to="/url" title="URL" description="解析 URL" />
+                    <NavItem to="/json" title="JSON" description="解析 JSON 字符串" />
+                    <NavItem to="/base64" title="Base64" description="编码/反编码 Base64 字符串" />
+                    <NavItem to="/regexp" title="RegExp" />
+                    <NavItem to="/clock" title="Clock" />
+                    <NavItem to="/time" title="Time" description="解析时间" />
+                    <NavItem to="/duration" title="Duration" description="解析时长" />
+                    <NavItem
+                        to="/bezier-curve"
+                        title="Bezier Curve"
+                        description="贝塞尔曲线：定义结点，绘制曲线"
+                    />
+                    <NavItem to="/xss" title="XSS" description="为 HTML 添加 XSS 过滤" />
                 </ul>
             </nav>
+            <Divider />
 
             <Suspense fallback={<Loading />}>
                 <Outlet />
@@ -56,4 +43,17 @@ function App() {
     )
 }
 
-export default App
+function NavItem({ title, description, to, ...props }) {
+    const resolved = useResolvedPath(to)
+    const match = useMatch({ path: resolved.pathname, end: true })
+
+    const className = clsx(styles.navItem, { [styles.active]: match })
+
+    return (
+        <li className={className}>
+            <Link to={to} title={description} {...props}>
+                {title}
+            </Link>
+        </li>
+    )
+}

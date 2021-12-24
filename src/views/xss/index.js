@@ -31,10 +31,7 @@ export default function XSSView() {
     }, [isEnabledBeautify, xssedHTML])
 
     return (
-        <VStack className={styles.container} spacing="large" padding="huge">
-            <h1>XSS</h1>
-            <p>为 HTML 添加 XSS 过滤</p>
-
+        <VStack className={styles.container} spacing padding>
             <HStack spacing align="center">
                 <CheckBox label="enabled xss" checked={isEnabledXSS} onChange={setEnabledXSS} />
 

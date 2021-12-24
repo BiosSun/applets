@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import clsx from 'clsx'
-import { VStack, HStack } from '@nami-ui/stack'
+import { HStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
 import FileSize from 'components/file-size'
+import Panel from 'components/panel'
 
 import styles from './index.module.scss'
 
@@ -42,93 +43,60 @@ export default function JSSizeView() {
     }, [sourceCode])
 
     return (
-        <VStack className={styles.container} spacing="huge">
-            <VStack spacing="large" padding={{ top: 'huge', horizontal: 'huge' }}>
-                <h1>JS Size</h1>
-                <p>计算某段 JS 代码的源文件大小，压缩后大小及 gzip 之后的大小</p>
-                <SizesInfo sourceCode={sourceCode} minifiedCode={minifiedCode} />
-            </VStack>
-
-            <HStack $flex className={styles.codeareas}>
-                <VStack $flex className={styles.codearea}>
-                    <strong className={styles.title}>Source Code</strong>
-                    <Divider />
+        <HStack $flex className={styles.container}>
+            <Panel $flex title="Source Code" note={<SizeInfo text={sourceCode} />} withoutTopBorder>
+                <textarea
+                    $flex
+                    value={sourceCode}
+                    className={styles.code}
+                    onChange={(e) => setSourceCode(e.target.value)}
+                    placeholder="请输入或粘贴 JS 源代码"
+                    spellCheck={false}
+                />
+            </Panel>
+            <Divider />
+            <Panel
+                $flex
+                title="Minified Code"
+                note={<SizeInfo text={minifiedCode} />}
+                withoutTopBorder
+            >
+                {isMinifying ? (
                     <textarea
                         $flex
-                        value={sourceCode}
-                        className={styles.code}
-                        onChange={(e) => setSourceCode(e.target.value)}
-                        placeholder="请输入或粘贴 JS 源代码"
+                        value={''}
+                        className={styles.minCode}
+                        placeholder="代码压缩中…"
+                        readOnly
                     />
-                </VStack>
-                <Divider />
-                <VStack $flex className={styles.codearea}>
-                    <strong className={styles.title}>Minified Code</strong>
-                    <Divider />
-                    {isMinifying ? (
-                        <textarea
-                            $flex
-                            value={''}
-                            className={styles.minCode}
-                            placeholder="代码压缩中…"
-                            readOnly
-                        />
-                    ) : !minifiedError ? (
-                        <textarea $flex value={minifiedCode} className={styles.minCode} readOnly />
-                    ) : (
-                        <ParseErrorInfo $flex error={minifiedError} />
-                    )}
-                </VStack>
-            </HStack>
-        </VStack>
+                ) : !minifiedError ? (
+                    <textarea $flex value={minifiedCode} className={styles.minCode} readOnly />
+                ) : (
+                    <ParseErrorInfo $flex error={minifiedError} />
+                )}
+            </Panel>
+        </HStack>
     )
 }
 
-function SizesInfo({ className, sourceCode, minifiedCode, ...otherProps }) {
-    const [sourceCodeSize, setSourceCodeSize] = useState({ original: 0, gzip: 0 })
-    const [minifiedCodeSize, setMinifiedCodeSize] = useState({ original: 0, gzip: 0 })
+function SizeInfo({ text }) {
+    const [size, setSize] = useState({ original: 0, gzip: 0 })
 
     useEffect(() => {
         fileSizeWorker
-            .size(sourceCode)
-            .then(setSourceCodeSize)
+            .size(text)
+            .then(setSize)
             .catch(() => {
-                setSourceCodeSize({ original: 0, gzip: 0 })
+                setSize({ original: 0, gzip: 0 })
             })
-    }, [sourceCode])
-
-    useEffect(() => {
-        fileSizeWorker
-            .size(minifiedCode)
-            .then(setMinifiedCodeSize)
-            .catch(() => {
-                setMinifiedCodeSize({ original: 0, gzip: 0 })
-            })
-    }, [minifiedCode])
+    }, [text])
 
     return (
-        <VStack className={className} {...otherProps}>
-            <dl className={styles.sizes}>
-                <dt>Source Code Size</dt>
-                <dd>
-                    <FileSize bytes={sourceCodeSize.original} />
-                </dd>
-                <dt>GZip</dt>
-                <dd>
-                    <FileSize bytes={sourceCodeSize.gzip} />
-                </dd>
-            </dl>
-            <dl className={styles.sizes}>
-                <dt>Minified Code Size</dt>
-                <dd>
-                    <FileSize bytes={minifiedCodeSize.original} />
-                </dd>
-                <dt>GZip</dt>
-                <dd>
-                    <FileSize bytes={minifiedCodeSize.gzip} />
-                </dd>
-            </dl>
-        </VStack>
+        <span className={styles.size}>
+            <span>size: </span>
+            <FileSize bytes={size.original} />, <span>gzip: </span>
+            <FileSize bytes={size.gzip} />
+        </span>
     )
 }
 

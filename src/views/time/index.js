@@ -86,24 +86,20 @@ export default function TimeView() {
     }
 
     return (
-        <VStack padding="huge" spacing="large">
-            <h1>Time</h1>
-            <p>解析时间</p>
-            <div className={styles.track}>
-                {textList.map((node) => (
-                    <Item
-                        key={node.id}
-                        value={node.value}
-                        disabledRemove={textList.length === 1 && !textList[0].value.text?.trim()}
-                        onChange={(value) => change(node.id, value)}
-                        onRemove={() => (textList.length > 1 ? remove(node.id) : clean(node.id))}
-                    />
-                ))}
-                <button className={styles.addButton} onClick={add}>
-                    + 添加
-                </button>
-            </div>
-        </VStack>
+        <div className={styles.track}>
+            {textList.map((node) => (
+                <Item
+                    key={node.id}
+                    value={node.value}
+                    disabledRemove={textList.length === 1 && !textList[0].value.text?.trim()}
+                    onChange={(value) => change(node.id, value)}
+                    onRemove={() => (textList.length > 1 ? remove(node.id) : clean(node.id))}
+                />
+            ))}
+            <button className={styles.addButton} onClick={add}>
+                + 添加
+            </button>
+        </div>
     )
 }
 

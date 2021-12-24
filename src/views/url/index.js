@@ -22,7 +22,7 @@ export default function URLView() {
         'URL/uri',
         '',
         (uri) => uri.toString(),
-        (str) => URI(str),
+        (str) => URI(str)
     )
 
     const set = useCallback(
@@ -34,13 +34,11 @@ export default function URLView() {
                 update()
             }
         },
-        [uri, update],
+        [uri, update]
     )
 
     return (
-        <VStack padding="huge" spacing="large">
-            <h1>URL</h1>
-            <p>解析 URL</p>
+        <div className={styles.container}>
             <table className={styles.fields}>
                 <thead>
                     <Field
@@ -84,7 +82,7 @@ export default function URLView() {
                     <Field indent={1} name="hash" uri={uri} onChange={set} />
                 </tbody>
             </table>
-        </VStack>
+        </div>
     )
 }
 

@@ -9,6 +9,7 @@ interface PanelProps {
     note?: any
     error?: string
     className?: string
+    withoutTopBorder?: boolean
 }
 
 export default function Panel({
@@ -16,6 +17,7 @@ export default function Panel({
     children,
     note,
     error,
+    withoutTopBorder,
     className = undefined,
     ...otherProps
 }: PanelProps) {
@@ -24,7 +26,7 @@ export default function Panel({
             className={clsx(styles.panel, { [styles.error]: error }, className)}
             {...otherProps}
         >
-            <Divider />
+            {!withoutTopBorder ? <Divider /> : null}
             <div className={styles.titleBar}>
                 <div className={styles.title}>{title}</div>
                 {note ? <div className={styles.note}>{note}</div> : null}
