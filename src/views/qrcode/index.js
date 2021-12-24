@@ -63,7 +63,7 @@ export default function QRCodeView() {
     return (
         <VStack>
             <HStack spacing padding align="center">
-                容错：
+                Level:
                 <HStack component="label" spacing="small" align="center">
                     <input type="radio" checked={level === 'L'} onChange={() => setLevel('L')} />L
                 </HStack>
