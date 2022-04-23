@@ -123,6 +123,16 @@
     color: #204a87;
 }
 
+.emptyProperty {
+    @extend .property;
+
+    .flag {
+        color: #babdb6;
+        font-style: italic;
+        text-decoration: underline;
+    }
+}
+
 .index {
     width: 40px;
 

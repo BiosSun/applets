@@ -340,8 +340,16 @@ function Display({ text, decode, timestamp, deep, sortProps, arrayIndex, parseJS
 function PropertyItem({ index, name, value, last }) {
     return (
         <div className={styles.item}>
-            {_.isNumber(index) ? <span className={styles.index}>{index}. </span> : null}
-            {name ? <span className={styles.property}>{name}: </span> : null}
+            {typeof index === 'number' ? <span className={styles.index}>{index}. </span> : null}
+            {typeof name === 'string' ? (
+                name ? (
+                    <span className={styles.property}>{name}: </span>
+                ) : (
+                    <span className={styles.emptyProperty}>
+                        <span className={styles.flag}>EMPTY PROPERTY NAME</span>:{' '}
+                    </span>
+                )
+            ) : null}
             <PropertyValue value={value} />
             {!last ? ',' : null}
         </div>
