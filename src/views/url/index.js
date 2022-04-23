@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { VStack } from '@nami-ui/stack'
 import TextareaAutosize from 'react-autosize-textarea'
 import _ from 'lodash'
 import clsx from 'clsx'
@@ -34,7 +33,7 @@ export default function URLView() {
                 update()
             }
         },
-        [uri, update]
+        [setURI, uri, update]
     )
 
     const uriString = uri.toString()
@@ -44,32 +43,25 @@ export default function URLView() {
         <div className={styles.container}>
             <table className={styles.fields}>
                 <thead>
-                    <Field
-                        name="uri"
-                        uri={uri}
-                        getValue={() => uri.toString()}
-                        onChange={set}
-                        textarea
-                    >
-                        <div className={styles.qrcode}>
-                            <button
-                                className={clsx(styles.qrcodeButton, {
-                                    [styles.qrcodeButtonDanger]: isLongURI,
-                                })}
-                                disabled={!uri.toString()}
-                            >
-                                二维码
-                            </button>
-                            <div className={styles.qrcodePopover}>
-                                {isLongURI ? (
-                                    <p className={styles.qrcodeError}>URL 过长，无法生成二维码</p>
-                                ) : (
-                                    <QRCode
-                                        className={styles.qrcodePayload}
-                                        value={uriString}
-                                        size={300}
-                                    />
-                                )}
+                    <Field name="uri" uri={uri} getValue={() => uri.toString()} onChange={set} textarea>
+                        <div className={styles.actions}>
+                            <div className={styles.length}>{Array.from(uriString).length} 个字符</div>
+                            <div className={styles.qrcode}>
+                                <button
+                                    className={clsx(styles.qrcodeButton, {
+                                        [styles.qrcodeButtonDanger]: isLongURI,
+                                    })}
+                                    disabled={!uri.toString()}
+                                >
+                                    二维码
+                                </button>
+                                <div className={styles.qrcodePopover}>
+                                    {isLongURI ? (
+                                        <p className={styles.qrcodeError}>URL 过长，无法生成二维码</p>
+                                    ) : (
+                                        <QRCode className={styles.qrcodePayload} value={uriString} size={300} />
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </Field>
@@ -121,18 +113,7 @@ Field.defaultProps = {
     indent: 0,
 }
 
-function Field({
-    name,
-    uri,
-    onChange,
-    getValue,
-    parse,
-    serialize,
-    textarea,
-    indent,
-    invisibleFieldName,
-    children,
-}) {
+function Field({ name, uri, onChange, getValue, parse, serialize, textarea, indent, invisibleFieldName, children }) {
     const [focused, setFocus] = useState(false)
     const [value, setValue] = useState('')
     const [error, setError] = useState(null)
