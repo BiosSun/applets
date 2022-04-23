@@ -1,11 +1,16 @@
 import { useMemo } from 'react'
 import clsx from 'clsx'
 import { v4 as uuidv4 } from 'uuid'
-import produce from 'immer'
 import dayjs from 'dayjs'
+
 import { VStack, HStack } from '@nami-ui/stack'
+import Card from '../../components/card'
+import Toggle from '../../components/toggle'
+import Input from '../../components/input'
+import TextButton from '../../components/text-button'
 
 import useLocalState, { updateLocalState } from 'utils/use-local-state.ts'
+import useList from 'utils/use-list.ts'
 import semanticTime from './semantic-time'
 
 import styles from './index.module.scss'
@@ -23,14 +28,18 @@ const FORMATS = [
     'Ahh:mm YYYY年MM月DD日',
 ]
 
+function createValue(text = '') {
+    return {
+        text,
+        isMillisecondTimestamp: false,
+        isExpand: false,
+    }
+}
+
 function createNode(text = '') {
     return {
         id: uuidv4(),
-        value: {
-            text,
-            isMillisecondTimestamp: false,
-            isExpand: false,
-        },
+        value: createValue(text),
     }
 }
 
@@ -43,62 +52,38 @@ updateLocalState('Time/time', (value) => {
 })
 
 export default function TimeView() {
-    const [textList, setTextList] = useLocalState('Time/time', () => [createNode()])
+    const list = useList(useLocalState('Time/time', () => [createNode()]))
+
+    const disabledRemove = list.length === 1 && !list.items[0].value.text?.trim()
 
     function add() {
-        setTextList(
-            produce(textList, (list) => {
-                list.push(createNode())
-            })
-        )
+        list.add(createNode())
     }
 
     function change(id, value) {
-        setTextList(
-            produce(textList, (list) => {
-                list.find((node) => node.id === id).value = value
-            })
-        )
-    }
-
-    function clean(id) {
-        setTextList(
-            produce(textList, (list) => {
-                const item = list.find((node) => node.id === id)
-
-                if (item) {
-                    item.value = {
-                        text: '',
-                        isMillisecondTimestamp: false,
-                        isExpand: false,
-                    }
-                }
-            })
-        )
+        list.change(id, 'value', value)
     }
 
     function remove(id) {
-        setTextList(
-            produce(textList, (list) => {
-                return list.filter((node) => node.id !== id)
-            })
-        )
+        if (list.length > 1) {
+            list.remove(id)
+        } else {
+            list.change(id, 'value', createValue())
+        }
     }
 
     return (
         <div className={styles.track}>
-            {textList.map((node) => (
+            {list.items.map((node) => (
                 <Item
                     key={node.id}
                     value={node.value}
-                    disabledRemove={textList.length === 1 && !textList[0].value.text?.trim()}
+                    disabledRemove={disabledRemove}
                     onChange={(value) => change(node.id, value)}
-                    onRemove={() => (textList.length > 1 ? remove(node.id) : clean(node.id))}
+                    onRemove={() => remove(node.id)}
                 />
             ))}
-            <button className={styles.addButton} onClick={add}>
-                + 添加
-            </button>
+            <TextButton className={styles.addButton} text="+ 添加" onClick={add} />
         </div>
     )
 }
@@ -139,33 +124,24 @@ function Item({ value, onChange, onRemove, disabledRemove }) {
         <VStack className={styles.item} spacing="small">
             <HStack className={styles.itemActions} justify="end" spacing>
                 {time && time.isValid() ? (
-                    <button
-                        className={styles.button}
+                    <TextButton
                         $align="end"
+                        text={value.isExpand ? '收起 -' : '展开 +'}
                         onClick={() => onChange({ ...value, isExpand: !value.isExpand })}
-                    >
-                        {value.isExpand ? '收起 -' : '展开 +'}
-                    </button>
+                    />
                 ) : null}
-                <button className={styles.button} onClick={onRemove} disabled={disabledRemove}>
-                    删除 x
-                </button>
+                <TextButton text="删除 x" onClick={onRemove} disabled={disabledRemove} />
             </HStack>
-            <VStack className={styles.card} spacing padding>
-                <Input value={value} valueType={valueType} onChange={onChange} />
+            <Card style={{ minHeight: 232 }}>
+                <TimeInput value={value} valueType={valueType} onChange={onChange} />
                 {!time ? null : !time.isValid() ? (
                     <span>无效的时间</span>
                 ) : (
-                    <VStack
-                        spacing
-                        className={clsx(styles.times, { [styles.expandedTimes]: value.isExpand })}
-                    >
+                    <VStack spacing className={clsx(styles.times, { [styles.expandedTimes]: value.isExpand })}>
                         <Label title="format">{time.format('YYYY-MM-DD ddd HH:mm:ss.SSS Z')}</Label>
                         <hr />
                         <Label title="ISO8601 (UTC)">{time.toISOString()}</Label>
-                        <Label title="ISO8601 (Local)">
-                            {time.format('YYYY-MM-DDTHH:mm:ss.SSSZZ')}
-                        </Label>
+                        <Label title="ISO8601 (Local)">{time.format('YYYY-MM-DDTHH:mm:ss.SSSZZ')}</Label>
                         <Label title="Unix timestamp">
                             {time.valueOf()} <em>({time.unix()})</em>
                         </Label>
@@ -179,41 +155,28 @@ function Item({ value, onChange, onRemove, disabledRemove }) {
                         </Label>
                     </VStack>
                 )}
-            </VStack>
+            </Card>
         </VStack>
     )
 }
 
-function Input({ value, valueType, onChange, ...otherProps }) {
+function TimeInput({ value, valueType, onChange, ...otherProps }) {
     return (
         <HStack {...otherProps} spacing>
-            <input
+            <Input
                 $flex
-                autoFocus
-                className={styles.input}
                 placeholder="输入一个时间，任意格式"
+                monospace
+                autoFocus
                 value={value.text}
-                onChange={(event) =>
-                    onChange({
-                        text: event.target.value,
-                        isMillisecondTimestamp: maybeMillisecondTimestamp(event.target.value),
-                    })
-                }
+                onChange={(text) => onChange({ text, isMillisecondTimestamp: maybeMillisecondTimestamp(text) })}
             />
             {valueType === 'timestamp' ? (
-                <HStack component="label" align="center" spacing="small">
-                    <input
-                        type="checkbox"
-                        checked={value.isMillisecondTimestamp}
-                        onChange={(event) =>
-                            onChange({
-                                ...value,
-                                isMillisecondTimestamp: event.target.checked,
-                            })
-                        }
-                    />
-                    毫秒时间戳
-                </HStack>
+                <Toggle
+                    label="毫秒时间戳"
+                    value={value.isMillisecondTimestamp}
+                    onChange={(isMillisecondTimestamp) => onChange({ ...value, isMillisecondTimestamp })}
+                />
             ) : null}
         </HStack>
     )
@@ -221,12 +184,7 @@ function Input({ value, valueType, onChange, ...otherProps }) {
 
 function Label({ title, children, pre, className, ...otherProps }) {
     return (
-        <HStack
-            key="array"
-            className={clsx(styles.label, className)}
-            spacing="small"
-            {...otherProps}
-        >
+        <HStack key="array" className={clsx(styles.label, className)} spacing="small" {...otherProps}>
             <span className={styles.labelTitle}>{title}:</span>
             <span className={clsx(styles.labelValue, pre && styles.labelPreValue)} $flex>
                 {children}

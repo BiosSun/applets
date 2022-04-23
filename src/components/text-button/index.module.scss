@@ -1,0 +1,22 @@
+.button {
+    padding: 0;
+    background: transparent;
+    border: 0;
+    color: var(--nami-primary-700);
+    font-size: 14px;
+    line-height: 20px;
+
+    &:not(:disabled) {
+        &:hover {
+            text-decoration: underline;
+        }
+
+        &:active {
+            color: var(--nami-primary-800);
+        }
+    }
+
+    &:disabled {
+        color: #ddd;
+    }
+}
