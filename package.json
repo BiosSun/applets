@@ -35,6 +35,7 @@
         "base64url": "^3.0.1",
         "buffer": "^6.0.3",
         "clsx": "^1.1.1",
+        "comment-json": "^4.2.2",
         "consolidated-events": "^2.0.2",
         "dayjs": "^1.10.7",
         "immer": "^8.0.1",
