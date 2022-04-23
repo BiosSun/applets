@@ -37,8 +37,6 @@ function parsedataurl(str: string) {
         return { data: str }
     }
 
-    console.info(match)
-
     const type = match[1]
     let data = match[2]
 
@@ -46,7 +44,6 @@ function parsedataurl(str: string) {
         data = decodeURIComponent(data)
     } catch (error) {
         console.info(error)
-        // ignore
     }
 
     return { isDataUrl: true, type, data }

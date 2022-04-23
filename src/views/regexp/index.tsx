@@ -75,8 +75,6 @@ export default function RegExpView() {
 
     const render = useRegExpDiagram(diagramRef, expr)
 
-    console.info(render.rendering)
-
     return (
         <VStack padding spacing>
             <strong>

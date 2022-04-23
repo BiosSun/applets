@@ -206,8 +206,6 @@ function parseNumber(number, timestamp) {
     let value = number
     let type = 'number'
 
-    console.info(number, timestamp, VALID_TIMESTAMP_NUMBER_RANGE)
-
     if (
         timestamp &&
         value >= VALID_TIMESTAMP_NUMBER_RANGE[0] &&
