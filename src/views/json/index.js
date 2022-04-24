@@ -291,29 +291,29 @@ function tryParseURL(text) {
 }
 
 function getType(value) {
-    return _.isNull(value)
-        ? 'null'
-        : _.isBoolean(value)
-        ? 'boolean'
-        : _.isNumber(value)
-        ? 'number'
-        : _.isString(value)
-        ? 'string'
-        : _.isArray(value)
-        ? 'array'
-        : _.isObject(value)
-        ? 'object'
-        : 'unknown'
+    const type = typeof value
+
+    if (type === 'object') {
+        if (value === null) {
+            return 'null'
+        } else if (Array.isArray(value)) {
+            return 'array'
+        } else {
+            return 'object'
+        }
+    }
+
+    return type
 }
 
 const TYPE_SORTS = {
-    unknown: 0,
     null: 1,
     boolean: 2,
     number: 3,
     string: 4,
     array: 5,
     object: 6,
+    unknown: 100,
 }
 
 function Display({ text, decode, timestamp, deep, sortProps, arrayIndex, parseJSON, ...otherProps }) {
@@ -463,8 +463,8 @@ function ObjectPropertyValue({ value }) {
             const type1 = getType(value1)
             const type2 = getType(value2)
 
-            const typeIndex1 = TYPE_SORTS[type1]
-            const typeIndex2 = TYPE_SORTS[type2]
+            const typeIndex1 = TYPE_SORTS[type1] ?? TYPE_SORTS.unknown
+            const typeIndex2 = TYPE_SORTS[type2] ?? TYPE_SORTS.unknown
 
             if (typeIndex1 !== typeIndex2) {
                 return typeIndex1 - typeIndex2
