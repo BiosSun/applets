@@ -1,4 +1,4 @@
-import { useMemo, createContext, useContext, useState, useEffect, useCallback } from 'react'
+import { useMemo, createContext, useContext, useState, useEffect, useRef } from 'react'
 import _ from 'lodash'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
@@ -11,7 +11,7 @@ import FileSize from 'components/file-size'
 import Toggle from 'components/toggle'
 
 import useLocalState from 'utils/use-local-state.ts'
-import { adaptors } from './adaptors'
+import Json from './json'
 
 import styles from './index.module.scss'
 
@@ -48,54 +48,80 @@ export default function JSONView() {
     const [arrayIndex, setArrayIndex] = useLocalState('JSON/arrayIndex', false)
     const [sortProps, setSortProps] = useLocalState('JSON/sortProps', false)
     const [comment, setComment] = useLocalState('JSON/comment', false)
+    const [filterable, setFilterable] = useLocalState('JSON/filterable', false)
+    const [filterText, setFilterText] = useLocalState('JSON/filter-text', '')
 
-    const JSON = comment ? adaptors.comment : adaptors.native
+    const json = useMemo(() => new Json(comment), [comment])
 
-    const parseJSON = useCallback(
-        (text) => {
-            const trimmedText = text?.trim() ?? ''
+    const trimmedText = useMemo(() => text.trim(), [text])
+    const trimmedFilterText = useMemo(() => filterText.trim(), [filterText])
+    const lastValidFilterText = useRef(undefined)
 
-            if (!trimmedText) {
-                return [undefined, undefined]
+    const [parsedData, parsedError] = useMemo(() => {
+        try {
+            return [json.parse(trimmedText)]
+        } catch (err) {
+            if (_.isError(err)) {
+                err.message = `源码：${err.message}`
             }
 
-            if (!JSON.initialValid(trimmedText)) {
-                const error = new Error('无效的 JSON 源码')
-                if (JSON !== adaptors.comment && adaptors.comment.initialValid(trimmedText)) {
-                    error.message += '，若您的 JSON 中包含注释，请勾选「支持注释」'
+            return [undefined, err]
+        }
+    }, [json, trimmedText])
+
+    const deepData = useMemo(() => {
+        if (deep && parsedData != null) {
+            return json.deepParse(parsedData)
+        } else {
+            return parsedData
+        }
+    }, [json, deep, parsedData])
+
+    const [filteredData, filteredError] = useMemo(() => {
+        let data = deepData
+        let error
+
+        if (filterable && deepData != null) {
+            try {
+                data = json.filter(deepData, trimmedFilterText)
+                lastValidFilterText.current = trimmedFilterText
+            } catch (e) {
+                if (_.isError(e)) {
+                    e.message = `过滤表达式：${e.message}`
                 }
 
-                return [undefined, error]
-            }
+                error = e
 
-            try {
-                const value = JSON.parse(trimmedText)
-                return [value]
-            } catch (error) {
-                return [undefined, error]
+                if (lastValidFilterText.current) {
+                    data = json.filter(deepData, lastValidFilterText.current)
+                }
             }
-        },
-        [JSON]
-    )
+        }
+
+        return [data, error]
+    }, [json, filterable, trimmedFilterText, deepData])
+
+    const data = filteredData
+    const error = filteredError ?? parsedError
 
     function formatJSON() {
-        const [json, error] = parseJSON(text)
-
-        if (error) {
+        try {
+            setText(json.format(trimmedText))
+        } catch (error) {
             alert(error.message)
-        } else {
-            setText(JSON.stringify(json, 4))
         }
     }
 
     function compressJSON() {
-        const [json, error] = parseJSON(text)
-
-        if (error) {
+        try {
+            setText(json.compress(trimmedText))
+        } catch (error) {
             alert(error.message)
-        } else {
-            setText(JSON.stringify(json, 0))
         }
+    }
+
+    function toggleFilterable() {
+        setFilterable(!filterable)
     }
 
     return (
@@ -155,23 +181,35 @@ export default function JSONView() {
                         value={comment}
                         onChange={(checked) => setComment(checked)}
                     />
-                    <button onClick={formatJSON}>格式化源码</button>
-                    <button onClick={compressJSON}>压缩源码</button>
+                    <button className={styles.button} onClick={formatJSON}>
+                        格式化源码
+                    </button>
+                    <button className={styles.button} onClick={compressJSON}>
+                        压缩源码
+                    </button>
+                    <button
+                        className={clsx(styles.button, { [styles.activated]: filterable })}
+                        onClick={toggleFilterable}
+                    >
+                        过滤数据
+                    </button>
                 </HStack>
 
                 <HStack $flex className={styles.panels}>
-                    <Input $flex $col={10} value={text} onChange={setText} />
+                    <VStack $flex $col={10}>
+                        {filterable ? <FilterInput value={filterText} onChange={setFilterText} /> : null}
+                        <JSONInput $flex value={text} onChange={setText} />
+                    </VStack>
                     <Divider />
                     <Display
                         $flex
                         $col={14}
-                        text={text}
+                        data={data}
+                        error={error}
                         decode={decode}
                         timestamp={timestamp}
-                        deep={deep}
                         sortProps={sortProps}
                         arrayIndex={arrayIndex}
-                        parseJSON={parseJSON}
                     />
                 </HStack>
             </VStack>
@@ -179,7 +217,7 @@ export default function JSONView() {
     )
 }
 
-function Input({ value, onChange, ...otherProps }) {
+function JSONInput({ value, onChange, ...otherProps }) {
     return (
         <Panel title="源码" note={<SizesInfo sourceCode={value} />} {...otherProps}>
             <textarea
@@ -189,6 +227,33 @@ function Input({ value, onChange, ...otherProps }) {
                 value={value}
                 onChange={(event) => onChange(event.target.value)}
                 spellCheck={false}
+            />
+        </Panel>
+    )
+}
+
+function FilterInput({ value, onChange, ...otherProps }) {
+    return (
+        <Panel
+            title="过滤表达式"
+            note={
+                <span className={styles.panelNote}>
+                    基于{' '}
+                    <a href="https://jmespath.org/tutorial.html" target="_blank" rel="noopener noreferrer">
+                        JMESPath
+                    </a>
+                </span>
+            }
+            {...otherProps}
+        >
+            <textarea
+                $flex
+                className={styles.input}
+                placeholder="请输入 JMESPath 格式的过滤表达式"
+                value={value}
+                onChange={(event) => onChange(event.target.value)}
+                spellCheck={false}
+                autoFocus
             />
         </Panel>
     )
@@ -232,7 +297,7 @@ function parseNumber(number, timestamp) {
     return [value, type]
 }
 
-function parseString(string, decode, deep, parseJSON) {
+function parseString(string, decode) {
     let value = string
     let type = 'text'
 
@@ -240,25 +305,11 @@ function parseString(string, decode, deep, parseJSON) {
         value = tryDecodeURIComponent(value)
     }
 
-    if (deep) {
-        ;[value, type] = tryParseJSON(value, parseJSON)
-    }
-
     if (type === 'text') {
         ;[value, type] = tryParseURL(value)
     }
 
     return [value, type]
-}
-
-function tryParseJSON(text, parser) {
-    const [value, error] = parser(text)
-
-    if (error || value === undefined) {
-        return [text, 'text']
-    } else {
-        return [value, 'json']
-    }
 }
 
 function tryDecodeURIComponent(text, decode) {
@@ -290,46 +341,18 @@ function tryParseURL(text) {
     }
 }
 
-function getType(value) {
-    const type = typeof value
-
-    if (type === 'object') {
-        if (value === null) {
-            return 'null'
-        } else if (Array.isArray(value)) {
-            return 'array'
-        } else {
-            return 'object'
-        }
-    }
-
-    return type
-}
-
-const TYPE_SORTS = {
-    null: 1,
-    boolean: 2,
-    number: 3,
-    string: 4,
-    array: 5,
-    object: 6,
-    unknown: 100,
-}
-
-function Display({ text, decode, timestamp, deep, sortProps, arrayIndex, parseJSON, ...otherProps }) {
-    const [value, error] = useMemo(() => parseJSON(text), [parseJSON, text])
-
+function Display({ data, error, decode, timestamp, sortProps, arrayIndex, ...otherProps }) {
     const context = useMemo(
-        () => ({ decode, deep, timestamp, sortProps, arrayIndex, parseJSON }),
-        [decode, deep, timestamp, sortProps, arrayIndex, parseJSON]
+        () => ({ decode, timestamp, sortProps, arrayIndex }),
+        [decode, timestamp, sortProps, arrayIndex]
     )
 
     return (
         <DisplayContext.Provider value={context}>
             <Panel title="显示" error={error?.message} {...otherProps}>
-                {!error && value !== undefined ? (
+                {data !== undefined ? (
                     <div $flex className={styles.display}>
-                        <PropertyValue value={value} />
+                        <PropertyValue value={data} />
                     </div>
                 ) : null}
             </Panel>
@@ -398,9 +421,9 @@ function NumberPropertyValue({ value: num }) {
 }
 
 function StringPropertyValue({ value: str }) {
-    const { decode, deep, parseJSON } = useContext(DisplayContext)
+    const { decode } = useContext(DisplayContext)
 
-    const [value, type] = useMemo(() => parseString(str, decode, deep, parseJSON), [str, decode, deep, parseJSON])
+    const [value, type] = useMemo(() => parseString(str, decode), [str, decode])
 
     switch (type) {
         case 'text':
@@ -411,8 +434,6 @@ function StringPropertyValue({ value: str }) {
                     {value.toString()}
                 </a>
             )
-        case 'json':
-            return <PropertyValue value={value} />
         default:
             throw new Error('无效的字符串值类型')
     }
@@ -459,19 +480,7 @@ function ObjectPropertyValue({ value }) {
             return entries
         }
 
-        return [...entries].sort(([key1, value1], [key2, value2]) => {
-            const type1 = getType(value1)
-            const type2 = getType(value2)
-
-            const typeIndex1 = TYPE_SORTS[type1] ?? TYPE_SORTS.unknown
-            const typeIndex2 = TYPE_SORTS[type2] ?? TYPE_SORTS.unknown
-
-            if (typeIndex1 !== typeIndex2) {
-                return typeIndex1 - typeIndex2
-            }
-
-            return value1 < value2 ? -1 : value1 > value2 ? 1 : 0
-        })
+        return [...entries].sort(([k1, v1], [k2, v2]) => Json.compareValue(v1, v2))
     }, [entries, sortProps])
 
     const finalEntries = sortedEntries
