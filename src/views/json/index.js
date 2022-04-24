@@ -156,7 +156,7 @@ export default function JSONView() {
                         onChange={(checked) => setComment(checked)}
                     />
                     <button onClick={formatJSON}>格式化源码</button>
-                    <button onClick={compressJSON}>压缩源码源码</button>
+                    <button onClick={compressJSON}>压缩源码</button>
                 </HStack>
 
                 <HStack $flex className={styles.panels}>
