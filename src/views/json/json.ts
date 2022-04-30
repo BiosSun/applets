@@ -78,16 +78,16 @@ export default class Json {
     }
 
     deepParse(val: any) {
-        let changed = new Map<string, any>()
-
         const deep = (val: any) => {
             switch (Json.getValueType(val)) {
                 case 'string': {
                     const data = parseStringValue(val)
-                    return data !== undefined ? this.deepParse(data) : val
+                    return data !== undefined ? deep(data) : val
                 }
 
                 case 'object': {
+                    let changed = new Map<string, any>()
+
                     Object.entries(val).forEach(([k, v]) => {
                         const r = deep(v)
                         if (r !== v) {
@@ -97,7 +97,9 @@ export default class Json {
 
                     if (changed.size) {
                         const newVal = { ...val }
-                        changed.forEach((v, k) => (newVal[k] = v))
+                        changed.forEach((v, k) => {
+                            newVal[k] = v
+                        })
                         changed.clear()
                         return newVal
                     } else {
@@ -106,6 +108,8 @@ export default class Json {
                 }
 
                 case 'array': {
+                    let changed = new Map<string, any>()
+
                     val.forEach((v, i) => {
                         const r = deep(v)
                         if (r !== v) {
