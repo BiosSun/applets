@@ -21,3 +21,12 @@
     background: #f7f8fa;
     overflow: auto;
 }
+
+.note {
+    color: var(--nami-paper-700);
+
+    strong {
+        color: var(--nami-paper-900);
+        font-weight: 500;
+    }
+}

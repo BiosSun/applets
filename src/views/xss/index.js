@@ -20,7 +20,7 @@ export default function XSSView() {
     const [optionsCode, setOptionsCode] = useLocalState('XSS/optionsCode', DEFAULT_OPTIONS)
     const [originalHTML, setOriginalHTML] = useLocalState('XSS/originalHTML', '')
 
-    const [xssedHTML] = useSandbox(originalHTML, optionsCode)
+    const [xssedHTML, transformError, transformDuration] = useSandbox(originalHTML, optionsCode)
 
     const transformedHTML = useMemo(() => {
         if (isEnabledBeautify) {
@@ -34,12 +34,13 @@ export default function XSSView() {
         <VStack className={styles.container} spacing padding>
             <HStack spacing align="center">
                 <CheckBox label="enabled xss" checked={isEnabledXSS} onChange={setEnabledXSS} />
+                <CheckBox label="enabled beautify" checked={isEnabledBeautify} onChange={setEnabledBeautify} />
 
-                <CheckBox
-                    label="enabled beautify"
-                    checked={isEnabledBeautify}
-                    onChange={setEnabledBeautify}
-                />
+                {!transformError && Number.isFinite(transformDuration) ? (
+                    <span className={styles.note}>
+                        处理耗时：<strong>{transformDuration}ms</strong>
+                    </span>
+                ) : null}
 
                 <Space $flex />
 
@@ -71,12 +72,7 @@ export default function XSSView() {
                 <VStack $flex>
                     <Divider />
 
-                    <FlexibleMonacoEditor
-                        $flex
-                        language="html"
-                        value={originalHTML}
-                        onChange={setOriginalHTML}
-                    />
+                    <FlexibleMonacoEditor $flex language="html" value={originalHTML} onChange={setOriginalHTML} />
 
                     <Divider />
 
@@ -100,11 +96,7 @@ export default function XSSView() {
 
                         <Divider />
 
-                        <RichTextEditor
-                            $flex
-                            className={styles.transformedRichTextPanel}
-                            value={transformedHTML}
-                        />
+                        <RichTextEditor $flex className={styles.transformedRichTextPanel} value={transformedHTML} />
 
                         <Divider />
                     </VStack>

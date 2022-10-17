@@ -12,7 +12,7 @@ export default function RichTextEditor({ value, onChange, ...otherProps }) {
 
     useEffect(() => {
         function handle(e) {
-            if (e.source === iframeRef.current.contentWindow) {
+            if (e.source && e.source === iframeRef.current?.contentWindow) {
                 onChange(e.data.value)
             }
         }

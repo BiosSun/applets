@@ -11,12 +11,16 @@
                 const mainWindow = e.source
                 let transformedHTML
                 let error
+                let startTime
+                let endTime
 
                 try {
                     const { optionsCode, originalHTML } = e.data
                     const options = eval(`( ${(optionsCode || '').trim()} )`)
 
+                    startTime = Date.now()
                     transformedHTML = filterXSS(originalHTML, options)
+                    endTime = Date.now()
                 } catch (e) {
                     error = e.message
                 }
@@ -26,8 +30,9 @@
                         type: 'xss-sandbox-result',
                         transformedHTML,
                         error,
+                        duration: error ? undefined : endTime - startTime,
                     },
-                    e.origin,
+                    e.origin
                 )
             })
         </script>

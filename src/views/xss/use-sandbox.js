@@ -13,6 +13,7 @@ export default function useSandbox(originalHTML, optionsCode) {
     const [inited, setInited] = useState(false)
     const [transformedHTML, setTransformedHTML] = useState('')
     const [transformError, setTransformError] = useState('')
+    const [transformDuration, setTransformDuration] = useState(undefined)
 
     // 创建 iframe，并在所在组件被销毁时，连带销毁该 iframe 元素
     useEffect(() => {
@@ -52,6 +53,7 @@ export default function useSandbox(originalHTML, optionsCode) {
             ) {
                 setTransformedHTML(e.data.transformedHTML)
                 setTransformError(e.data.error)
+                setTransformDuration(e.data.duration)
             }
         }
 
@@ -62,5 +64,5 @@ export default function useSandbox(originalHTML, optionsCode) {
         }
     }, [])
 
-    return [transformedHTML, transformError]
+    return [transformedHTML, transformError, transformDuration]
 }
