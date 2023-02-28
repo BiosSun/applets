@@ -20,7 +20,7 @@ export default function useSandbox(originalHTML, optionsCode) {
         const el = document.createElement('iframe')
         el.title = 'xss-sandbox'
         el.sandbox = 'allow-scripts'
-        el.src = process.env.PUBLIC_URL + '/xss-sandbox.html'
+        el.src = process.env.PUBLIC_URL + '/xss-sandbox.html?v=1'
         el.style = 'position: fixed; width: 0; height: 0; margin: 0; padding: 0; left: 0; top: 0'
 
         function handleLoad() {
