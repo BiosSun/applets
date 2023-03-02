@@ -50,6 +50,7 @@ export default function JSONView() {
     const [comment, setComment] = useLocalState('JSON/comment', false)
     const [filterable, setFilterable] = useLocalState('JSON/filterable', false)
     const [filterText, setFilterText] = useLocalState('JSON/filter-text', '')
+    const [displaySourceCode, setDisplaySourceCode] = useLocalState('JSON/display-source-code', true)
 
     const json = useMemo(() => new Json(comment), [comment])
 
@@ -181,6 +182,12 @@ export default function JSONView() {
                         value={comment}
                         onChange={(checked) => setComment(checked)}
                     />
+                    <Toggle
+                        label="显示源码"
+                        title="显示源码输入框"
+                        value={displaySourceCode}
+                        onChange={(checked) => setDisplaySourceCode(checked)}
+                    />
                     <button className={styles.button} onClick={formatJSON}>
                         格式化源码
                     </button>
@@ -196,21 +203,20 @@ export default function JSONView() {
                 </HStack>
 
                 <HStack $flex className={styles.panels}>
-                    <VStack $flex $col={10}>
+                    {displaySourceCode ? <JSONInput $flex $col={10} value={text} onChange={setText} /> : null}
+                    {displaySourceCode ? <Divider /> : null}
+                    <VStack $flex $col={displaySourceCode ? 14 : null}>
                         {filterable ? <FilterInput value={filterText} onChange={setFilterText} /> : null}
-                        <JSONInput $flex value={text} onChange={setText} />
+                        <Display
+                            $flex
+                            data={data}
+                            error={error}
+                            decode={decode}
+                            timestamp={timestamp}
+                            sortProps={sortProps}
+                            arrayIndex={arrayIndex}
+                        />
                     </VStack>
-                    <Divider />
-                    <Display
-                        $flex
-                        $col={14}
-                        data={data}
-                        error={error}
-                        decode={decode}
-                        timestamp={timestamp}
-                        sortProps={sortProps}
-                        arrayIndex={arrayIndex}
-                    />
                 </HStack>
             </VStack>
         </JSONContext.Provider>
