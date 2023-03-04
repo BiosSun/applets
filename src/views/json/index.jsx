@@ -7,16 +7,19 @@ import * as Comlink from 'comlink'
 
 import { VStack, HStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
+import { Button } from 'components/button'
 import Panel from 'components/panel'
 import FileSize from 'components/file-size'
-import Toggle from 'components/toggle'
+import { Toggle } from 'components/toggle'
 
 import useLocalState from 'utils/use-local-state.ts'
 import Json from './json'
 
 import styles from './index.module.scss'
 
-const fileSizeWorker = Comlink.wrap(new Worker(new URL('utils/file-size-worker.js', import.meta.url)))
+const fileSizeWorker = Comlink.wrap(
+    new Worker(new URL('utils/file-size-worker.js', import.meta.url))
+)
 
 const DEFAULT_TEXT = `{
     "ID": null,
@@ -48,7 +51,10 @@ export default function JSONView() {
     const [comment, setComment] = useLocalState('JSON/comment', false)
     const [filterable, setFilterable] = useLocalState('JSON/filterable', false)
     const [filterText, setFilterText] = useLocalState('JSON/filter-text', '')
-    const [displaySourceCode, setDisplaySourceCode] = useLocalState('JSON/display-source-code', true)
+    const [displaySourceCode, setDisplaySourceCode] = useLocalState(
+        'JSON/display-source-code',
+        true
+    )
 
     const json = useMemo(() => new Json(comment), [comment])
 
@@ -133,7 +139,11 @@ export default function JSONView() {
                         align="center"
                         title="对于字符串类型的值，尝试使用 decodeURIComponent 进行解码"
                     >
-                        <input type="checkbox" checked={decode} onChange={(event) => setDecode(event.target.checked)} />
+                        <input
+                            type="checkbox"
+                            checked={decode}
+                            onChange={(event) => setDecode(event.target.checked)}
+                        />
                         解码字符串
                     </HStack>
                     <HStack
@@ -155,10 +165,19 @@ export default function JSONView() {
                         align="center"
                         title="对于 JSON 格式的字符串类型的值，直接解析并渲染其 JSON 数据"
                     >
-                        <input type="checkbox" checked={deep} onChange={(event) => setDeep(event.target.checked)} />
+                        <input
+                            type="checkbox"
+                            checked={deep}
+                            onChange={(event) => setDeep(event.target.checked)}
+                        />
                         深层解析
                     </HStack>
-                    <HStack component="label" spacing="small" align="center" title="显示数组元素的索引">
+                    <HStack
+                        component="label"
+                        spacing="small"
+                        align="center"
+                        title="显示数组元素的索引"
+                    >
                         <input
                             type="checkbox"
                             checked={arrayIndex}
@@ -166,7 +185,12 @@ export default function JSONView() {
                         />
                         数组索引
                     </HStack>
-                    <HStack component="label" spacing="small" align="center" title="按属性值进行排序">
+                    <HStack
+                        component="label"
+                        spacing="small"
+                        align="center"
+                        title="按属性值进行排序"
+                    >
                         <input
                             type="checkbox"
                             checked={sortProps}
@@ -186,25 +210,29 @@ export default function JSONView() {
                         value={displaySourceCode}
                         onChange={(checked) => setDisplaySourceCode(checked)}
                     />
-                    <button className={styles.button} onClick={formatJSON}>
+                    <Button className={styles.button} onClick={formatJSON}>
                         格式化源码
-                    </button>
-                    <button className={styles.button} onClick={compressJSON}>
+                    </Button>
+                    <Button className={styles.button} onClick={compressJSON}>
                         压缩源码
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                         className={clsx(styles.button, { [styles.activated]: filterable })}
                         onClick={toggleFilterable}
                     >
                         过滤数据
-                    </button>
+                    </Button>
                 </HStack>
 
                 <HStack $flex className={styles.panels}>
-                    {displaySourceCode ? <JSONInput $flex $col={10} value={text} onChange={setText} /> : null}
+                    {displaySourceCode ? (
+                        <JSONInput $flex $col={10} value={text} onChange={setText} />
+                    ) : null}
                     {displaySourceCode ? <Divider /> : null}
                     <VStack $flex $col={displaySourceCode ? 14 : null}>
-                        {filterable ? <FilterInput value={filterText} onChange={setFilterText} /> : null}
+                        {filterable ? (
+                            <FilterInput value={filterText} onChange={setFilterText} />
+                        ) : null}
                         <Display
                             $flex
                             data={data}
@@ -243,7 +271,11 @@ function FilterInput({ value, onChange, ...otherProps }) {
             note={
                 <span className={styles.panelNote}>
                     基于{' '}
-                    <a href="https://jmespath.org/tutorial.html" target="_blank" rel="noopener noreferrer">
+                    <a
+                        href="https://jmespath.org/tutorial.html"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
                         JMESPath
                     </a>
                 </span>
@@ -287,13 +319,20 @@ function SizesInfo({ sourceCode }) {
 const DisplayContext = createContext({ decode: false })
 
 const now = dayjs()
-const VALID_TIMESTAMP_NUMBER_RANGE = [now.subtract(10, 'years').valueOf(), now.add(10, 'years').valueOf()]
+const VALID_TIMESTAMP_NUMBER_RANGE = [
+    now.subtract(10, 'years').valueOf(),
+    now.add(10, 'years').valueOf(),
+]
 
 function parseNumber(number, timestamp) {
     let value = number
     let type = 'number'
 
-    if (timestamp && value >= VALID_TIMESTAMP_NUMBER_RANGE[0] && value <= VALID_TIMESTAMP_NUMBER_RANGE[1]) {
+    if (
+        timestamp &&
+        value >= VALID_TIMESTAMP_NUMBER_RANGE[0] &&
+        value <= VALID_TIMESTAMP_NUMBER_RANGE[1]
+    ) {
         value = dayjs(value)
         type = 'time'
     }
@@ -434,7 +473,12 @@ function StringPropertyValue({ value: str }) {
             return <span className={styles.string}>"{value}"</span>
         case 'url':
             return (
-                <a className={styles.string} href={value.toString()} target="_blank" rel="noreferrer">
+                <a
+                    className={styles.string}
+                    href={value.toString()}
+                    target="_blank"
+                    rel="noreferrer"
+                >
                     {value.toString()}
                 </a>
             )
@@ -499,7 +543,12 @@ function ObjectPropertyValue({ value }) {
 
             <div className={styles.items}>
                 {finalEntries.map(([key, value], index) => (
-                    <PropertyItem key={key} name={key} value={value} last={index === finalEntries.length - 1} />
+                    <PropertyItem
+                        key={key}
+                        name={key}
+                        value={value}
+                        last={index === finalEntries.length - 1}
+                    />
                 ))}
             </div>
 

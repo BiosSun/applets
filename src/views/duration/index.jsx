@@ -66,7 +66,9 @@ export default function DurationView() {
                     onRemove={() => remove(node.id)}
                 />
             ))}
-            <TextButton className={styles.addButton} text="+ 添加" onClick={add} />
+            <TextButton className={styles.addButton} onClick={add}>
+                + 添加
+            </TextButton>
         </div>
     )
 }
@@ -89,7 +91,9 @@ function Item({ value, onChange, onRemove, disabledRemove }) {
     return (
         <VStack className={styles.item} spacing="small">
             <HStack className={styles.itemActions} justify="end" spacing>
-                <TextButton text="删除 x" onClick={onRemove} disabled={disabledRemove} />
+                <TextButton onClick={onRemove} disabled={disabledRemove}>
+                    删除 x
+                </TextButton>
             </HStack>
             <Card>
                 <TimeInput value={value} onChange={onChange} />
@@ -104,7 +108,8 @@ function Item({ value, onChange, onRemove, disabledRemove }) {
                                 {duration.years()} <em>( as {Math.floor(duration.asYears())} )</em>
                             </Label>
                             <Label title="Months">
-                                {duration.months()} <em>( as {Math.floor(duration.asMonths())} )</em>
+                                {duration.months()}{' '}
+                                <em>( as {Math.floor(duration.asMonths())} )</em>
                             </Label>
                             <Label title="Weeks">
                                 {duration.weeks()} <em>( as {Math.floor(duration.asWeeks())} )</em>
@@ -117,10 +122,12 @@ function Item({ value, onChange, onRemove, disabledRemove }) {
                                 {duration.hours()} <em>( as {Math.floor(duration.asHours())} )</em>
                             </Label>
                             <Label title="seconds">
-                                {duration.seconds()} <em>( as {Math.floor(duration.asSeconds())} )</em>
+                                {duration.seconds()}{' '}
+                                <em>( as {Math.floor(duration.asSeconds())} )</em>
                             </Label>
                             <Label title="Milliseconds">
-                                {duration.milliseconds()} <em>( as {Math.floor(duration.asMilliseconds())} )</em>
+                                {duration.milliseconds()}{' '}
+                                <em>( as {Math.floor(duration.asMilliseconds())} )</em>
                             </Label>
                         </VStack>
                     )}
@@ -145,7 +152,12 @@ function TimeInput({ value, onChange, ...otherProps }) {
 
 function Label({ title, children, pre, className, ...otherProps }) {
     return (
-        <HStack key="array" className={clsx(styles.label, className)} spacing="small" {...otherProps}>
+        <HStack
+            key="array"
+            className={clsx(styles.label, className)}
+            spacing="small"
+            {...otherProps}
+        >
             <span className={styles.labelTitle}>{title}:</span>
             <span className={clsx(styles.labelValue, pre && styles.labelPreValue)} $flex>
                 {children}

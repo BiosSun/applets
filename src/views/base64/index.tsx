@@ -3,6 +3,7 @@ import toArrayBuffer from 'to-arraybuffer'
 import { useMemo } from 'react'
 import { VStack, HStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
+import { Button } from "components/button";
 import Panel from '../../components/panel'
 
 import styles from './index.module.scss'
@@ -193,7 +194,7 @@ export default function Base64View() {
                 <Divider />
                 type: {mime.type}
                 <Divider />
-                <button onClick={clean}>Clean</button>
+                <Button onClick={clean}>Clean</Button>
             </HStack>
 
             <HStack $flex className={styles.panels}>

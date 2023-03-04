@@ -5,6 +5,7 @@ import clsx from 'clsx'
 import URI from 'urijs'
 import { QRCodeSVG } from 'qrcode.react'
 import { useUpdate } from 'react-use'
+import { Button } from "components/button";
 
 import styles from './index.module.scss'
 import useLocalState from 'utils/use-local-state.ts'
@@ -47,14 +48,14 @@ export default function URLView() {
                         <div className={styles.actions}>
                             <div className={styles.length}>{Array.from(uriString).length} 个字符</div>
                             <div className={styles.qrcode}>
-                                <button
+                                <Button
                                     className={clsx(styles.qrcodeButton, {
                                         [styles.qrcodeButtonDanger]: isLongURI,
                                     })}
                                     disabled={!uri.toString()}
                                 >
                                     二维码
-                                </button>
+                                </Button>
                                 <div className={styles.qrcodePopover}>
                                     {isLongURI ? (
                                         <p className={styles.qrcodeError}>URL 过长，无法生成二维码</p>

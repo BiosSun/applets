@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 
 import { VStack, HStack } from '@nami-ui/stack'
 import Card from '../../components/card'
-import Toggle from '../../components/toggle'
+import { Toggle } from '../../components/toggle'
 import Input from '../../components/input'
 import TextButton from '../../components/text-button'
 
@@ -83,7 +83,9 @@ export default function TimeView() {
                     onRemove={() => remove(node.id)}
                 />
             ))}
-            <TextButton className={styles.addButton} text="+ 添加" onClick={add} />
+            <TextButton className={styles.addButton} onClick={add}>
+                + 添加
+            </TextButton>
         </div>
     )
 }
@@ -126,22 +128,30 @@ function Item({ value, onChange, onRemove, disabledRemove }) {
                 {time && time.isValid() ? (
                     <TextButton
                         $align="end"
-                        text={value.isExpand ? '收起 -' : '展开 +'}
                         onClick={() => onChange({ ...value, isExpand: !value.isExpand })}
-                    />
+                    >
+                        {value.isExpand ? '收起 -' : '展开 +'}
+                    </TextButton>
                 ) : null}
-                <TextButton text="删除 x" onClick={onRemove} disabled={disabledRemove} />
+                <TextButton onClick={onRemove} disabled={disabledRemove}>
+                    删除 x
+                </TextButton>
             </HStack>
             <Card style={{ minHeight: 232 }}>
                 <TimeInput value={value} valueType={valueType} onChange={onChange} />
                 {!time ? null : !time.isValid() ? (
                     <span>无效的时间</span>
                 ) : (
-                    <VStack spacing className={clsx(styles.times, { [styles.expandedTimes]: value.isExpand })}>
+                    <VStack
+                        spacing
+                        className={clsx(styles.times, { [styles.expandedTimes]: value.isExpand })}
+                    >
                         <Label title="format">{time.format('YYYY-MM-DD ddd HH:mm:ss.SSS Z')}</Label>
                         <hr />
                         <Label title="ISO8601 (UTC)">{time.toISOString()}</Label>
-                        <Label title="ISO8601 (Local)">{time.format('YYYY-MM-DDTHH:mm:ss.SSSZZ')}</Label>
+                        <Label title="ISO8601 (Local)">
+                            {time.format('YYYY-MM-DDTHH:mm:ss.SSSZZ')}
+                        </Label>
                         <Label title="Unix timestamp">
                             {time.valueOf()} <em>({time.unix()})</em>
                         </Label>
@@ -169,13 +179,17 @@ function TimeInput({ value, valueType, onChange, ...otherProps }) {
                 monospace
                 autoFocus
                 value={value.text}
-                onChange={(text) => onChange({ text, isMillisecondTimestamp: maybeMillisecondTimestamp(text) })}
+                onChange={(text) =>
+                    onChange({ text, isMillisecondTimestamp: maybeMillisecondTimestamp(text) })
+                }
             />
             {valueType === 'timestamp' ? (
                 <Toggle
                     label="毫秒时间戳"
                     value={value.isMillisecondTimestamp}
-                    onChange={(isMillisecondTimestamp) => onChange({ ...value, isMillisecondTimestamp })}
+                    onChange={(isMillisecondTimestamp) =>
+                        onChange({ ...value, isMillisecondTimestamp })
+                    }
                 />
             ) : null}
         </HStack>
@@ -184,7 +198,12 @@ function TimeInput({ value, valueType, onChange, ...otherProps }) {
 
 function Label({ title, children, pre, className, ...otherProps }) {
     return (
-        <HStack key="array" className={clsx(styles.label, className)} spacing="small" {...otherProps}>
+        <HStack
+            key="array"
+            className={clsx(styles.label, className)}
+            spacing="small"
+            {...otherProps}
+        >
             <span className={styles.labelTitle}>{title}:</span>
             <span className={clsx(styles.labelValue, pre && styles.labelPreValue)} $flex>
                 {children}

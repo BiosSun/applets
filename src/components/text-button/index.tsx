@@ -1,17 +1,11 @@
 import clsx from 'clsx'
+import { Button, ButtonProps } from 'components/button'
 import styles from './index.module.scss'
 
-interface TextButtonProps {
-    text: string
+interface TextButtonProps extends ButtonProps {
     onClick: () => void
-    disabled?: boolean
-    className?: string
 }
 
-export default function TextButton({ text, className, ...otherProps }: TextButtonProps) {
-    return (
-        <button className={clsx(styles.button, className)} type="button" {...otherProps}>
-            {text}
-        </button>
-    )
+export default function TextButton({ className, ...otherProps }: TextButtonProps) {
+    return <Button className={clsx(styles.button, className)} {...otherProps} />
 }

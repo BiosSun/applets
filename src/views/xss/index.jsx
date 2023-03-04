@@ -1,10 +1,9 @@
 import React, { useState, useMemo } from 'react'
+import { html as HTMLBeautify } from 'js-beautify'
 import { VStack, HStack } from '@nami-ui/stack'
-import { CheckBox } from '@nami-ui/checkbox'
 import { Divider } from '@nami-ui/divider'
 import { Space } from '@nami-ui/space'
-import { Button } from '@nami-ui/button'
-import { html as HTMLBeautify } from 'js-beautify'
+import { Toggle } from 'components/toggle'
 import useSandbox from './use-sandbox'
 import FlexibleMonacoEditor from './flexible-monaco-editor'
 import RichTextEditor from './rich-text-editor'
@@ -16,7 +15,7 @@ import useLocalState from 'utils/use-local-state.ts'
 export default function XSSView() {
     const [isEnabledXSS, setEnabledXSS] = useLocalState('XSS/isEnabledXSS', true)
     const [isEnabledBeautify, setEnabledBeautify] = useLocalState('XSS/isEnabledBeautify', false)
-    const [isDisplayOptionsEditer, setDisplayOptionsEditer] = useState(false)
+    const [isDisplayOptionsEditor, setDisplayOptionsEditor] = useState(false)
     const [optionsCode, setOptionsCode] = useLocalState('XSS/optionsCode', DEFAULT_OPTIONS)
     const [originalHTML, setOriginalHTML] = useLocalState('XSS/originalHTML', '')
 
@@ -33,8 +32,12 @@ export default function XSSView() {
     return (
         <VStack className={styles.container} spacing padding>
             <HStack spacing align="center">
-                <CheckBox label="enabled xss" checked={isEnabledXSS} onChange={setEnabledXSS} />
-                <CheckBox label="enabled beautify" checked={isEnabledBeautify} onChange={setEnabledBeautify} />
+                <Toggle value={isEnabledXSS} label="Enabled XSS" onChange={setEnabledXSS} />
+                <Toggle
+                    label="Enabled Beautify"
+                    value={isEnabledBeautify}
+                    onChange={setEnabledBeautify}
+                />
 
                 {!transformError && Number.isFinite(transformDuration) ? (
                     <span className={styles.note}>
@@ -44,15 +47,17 @@ export default function XSSView() {
 
                 <Space $flex />
 
-                <Button onClick={() => setDisplayOptionsEditer(!isDisplayOptionsEditer)}>
-                    {isDisplayOptionsEditer ? '关闭' : '打开'} XSS 配置编辑器
-                </Button>
+                <Toggle
+                    value={isDisplayOptionsEditor}
+                    label="显示 XSS 配置编辑器"
+                    onChange={setDisplayOptionsEditor}
+                />
             </HStack>
 
             <HStack $flex>
-                {isDisplayOptionsEditer ? <Divider /> : null}
+                {isDisplayOptionsEditor ? <Divider /> : null}
 
-                {isDisplayOptionsEditer ? (
+                {isDisplayOptionsEditor ? (
                     <VStack $flex $col={14}>
                         <Divider />
 
@@ -72,7 +77,12 @@ export default function XSSView() {
                 <VStack $flex>
                     <Divider />
 
-                    <FlexibleMonacoEditor $flex language="html" value={originalHTML} onChange={setOriginalHTML} />
+                    <FlexibleMonacoEditor
+                        $flex
+                        language="html"
+                        value={originalHTML}
+                        onChange={setOriginalHTML}
+                    />
 
                     <Divider />
 
@@ -83,7 +93,7 @@ export default function XSSView() {
 
                 <Divider />
 
-                {!isDisplayOptionsEditer ? (
+                {!isDisplayOptionsEditor ? (
                     <VStack $flex>
                         <Divider />
 
@@ -96,13 +106,17 @@ export default function XSSView() {
 
                         <Divider />
 
-                        <RichTextEditor $flex className={styles.transformedRichTextPanel} value={transformedHTML} />
+                        <RichTextEditor
+                            $flex
+                            className={styles.transformedRichTextPanel}
+                            value={transformedHTML}
+                        />
 
                         <Divider />
                     </VStack>
                 ) : null}
 
-                {!isDisplayOptionsEditer ? <Divider /> : null}
+                {!isDisplayOptionsEditor ? <Divider /> : null}
             </HStack>
         </VStack>
     )

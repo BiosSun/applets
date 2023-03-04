@@ -4,6 +4,7 @@ import { addEventListener } from 'consolidated-events'
 import useResizeObserver from 'use-resize-observer'
 import { VStack, HStack, StackItemProps } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
+import { Button } from 'components/button'
 
 import styles from './index.module.scss'
 import useLocalState from 'utils/use-local-state'
@@ -159,7 +160,7 @@ export default function BezierCurveView() {
                 </HStack>
             ) : (
                 <HStack spacing padding>
-                    <button onClick={resetControlNodes}>重置</button>
+                    <Button onClick={resetControlNodes}>重置</Button>
                     <span>{controlNodes.length}个控制点</span>
                     <Slide $flex value={progress} onChange={setProgress} />
                 </HStack>

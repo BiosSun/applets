@@ -7,6 +7,7 @@ import TextareaAutosize from 'react-autosize-textarea'
 import ReactResizeDetector from 'react-resize-detector'
 import { QRCodeSVG } from 'qrcode.react'
 
+import { Button } from "components/button";
 import useLocalState from 'utils/use-local-state.ts'
 
 import styles from './index.module.scss'
@@ -89,9 +90,9 @@ export default function QRCodeView() {
                         onRemove={() => (textList.length > 1 ? remove(node.id) : clean(node.id))}
                     />
                 ))}
-                <button className={styles.addButton} onClick={add}>
+                <Button className={styles.addButton} onClick={add}>
                     + 添加
-                </button>
+                </Button>
             </div>
         </VStack>
     )
@@ -101,9 +102,9 @@ function Item({ text, level, onChange, onRemove, disabledRemove }) {
     return (
         <VStack className={styles.card} spacing="small">
             <HStack className={styles.cardActions} justify="end">
-                <button className={styles.button} onClick={onRemove} disabled={disabledRemove}>
+                <Button className={styles.button} onClick={onRemove} disabled={disabledRemove}>
                     删除 ↓
-                </button>
+                </Button>
             </HStack>
             <HStack className={styles.item} spacing>
                 <Input value={text} onChange={onChange} />
