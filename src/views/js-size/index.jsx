@@ -1,21 +1,19 @@
 import { useState, useEffect, useMemo } from 'react'
 import clsx from 'clsx'
+import * as Comlink from 'comlink'
 import { HStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
 import FileSize from 'components/file-size'
 import Panel from 'components/panel'
+import useLocalState from 'utils/use-local-state.ts'
 
 import styles from './index.module.scss'
 
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import UglifyWorker from 'workerize-loader?inline!./uglify-worker'
+import UglifyWorker from './uglify-worker.js?worker'
+import FileSizeWorker from 'utils/file-size-worker.js?worker'
 
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import FileSizeWorker from 'workerize-loader?inline!../../utils/file-size-worker'
-import useLocalState from 'utils/use-local-state.ts'
-
-const uglifyWorker = UglifyWorker()
-const fileSizeWorker = FileSizeWorker()
+const uglifyWorker = Comlink.wrap(new UglifyWorker())
+const fileSizeWorker = Comlink.wrap(new FileSizeWorker())
 
 export default function JSSizeView() {
     const [sourceCode, setSourceCode] = useLocalState('JSSize/sourceCode', '')
@@ -43,7 +41,7 @@ export default function JSSizeView() {
     }, [sourceCode])
 
     return (
-        <HStack $flex className={styles.container}>
+        <HStack className={styles.container}>
             <Panel $flex title="Source Code" note={<SizeInfo text={sourceCode} />} withoutTopBorder>
                 <textarea
                     $flex

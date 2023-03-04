@@ -1,6 +1,6 @@
-@use '~@nami-ui/styles/index' as nami;
+@use '@nami-ui/styles/index' as nami;
 
-@import '~normalize.css/normalize.css';
+@import 'normalize.css/normalize.css';
 
 :root {
     @include nami.variables();

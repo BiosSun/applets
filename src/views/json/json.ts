@@ -78,7 +78,7 @@ export default class Json {
     }
 
     deepParse(val: any) {
-        const deep = (val: any) => {
+        function deep(val: any): any {
             switch (Json.getValueType(val)) {
                 case 'string': {
                     const data = parseStringValue(val)
@@ -110,7 +110,7 @@ export default class Json {
                 case 'array': {
                     let changed = new Map<string, any>()
 
-                    val.forEach((v, i) => {
+                    val.forEach((v: any, i: any) => {
                         const r = deep(v)
                         if (r !== v) {
                             changed.set(i, r)
@@ -119,7 +119,7 @@ export default class Json {
 
                     if (changed.size) {
                         const newVal = [...val]
-                        changed.forEach((v, i) => (newVal[i] = v))
+                        changed.forEach((v, i) => (newVal[i as any] = v))
                         changed.clear()
                         return newVal
                     } else {
@@ -172,12 +172,16 @@ export default class Json {
     }
 
     private static TYPE_SORTS = {
+        undefined: 0,
         null: 1,
         boolean: 2,
         number: 3,
-        string: 4,
-        array: 5,
-        object: 6,
+        bigint: 4,
+        string: 5,
+        symbol: 6,
+        array: 7,
+        object: 8,
+        function: 9,
         unknown: 100,
     }
 

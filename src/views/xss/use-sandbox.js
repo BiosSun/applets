@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from 'react'
 
 /**
- * 一个 JS 代码执行环境，返回解析到的结果值
+ * 一个 JS 代码的执行环境，返回解析到的结果值
  *
  * NOTE: 结果值不会立即返回，该 hook 会在结果生成后触发组件刷新，并返回结果值。
  *
@@ -20,7 +20,7 @@ export default function useSandbox(originalHTML, optionsCode) {
         const el = document.createElement('iframe')
         el.title = 'xss-sandbox'
         el.sandbox = 'allow-scripts'
-        el.src = process.env.PUBLIC_URL + '/xss-sandbox.html?v=1'
+        el.src = 'xss-sandbox.html?v=1'
         el.style = 'position: fixed; width: 0; height: 0; margin: 0; padding: 0; left: 0; top: 0'
 
         function handleLoad() {

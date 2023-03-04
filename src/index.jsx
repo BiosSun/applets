@@ -1,5 +1,5 @@
 import { lazy } from 'react'
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import dayjs from 'dayjs'
@@ -14,7 +14,6 @@ import dayOfYear from 'dayjs/plugin/dayOfYear'
 import './index.scss'
 
 import App from './App'
-import * as serviceWorker from './serviceWorker'
 
 const WelcomeView = lazy(() => import(/* webpackChunkName: "views_welcome", webpackPrefetch: true */ './views/welcome')) // prettier-ignore
 const JSSizeView = lazy(() => import(/* webpackChunkName: "views_js-size", webpackPrefetch: true */ './views/js-size')) // prettier-ignore
@@ -37,7 +36,7 @@ dayjs.extend(toArray)
 dayjs.extend(toObject)
 dayjs.extend(dayOfYear)
 
-render(
+createRoot(document.getElementById('root')).render(
     <BrowserRouter>
         <Routes>
             <Route path="/" element={<App />}>
@@ -55,11 +54,5 @@ render(
                 <Route path="/xss" element={<XSSView />} />
             </Route>
         </Routes>
-    </BrowserRouter>,
-    document.getElementById('root')
+    </BrowserRouter>
 )
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister()

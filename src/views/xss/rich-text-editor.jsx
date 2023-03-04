@@ -31,7 +31,7 @@ export default function RichTextEditor({ value, onChange, ...otherProps }) {
             onLoad={() => setInited(true)}
             title="rich-text-editor"
             sandbox="allow-scripts"
-            src={process.env.PUBLIC_URL + '/xss-rich-text.html?readonly=' + (onChange ? 1 : 0)}
+            src={'/xss-rich-text.html?readonly=' + (onChange ? 1 : 0)}
         />
     )
 }

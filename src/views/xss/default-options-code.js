@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-anonymous-default-export
 export default `{
     // =============================================================================================
     // 你可以在这里书写兼容当前浏览器的 JS 代码，以声明 xss.js 配置，这些代码会存储在本地存储中,

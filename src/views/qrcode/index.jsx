@@ -5,7 +5,7 @@ import { VStack, HStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
 import TextareaAutosize from 'react-autosize-textarea'
 import ReactResizeDetector from 'react-resize-detector'
-import QRCode from 'qrcode.react'
+import { QRCodeSVG } from 'qrcode.react'
 
 import useLocalState from 'utils/use-local-state.ts'
 
@@ -141,13 +141,12 @@ function Display({ value = '', level, className }) {
                             </span>
                         </div>
                     ) : (
-                        <QRCode
+                        <QRCodeSVG
                             $flex
                             className={clsx(className, styles.qrcode)}
                             value={value}
                             size={height}
                             level={level}
-                            renderAs="svg"
                             bgColor="transparent"
                         />
                     )}

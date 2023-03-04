@@ -65,6 +65,7 @@ export default {
         this.regexp = this.properties.regexp
 
         // If there is no need for a label, then proxy to the nested regexp.
+        // eslint-disable-next-line eqeqeq
         if (this.properties.capture.textValue == '?:') {
             this.proxy = this.regexp
         }

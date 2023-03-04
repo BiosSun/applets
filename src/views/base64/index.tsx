@@ -91,12 +91,12 @@ export default function Base64View() {
 
     function btoa(data: ArrayBuffer) {
         let value: string = ''
-        let error: string = undefined
+        let error: string | undefined = undefined
 
         try {
             value = Buffer.from(data).toString('base64')
         } catch (e) {
-            error = e.message
+            error = (e as Error).message
         }
 
         return { value, error }
@@ -104,12 +104,12 @@ export default function Base64View() {
 
     function atob(data: string) {
         let value: ArrayBuffer = EMPTY_ARRAY_BUFFER
-        let error: string = undefined
+        let error: string | undefined = undefined
 
         try {
             value = base642buffer(data)
         } catch (e) {
-            error = e
+            error = (e as Error).message
         }
 
         return { value, error }
@@ -137,7 +137,7 @@ export default function Base64View() {
         updateBySource(type, buffer)
     }
 
-    function fromFile(file: File) {
+    function fromFile(file: File | undefined) {
         if (!file) {
             return
         }
@@ -159,17 +159,17 @@ export default function Base64View() {
     }
 
     function fromBase64(str: string) {
-        let info: ReturnType<typeof parsedataurl>
-        let error = undefined
+        let info: ReturnType<typeof parsedataurl> | undefined = undefined
+        let error: string | undefined = undefined
 
         try {
             info = parsedataurl(str)
         } catch (e) {
-            error = e.message
+            error = (e as Error).message
         }
 
-        setIsDataUrl(info.isDataUrl ?? isDataUrl)
-        updateByBase64(info.type ?? mime.type, info.data, error)
+        setIsDataUrl(info?.isDataUrl ?? isDataUrl)
+        updateByBase64(info?.type ?? mime.type, info?.data ?? '', error ?? '')
     }
 
     return (
@@ -187,8 +187,8 @@ export default function Base64View() {
                 <input
                     type="file"
                     accept="image/*"
-                    onChange={(event) => fromFile(event.target.files[0])}
-                    onClick={(event) => ((event.target as HTMLInputElement).value = null)}
+                    onChange={(event) => fromFile(event.target.files?.[0])}
+                    onClick={(event) => ((event.target as HTMLInputElement)!.value = null as any)}
                 />
                 <Divider />
                 type: {mime.type}

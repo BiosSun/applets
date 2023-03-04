@@ -3,7 +3,7 @@ import TextareaAutosize from 'react-autosize-textarea'
 import _ from 'lodash'
 import clsx from 'clsx'
 import URI from 'urijs'
-import QRCode from 'qrcode.react'
+import { QRCodeSVG } from 'qrcode.react'
 import { useUpdate } from 'react-use'
 
 import styles from './index.module.scss'
@@ -59,7 +59,7 @@ export default function URLView() {
                                     {isLongURI ? (
                                         <p className={styles.qrcodeError}>URL 过长，无法生成二维码</p>
                                     ) : (
-                                        <QRCode className={styles.qrcodePayload} value={uriString} size={300} />
+                                        <QRCodeSVG className={styles.qrcodePayload} value={uriString} size={300} />
                                     )}
                                 </div>
                             </div>

@@ -232,14 +232,16 @@ function Canvas({
     useLayoutEffect(() => {
         const el = canvasRef.current
 
-        el.style.width = width + 'px'
-        el.style.height = height + 'px'
+        if (el) {
+            el.style.width = width + 'px'
+            el.style.height = height + 'px'
 
-        el.width = Math.floor(width * scale)
-        el.height = Math.floor(height * scale)
+            el.width = Math.floor(width * scale)
+            el.height = Math.floor(height * scale)
 
-        const ctx = el.getContext('2d')
-        ctx.scale(scale, scale)
+            const ctx = el.getContext('2d')
+            ctx!.scale(scale, scale)
+        }
     }, [width, height, scale])
 
     // 点击添加控制点
@@ -264,11 +266,11 @@ function Canvas({
     // 绘制控制点
     useEffect(() => {
         const el = canvasRef.current
-        const ctx = el.getContext('2d')
+        const ctx = el!.getContext('2d')
 
-        const pen = new Pen(ctx)
+        const pen = new Pen(ctx!)
 
-        ctx.clearRect(0, 0, width, height)
+        ctx!.clearRect(0, 0, width, height)
 
         // 获得对应当前时间的路径点分组
         const index = Math.round(progress * 1000)
@@ -307,7 +309,7 @@ function Canvas({
 
             pen.line(bezierPoints, { width: 4, style: 'rgb(255, 0, 0)' })
         }
-    }, [width, height, controlNodes, progress])
+    }, [width, height, controlNodes, progress, momentNodeGroups])
 
     return (
         <div className={clsx(styles.canvasContainer, className)} ref={containerRef}>

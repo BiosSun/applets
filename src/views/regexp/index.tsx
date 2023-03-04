@@ -1,7 +1,8 @@
 import clsx from 'clsx'
-import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react'
+import { RefObject, useEffect, useRef, useState } from 'react'
 import { VStack, HStack } from '@nami-ui/stack'
-import Parser from './parser/javascript'
+// @ts-ignore
+import Parser from './parser/javascript.js'
 import dom from '../../utils/dom'
 
 import styles from './index.module.scss'
@@ -24,7 +25,7 @@ function useRegExpDiagram(containerRef: RefObject<HTMLElement>, expression: stri
             return
         }
 
-        let box = document.createElement('div')
+        let box: HTMLDivElement = document.createElement('div')
         box.className = clsx(styles.box, styles.rendering)
         container.appendChild(box)
 
@@ -45,14 +46,14 @@ function useRegExpDiagram(containerRef: RefObject<HTMLElement>, expression: stri
                 dom.prev(box).forEach((el) => el.remove())
                 box.classList.remove(styles.rendering)
 
-                setMessage(undefined)
+                setMessage('')
             } catch (error) {
                 if (error !== 'Render cancelled') {
-                    setMessage(error.message || error)
+                    setMessage((error as Error).message ?? error)
                 }
 
                 box.remove()
-                box = undefined
+                box = undefined as any
             } finally {
                 setWarnings(parser.warnings)
                 setRendering(false)

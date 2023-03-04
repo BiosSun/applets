@@ -23,7 +23,7 @@ export default {
 
         // Report invalid repeat when the minimum is larger than the maximum.
         if (this.minimum > this.maximum && this.maximum !== -1) {
-            throw `Numbers out of order: ${this.textValue}`
+            throw new Error(`Numbers out of order: ${this.textValue}`)
         }
     },
 }

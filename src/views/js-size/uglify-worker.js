@@ -1,24 +1,13 @@
-import UglifyJS from '@virtual/uglify-js'
 import * as Terser from 'terser'
+import * as Comlink from 'comlink'
+
+Comlink.expose({ minify })
 
 export function minify(sourceCode) {
-    try {
-        return compressors.uglify(sourceCode)
-    } catch {
-        return compressors.terser(sourceCode)
-    }
+    return compressors.terser(sourceCode)
 }
 
 const compressors = {
-    uglify(sourceCode) {
-        const result = UglifyJS.minify(sourceCode)
-
-        if (result.error) {
-            throw result.error
-        } else {
-            return result.code
-        }
-    },
     async terser(sourceCode) {
         const options = {
             parse: {

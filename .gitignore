@@ -137,6 +137,7 @@ Temporary Items
 
 # production
 /build
+/dist
 
 # misc
 .env.local

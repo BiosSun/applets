@@ -2,7 +2,7 @@
 // [Node](./javascript/node.html) subclasses in the generated tree. This is all
 // a bit of a hack that is dependent on how canopy creates nodes in its parse
 // tree.
-import parser from './grammar.peg'
+import parser from './grammar.js'
 
 import Node from './node.js'
 import Root from './root.js'

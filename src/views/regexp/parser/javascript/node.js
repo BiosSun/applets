@@ -79,7 +79,7 @@ export default class Node {
     deferredStep(value) {
         return util.tick().then(() => {
             if (this.state.cancelRender) {
-                throw 'Render cancelled'
+                throw new Error('Render cancelled')
             }
 
             return value

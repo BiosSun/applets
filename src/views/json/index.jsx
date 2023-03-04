@@ -3,6 +3,7 @@ import _ from 'lodash'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useToggle } from 'react-use'
+import * as Comlink from 'comlink'
 
 import { VStack, HStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
@@ -15,10 +16,7 @@ import Json from './json'
 
 import styles from './index.module.scss'
 
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import FileSizeWorker from 'workerize-loader?inline!../../utils/file-size-worker'
-
-const fileSizeWorker = FileSizeWorker()
+const fileSizeWorker = Comlink.wrap(new Worker(new URL('utils/file-size-worker.js', import.meta.url)))
 
 const DEFAULT_TEXT = `{
     "ID": null,
