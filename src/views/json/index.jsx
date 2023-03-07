@@ -17,9 +17,9 @@ import Json from './json'
 
 import styles from './index.module.scss'
 
-const fileSizeWorker = Comlink.wrap(
-    new Worker(new URL('utils/file-size-worker.js', import.meta.url))
-)
+import FileSizeWorker from 'utils/file-size-worker.js?worker&inline'
+
+const fileSizeWorker = Comlink.wrap(new FileSizeWorker())
 
 const DEFAULT_TEXT = `{
     "ID": null,

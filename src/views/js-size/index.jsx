@@ -9,8 +9,8 @@ import useLocalState from 'utils/use-local-state.ts'
 
 import styles from './index.module.scss'
 
-import UglifyWorker from './uglify-worker.js?worker'
-import FileSizeWorker from 'utils/file-size-worker.js?worker'
+import UglifyWorker from './uglify-worker.js?worker&inline'
+import FileSizeWorker from 'utils/file-size-worker.js?worker&inline'
 
 const uglifyWorker = Comlink.wrap(new UglifyWorker())
 const fileSizeWorker = Comlink.wrap(new FileSizeWorker())
