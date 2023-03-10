@@ -157,7 +157,7 @@ export default function JSONView() {
                             checked={!!timestamp}
                             onChange={(event) => setTimestamp(event.target.checked ? 'ms' : false)}
                         />
-                        解码时间戳（毫秒）
+                        解码时间戳
                     </HStack>
                     <HStack
                         component="label"
@@ -318,29 +318,18 @@ function SizesInfo({ sourceCode }) {
 
 const DisplayContext = createContext({ decode: false })
 
-const now = dayjs()
-const VALID_TIMESTAMP_NUMBER_RANGE = [
-    now.subtract(10, 'years').valueOf(),
-    now.add(10, 'years').valueOf(),
-]
-
 function parseNumber(number, timestamp) {
     let value = number
     let type = 'number'
 
-    if (
-        timestamp &&
-        value >= VALID_TIMESTAMP_NUMBER_RANGE[0] &&
-        value <= VALID_TIMESTAMP_NUMBER_RANGE[1]
-    ) {
-        value = dayjs(value)
-        type = 'time'
+    if (timestamp) {
+        ;[value, type = 'number'] = tryParseTime(number)
     }
 
     return [value, type]
 }
 
-function parseString(string, decode) {
+function parseString(string, decode, timestamp) {
     let value = string
     let type = 'text'
 
@@ -352,6 +341,10 @@ function parseString(string, decode) {
         ;[value, type] = tryParseURL(value)
     }
 
+    if (type === 'text' && timestamp) {
+        ;[value, type = 'text'] = tryParseTime(string)
+    }
+
     return [value, type]
 }
 
@@ -361,6 +354,36 @@ function tryDecodeURIComponent(text, decode) {
     } catch {
         return text
     }
+}
+
+const now = dayjs()
+const VALID_TIMESTAMP_NUMBER_RANGE = [
+    now.subtract(40, 'years').valueOf(),
+    now.add(40, 'years').valueOf(),
+]
+
+function tryParseTime(val) {
+    let num = val
+
+    if (typeof num === 'string') {
+        num = parseInt(num)
+    }
+
+    if (!Number.isFinite(num)) {
+        return [val]
+    }
+
+    if (num >= VALID_TIMESTAMP_NUMBER_RANGE[0] && num <= VALID_TIMESTAMP_NUMBER_RANGE[1]) {
+        return [dayjs(num), 'time']
+    }
+
+    num *= 1000
+
+    if (num >= VALID_TIMESTAMP_NUMBER_RANGE[0] && num <= VALID_TIMESTAMP_NUMBER_RANGE[1]) {
+        return [dayjs(num), 'time']
+    }
+
+    return [val]
 }
 
 function tryParseURL(text) {
@@ -464,13 +487,22 @@ function NumberPropertyValue({ value: num }) {
 }
 
 function StringPropertyValue({ value: str }) {
-    const { decode } = useContext(DisplayContext)
+    const { decode, timestamp } = useContext(DisplayContext)
 
-    const [value, type] = useMemo(() => parseString(str, decode), [str, decode])
+    const [value, type] = useMemo(
+        () => parseString(str, decode, timestamp),
+        [str, decode, timestamp]
+    )
 
     switch (type) {
         case 'text':
             return <span className={styles.string}>"{value}"</span>
+        case 'time':
+            return (
+                <span className={styles.timestr} title={`"${str}"`}>
+                    {value.format('YYYY-MM-DD HH:mm:ss.SSS')}
+                </span>
+            )
         case 'url':
             return (
                 <a
