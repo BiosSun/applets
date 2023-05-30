@@ -115,11 +115,21 @@ export default function TimeView() {
                     <dd>now, &gt;d, +1y, -3M, 0m 0s 0ms（另外可以使用逗号作为分隔符）</dd>
                 </dl>
                 <dl>
+                    <dt>表达式中的单位：</dt>
+                    <dd>y - 年</dd>
+                    <dd>M - 月</dd>
+                    <dd>d - 日</dd>
+                    <dd>h - 时</dd>
+                    <dd>m - 月</dd>
+                    <dd>s - 秒</dd>
+                    <dd>ms - 毫秒</dd>
+                </dl>
+                <dl>
                     <dt>更多示例：</dt>
                     <dd>today - 1d</dd>
                     <dd>1676892034192 - 1d</dd>
                     <dd>(2023-02-20 19:20:34.192) - 1d</dd>
-                    <dd>2023y 2M 20d 19h 20m 34m 192ms -1d</dd>
+                    <dd>2023y 2M 20d 19h 20m 34s 192ms -1d</dd>
                 </dl>
             </div>
         </VStack>
