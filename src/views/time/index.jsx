@@ -120,7 +120,7 @@ export default function TimeView() {
                     <dd>M - 月</dd>
                     <dd>d - 日</dd>
                     <dd>h - 时</dd>
-                    <dd>m - 月</dd>
+                    <dd>m - 分</dd>
                     <dd>s - 秒</dd>
                     <dd>ms - 毫秒</dd>
                 </dl>
