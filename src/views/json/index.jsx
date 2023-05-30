@@ -132,7 +132,7 @@ export default function JSONView() {
     return (
         <JSONContext.Provider value={JSON}>
             <VStack className={styles.container}>
-                <HStack spacing padding align="center">
+                <HStack spacing padding wrap align="center">
                     <Toggle
                         label="解码字符串"
                         title="对于字符串类型的值，尝试使用 decodeURIComponent 进行解码"
@@ -248,7 +248,6 @@ function FilterInput({ value, onChange, ...otherProps }) {
             {...otherProps}
         >
             <textarea
-                $flex
                 className={styles.input}
                 placeholder="请输入 JMESPath 格式的过滤表达式"
                 value={value}

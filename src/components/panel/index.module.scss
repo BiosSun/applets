@@ -8,10 +8,13 @@
 
 .titleBar {
     height: 30px;
+    overflow: hidden;
     display: flex;
     align-items: center;
     background: #f6f6f7;
     padding: 0 10px;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
 .title {
