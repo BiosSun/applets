@@ -18,7 +18,7 @@ const MANIPULATE_TIMES = {
 }
 
 function parseValue(str) {
-    const match = str.match(/(\d+)(y|M|d|h|m|sm)/)
+    const match = str.match(/(\d+)(y|M|d|h|m|s|sm)/)
     return match ? { count: parseInt(match[1], 10), unit: match[2] } : null
 }
 
