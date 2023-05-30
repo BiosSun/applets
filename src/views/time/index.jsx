@@ -60,6 +60,14 @@ export default function TimeView() {
         list.add(createNode())
     }
 
+    function copy(id) {
+        const index = list.getIndex(id)
+        const node = list.get(id)
+        const newNode = createNode()
+        newNode.value = node.value
+        list.add(newNode, index + 1)
+    }
+
     function change(id, value) {
         list.change(id, 'value', value)
     }
@@ -81,6 +89,7 @@ export default function TimeView() {
                     disabledRemove={disabledRemove}
                     onChange={(value) => change(node.id, value)}
                     onRemove={() => remove(node.id)}
+                    onCopy={() => copy(node.id)}
                 />
             ))}
             <TextButton className={styles.addButton} onClick={add}>
@@ -90,7 +99,7 @@ export default function TimeView() {
     )
 }
 
-function Item({ value, onChange, onRemove, disabledRemove }) {
+function Item({ value, onChange, onRemove, onCopy, disabledRemove }) {
     const [time, valueType, message] = useMemo(() => {
         const text = value.text.trim()
         const ismts = value.isMillisecondTimestamp
@@ -135,9 +144,10 @@ function Item({ value, onChange, onRemove, disabledRemove }) {
                         $align="end"
                         onClick={() => onChange({ ...value, isExpand: !value.isExpand })}
                     >
-                        {value.isExpand ? '收起 -' : '展开 +'}
+                        {value.isExpand ? '收起 ^' : '展开 v'}
                     </TextButton>
                 ) : null}
+                <TextButton onClick={onCopy}>复制 %</TextButton>
                 <TextButton onClick={onRemove} disabled={disabledRemove}>
                     删除 x
                 </TextButton>

@@ -16,8 +16,14 @@ export default function useList<T extends Identifiable, Key extends keyof T>([it
         return _items.find((item) => item.id === id)
     }
 
-    function add(item: T): void {
-        setItems([...items, item])
+    function getIndex(id: string) {
+        return items.findIndex((item) => item.id === id)
+    }
+
+    function add(item: T, index: number = items.length): void {
+        const newItems = [...items]
+        newItems.splice(index, 0, item)
+        setItems(newItems)
     }
 
     function remove(id: string): void {
@@ -38,5 +44,5 @@ export default function useList<T extends Identifiable, Key extends keyof T>([it
         )
     }
 
-    return { items, length, get, add, remove, change }
+    return { items, length, get, getIndex, add, remove, change }
 }
