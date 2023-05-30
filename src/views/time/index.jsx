@@ -12,21 +12,10 @@ import TextButton from '../../components/text-button'
 import useLocalState, { updateLocalState } from 'utils/use-local-state.ts'
 import useList from 'utils/use-list.ts'
 import semanticTime from './semantic-time'
+import { maybeMillisecondTimestamp, parseTime, parseTimestamp } from './utils'
 
 import styles from './index.module.scss'
-
-function maybeMillisecondTimestamp(timestamp) {
-    const str = timestamp.toString().trim()
-    return /^\d+$/.test(timestamp) && str.length > 10
-}
-
-const FORMATS = [
-    'YYYY年MM月DD日',
-    'YYYY年MM月DD日 HH:mm',
-    'YYYY年MM月DD日 Ahh:mm',
-    'HH:mm YYYY年MM月DD日',
-    'Ahh:mm YYYY年MM月DD日',
-]
+import { Divider } from '@nami-ui/divider'
 
 function createValue(text = '') {
     return {
@@ -81,21 +70,59 @@ export default function TimeView() {
     }
 
     return (
-        <div className={styles.track}>
-            {list.items.map((node) => (
-                <Item
-                    key={node.id}
-                    value={node.value}
-                    disabledRemove={disabledRemove}
-                    onChange={(value) => change(node.id, value)}
-                    onRemove={() => remove(node.id)}
-                    onCopy={() => copy(node.id)}
-                />
-            ))}
-            <TextButton className={styles.addButton} onClick={add}>
-                + 添加
-            </TextButton>
-        </div>
+        <VStack>
+            <div className={styles.track}>
+                {list.items.map((node) => (
+                    <Item
+                        key={node.id}
+                        value={node.value}
+                        disabledRemove={disabledRemove}
+                        onChange={(value) => change(node.id, value)}
+                        onRemove={() => remove(node.id)}
+                        onCopy={() => copy(node.id)}
+                    />
+                ))}
+                <TextButton className={styles.addButton} onClick={add}>
+                    + 添加
+                </TextButton>
+            </div>
+            <Divider />
+            <div className={styles.tutorial}>
+                支持格式如下所示：
+                <dl>
+                    <dt>时间：</dt>
+                    <dd>2023-02-20</dd>
+                    <dd>2023-02-20 19:20:34.192</dd>
+                </dl>
+                <dl>
+                    <dt>时间戳：</dt>
+                    <dd>1676892034（秒）</dd>
+                    <dd>1676892034192（毫秒）</dd>
+                </dl>
+                <dl>
+                    <dt>关键字：</dt>
+                    <dd>now</dd>
+                    <dd>today</dd>
+                </dl>
+                <dl>
+                    <dt>表达式：</dt>
+                    <dd>now 3h（当前时间，但小时数设置为 3 点）</dd>
+                    <dd>now +3h（当前时间，加 3 小时）</dd>
+                    <dd>now -3h（当前时间，减 3 小时）</dd>
+                    <dd>now &lt;h（当前小时的开始时间）</dd>
+                    <dd>now &gt;h（当前小时的结束时间）</dd>
+                    <dd>now &gt;d +1y -3M 0m 0s 0ms（组合操作）</dd>
+                    <dd>now, &gt;d, +1y, -3M, 0m 0s 0ms（另外可以使用逗号作为分隔符）</dd>
+                </dl>
+                <dl>
+                    <dt>更多示例：</dt>
+                    <dd>today - 1d</dd>
+                    <dd>1676892034192 - 1d</dd>
+                    <dd>(2023-02-20 19:20:34.192) - 1d</dd>
+                    <dd>2023y 2M 20d 19h 20m 34m 192ms -1d</dd>
+                </dl>
+            </div>
+        </VStack>
     )
 }
 
@@ -109,21 +136,12 @@ function Item({ value, onChange, onRemove, onCopy, disabledRemove }) {
         }
 
         if (/^\d+$/.test(text)) {
-            let timestamp = Number(text)
-
-            if (!ismts) {
-                timestamp *= 1000
-            }
-
-            return [dayjs(timestamp), 'timestamp']
+            const time = parseTimestamp(text, ismts)
+            return [time, 'timestamp']
         }
 
-        let time = dayjs(text)
+        let time = parseTime(text)
         let message = ''
-
-        if (!time.isValid()) {
-            time = dayjs(text, FORMATS)
-        }
 
         if (!time.isValid()) {
             try {

@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { parseTime, parseTimestamp } from './utils'
 
 const OPERATORS = new Set(['<', '>', '+', '-'])
 const KEYWORDS = new Set(['now', 'today'])
@@ -50,10 +51,13 @@ export default function parse(str = '') {
     let time = dayjs(0)
     let operator = ''
 
-    str.split(/[,\s]+/g).forEach((item) => {
+    function parseItem(item) {
         let value
 
-        if (isOperator(item)) {
+        if (item.length > 1 && isOperator(item[0])) {
+            parseItem(item[0])
+            parseItem(item.substring(1))
+        } else if (isOperator(item)) {
             assert(!operator, '操作符之后不能再跟操作符')
             operator = item
         } else if (isKeyword(item)) {
@@ -67,10 +71,18 @@ export default function parse(str = '') {
             assert(['', '+', '-'].includes(operator), '在时间值之前若提供操作符，则只能是 `+` 或 `-`。') // prettier-ignore
             time = MANIPULATE_TIMES[operator](time, value.unit, value.count)
             operator = ''
+        } else if (/^\d+$/.test(item)) {
+            time = parseTimestamp(item)
+            assert(time.isValid(), '无效的时间戳')
+        } else if (item.at(0) === '(' && item.at(-1) === ')') {
+            time = parseTime(item.slice(1, -1))
+            assert(time.isValid(), '无效的时间')
         } else {
             throw new Error('无效的表达式')
         }
-    })
+    }
+
+    str.split(/(?<!\([^)]*)[,\s]+/g).forEach(parseItem)
 
     return time
 }
