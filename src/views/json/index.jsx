@@ -133,82 +133,47 @@ export default function JSONView() {
         <JSONContext.Provider value={JSON}>
             <VStack className={styles.container}>
                 <HStack spacing padding align="center">
-                    <HStack
-                        component="label"
-                        spacing="small"
-                        align="center"
+                    <Toggle
+                        label="解码字符串"
                         title="对于字符串类型的值，尝试使用 decodeURIComponent 进行解码"
-                    >
-                        <input
-                            type="checkbox"
-                            checked={decode}
-                            onChange={(event) => setDecode(event.target.checked)}
-                        />
-                        解码字符串
-                    </HStack>
-                    <HStack
-                        component="label"
-                        spacing="small"
-                        align="center"
+                        value={decode}
+                        onChange={setDecode}
+                    />
+                    <Toggle
+                        label="解码时间戳"
                         title="对于数值类型的值，若其值大于等于 1 年前的 Unix 时间戳，且小于等于 1 年后的 Unix 时间戳，则将其当作 Unix 时间戳进行解析"
-                    >
-                        <input
-                            type="checkbox"
-                            checked={!!timestamp}
-                            onChange={(event) => setTimestamp(event.target.checked ? 'ms' : false)}
-                        />
-                        解码时间戳
-                    </HStack>
-                    <HStack
-                        component="label"
-                        spacing="small"
-                        align="center"
+                        value={!!timestamp}
+                        onChange={(checked) => setTimestamp(checked ? 'ms' : false)}
+                    />
+                    <Toggle
+                        label="深层解析"
                         title="对于 JSON 格式的字符串类型的值，直接解析并渲染其 JSON 数据"
-                    >
-                        <input
-                            type="checkbox"
-                            checked={deep}
-                            onChange={(event) => setDeep(event.target.checked)}
-                        />
-                        深层解析
-                    </HStack>
-                    <HStack
-                        component="label"
-                        spacing="small"
-                        align="center"
+                        value={deep}
+                        onChange={setDeep}
+                    />
+                    <Toggle
+                        label="数组索引"
                         title="显示数组元素的索引"
-                    >
-                        <input
-                            type="checkbox"
-                            checked={arrayIndex}
-                            onChange={(event) => setArrayIndex(event.target.checked)}
-                        />
-                        数组索引
-                    </HStack>
-                    <HStack
-                        component="label"
-                        spacing="small"
-                        align="center"
+                        value={arrayIndex}
+                        onChange={setArrayIndex}
+                    />
+                    <Toggle
+                        label="排序属性"
                         title="按属性值进行排序"
-                    >
-                        <input
-                            type="checkbox"
-                            checked={sortProps}
-                            onChange={(event) => setSortProps(event.target.checked)}
-                        />
-                        排序属性
-                    </HStack>
+                        value={sortProps}
+                        onChange={setSortProps}
+                    />
                     <Toggle
                         label="支持注释"
                         title="允许源码中包含注释"
                         value={comment}
-                        onChange={(checked) => setComment(checked)}
+                        onChange={setComment}
                     />
                     <Toggle
                         label="显示源码"
                         title="显示源码输入框"
                         value={displaySourceCode}
-                        onChange={(checked) => setDisplaySourceCode(checked)}
+                        onChange={setDisplaySourceCode}
                     />
                     <Button className={styles.button} onClick={formatJSON}>
                         格式化源码
