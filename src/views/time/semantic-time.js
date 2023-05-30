@@ -1,60 +1,76 @@
 import dayjs from 'dayjs'
 
-const now = () => dayjs()
-const today = () => dayjs()
-const tomorrow = () => dayjs().add(1, 'days')
-const yesterday = () => dayjs().subtract(1, 'days')
-const beforeYesterday = () => dayjs().subtract(-2, 'days')
+const OPERATORS = new Set(['<', '>', '+', '-'])
+const KEYWORDS = new Set(['now', 'today'])
+const UNITS = new Set(['y', 'M', 'd', 'h', 'm', 's', 'ms'])
 
-const options = {
-    n: now,
-    now: now,
-    xz: now,
-    xianzai: now,
-    dq: now,
-    dangqian: now,
-    现在: now,
-    当前: now,
+const KEYWORD_TIMES = {
+    now: () => dayjs(),
+    today: () => dayjs().startOf('day'),
+}
 
-    t: today,
-    td: today,
-    today: today,
-    jr: today,
-    jt: today,
-    jinri: today,
-    jintian: today,
-    今日: today,
-    今天: today,
+const MANIPULATE_TIMES = {
+    '': (source, unit, value) => source.set(unit, value),
+    '<': (source, unit) => source.startOf(unit),
+    '>': (source, unit) => source.endOf(unit),
+    '+': (source, unit, value) => source.add(value, unit),
+    '-': (source, unit, value) => source.subtract(value, unit),
+}
 
-    tm: tomorrow,
-    tomorrow: tomorrow,
-    mt: tomorrow,
-    mr: tomorrow,
-    mingtian: tomorrow,
-    mingri: tomorrow,
-    明天: tomorrow,
-    明日: tomorrow,
+function parseValue(str) {
+    const match = str.match(/(\d+)(y|M|d|h|m|sm)/)
+    return match ? { count: parseInt(match[1], 10), unit: match[2] } : null
+}
 
-    ys: yesterday,
-    yesterday: yesterday,
-    zt: yesterday,
-    zr: yesterday,
-    zuotian: yesterday,
-    zuori: yesterday,
-    昨天: yesterday,
-    昨日: yesterday,
+function isOperator(str) {
+    return OPERATORS.has(str)
+}
 
-    by: beforeYesterday,
-    'before yesterday': beforeYesterday,
-    qt: beforeYesterday,
-    qr: beforeYesterday,
-    qiantian: beforeYesterday,
-    qianri: beforeYesterday,
-    前天: beforeYesterday,
-    前日: beforeYesterday,
+function isKeyword(str) {
+    return KEYWORDS.has(str)
+}
+
+function isUnit(str) {
+    return UNITS.has(str)
+}
+
+function assert(cond, message) {
+    if (!cond) {
+        throw new Error(message)
+    }
 }
 
 export default function parse(str = '') {
     str = str.trim()
-    return options[str]?.() ?? null
+
+    if (!str) {
+        return null
+    }
+
+    let time = dayjs(0)
+    let operator = ''
+
+    str.split(/[,\s]+/g).forEach((item) => {
+        let value
+
+        if (isOperator(item)) {
+            assert(!operator, '操作符之后不能再跟操作符')
+            operator = item
+        } else if (isKeyword(item)) {
+            assert(!operator, '关键字之前不支持操作符')
+            time = KEYWORD_TIMES[item]()
+        } else if (isUnit(item)) {
+            assert(['<', '>'].includes(operator), '在时间单位之前，必须提供 `<` 或 `>` 操作符。')
+            time = MANIPULATE_TIMES[operator](time, item)
+            operator = ''
+        } else if ((value = parseValue(item))) {
+            assert(['', '+', '-'].includes(operator), '在时间值之前若提供操作符，则只能是 `+` 或 `-`。') // prettier-ignore
+            time = MANIPULATE_TIMES[operator](time, value.unit, value.count)
+            operator = ''
+        } else {
+            throw new Error('无效的表达式')
+        }
+    })
+
+    return time
 }

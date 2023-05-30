@@ -91,7 +91,7 @@ export default function TimeView() {
 }
 
 function Item({ value, onChange, onRemove, disabledRemove }) {
-    const [time, valueType] = useMemo(() => {
+    const [time, valueType, message] = useMemo(() => {
         const text = value.text.trim()
         const ismts = value.isMillisecondTimestamp
 
@@ -110,16 +110,21 @@ function Item({ value, onChange, onRemove, disabledRemove }) {
         }
 
         let time = dayjs(text)
+        let message = ''
 
         if (!time.isValid()) {
             time = dayjs(text, FORMATS)
         }
 
         if (!time.isValid()) {
-            time = semanticTime(text) ?? time
+            try {
+                time = semanticTime(text) ?? time
+            } catch (error) {
+                message = error.message
+            }
         }
 
-        return [time, 'time']
+        return [time, 'time', message]
     }, [value])
 
     return (
@@ -140,7 +145,7 @@ function Item({ value, onChange, onRemove, disabledRemove }) {
             <Card style={{ minHeight: 232 }}>
                 <TimeInput value={value} valueType={valueType} onChange={onChange} />
                 {!time ? null : !time.isValid() ? (
-                    <span>无效的时间</span>
+                    <span>{message ?? '无效的时间'}</span>
                 ) : (
                     <VStack
                         spacing
