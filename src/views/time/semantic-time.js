@@ -11,7 +11,8 @@ const KEYWORD_TIMES = {
 }
 
 const MANIPULATE_TIMES = {
-    '': (source, unit, value) => source.set(unit === 'd' ? 'D' : unit, value),
+    '': (source, unit, value) =>
+        source.set(unit === 'd' ? 'D' : unit, value - (unit === 'M' ? 1 : 0)),
     '<': (source, unit) => source.startOf(unit),
     '>': (source, unit) => source.endOf(unit),
     '+': (source, unit, value) => source.add(value, unit),
