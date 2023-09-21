@@ -27,6 +27,7 @@ const ClockView = lazy(() => import(/* webpackChunkName: "views_clock", webpackP
 const Base64View = lazy(() => import(/* webpackChunkName: "views_base64", webpackPrefetch: true */ './views/base64/index.tsx')) // prettier-ignore
 const BezierCurveView = lazy(() => import(/* webpackChunkName: "views_bezier-curve", webpackPrefetch: true */ './views/bezier-curve/index.tsx')) // prettier-ignore
 const RegExpView = lazy(() => import(/* webpackChunkName: "views_regexp", webpackPrefetch: true */ './views/regexp/index.tsx')) // prettier-ignore
+const ChartView = lazy(() => import(/* webpackChunkName: "views_chart", webpackPrefetch: true */ './views/chart/chart')) // prettier-ignore
 
 dayjs.locale('zh-cn')
 dayjs.extend(weekOfYear)
@@ -47,6 +48,7 @@ createRoot(document.getElementById('root')).render(
                 <Route path="/json" element={<JSONView />} />
                 <Route path="/base64" element={<Base64View />} />
                 <Route path="/regexp" element={<RegExpView />} />
+                <Route path="/chart" element={<ChartView />} />
                 <Route path="/clock" element={<ClockView />} />
                 <Route path="/time" element={<TimeView />} />
                 <Route path="/duration" element={<DurationView />} />

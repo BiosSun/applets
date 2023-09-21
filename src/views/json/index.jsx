@@ -188,7 +188,7 @@ export default function JSONView() {
                         过滤数据
                     </Button>
                 </HStack>
-
+                <Divider />
                 <HStack $flex className={styles.panels}>
                     {displaySourceCode ? (
                         <JSONInput $flex $col={10} value={text} onChange={setText} />

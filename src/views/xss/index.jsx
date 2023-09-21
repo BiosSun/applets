@@ -5,7 +5,7 @@ import { Divider } from '@nami-ui/divider'
 import { Space } from '@nami-ui/space'
 import { Toggle } from 'components/toggle'
 import useSandbox from './use-sandbox'
-import FlexibleMonacoEditor from './flexible-monaco-editor'
+import CodeEditor from 'components/code-editor'
 import RichTextEditor from './rich-text-editor'
 import styles from './index.module.scss'
 
@@ -61,7 +61,7 @@ export default function XSSView() {
                     <VStack $flex $col={14}>
                         <Divider />
 
-                        <FlexibleMonacoEditor
+                        <CodeEditor
                             $flex
                             language="javascript"
                             value={optionsCode}
@@ -77,7 +77,7 @@ export default function XSSView() {
                 <VStack $flex>
                     <Divider />
 
-                    <FlexibleMonacoEditor
+                    <CodeEditor
                         $flex
                         language="html"
                         value={originalHTML}
@@ -86,7 +86,7 @@ export default function XSSView() {
 
                     <Divider />
 
-                    <FlexibleMonacoEditor $flex language="html" readOnly value={transformedHTML} />
+                    <CodeEditor $flex language="html" readOnly value={transformedHTML} />
 
                     <Divider />
                 </VStack>

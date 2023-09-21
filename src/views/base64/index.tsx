@@ -196,7 +196,7 @@ export default function Base64View() {
                 <Divider />
                 <Button onClick={clean}>Clean</Button>
             </HStack>
-
+            <Divider />
             <HStack $flex className={styles.panels}>
                 <SourcePanel $flex {...source} mime={mime} onChange={fromText} />
                 <Divider />

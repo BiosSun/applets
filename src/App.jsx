@@ -19,6 +19,7 @@ export default function App() {
                     <NavItem to="/json" title="JSON" description="解析 JSON 字符串" />
                     <NavItem to="/base64" title="Base64" description="编码/反编码 Base64 字符串" />
                     <NavItem to="/regexp" title="RegExp" />
+                    <NavItem to="/chart" title="Chart" description="快速创建一些图表" />
                     <NavItem to="/clock" title="Clock" />
                     <NavItem to="/time" title="Time" description="解析时间" />
                     <NavItem to="/duration" title="Duration" description="解析时长" />
@@ -26,6 +27,7 @@ export default function App() {
                     <NavItem to="/xss" title="XSS" description="为 HTML 添加 XSS 过滤" />
                 </ul>
             </nav>
+
             <Divider />
 
             <Suspense fallback={<Loading />}>

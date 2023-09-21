@@ -42,7 +42,7 @@ export default function JSSizeView() {
 
     return (
         <HStack className={styles.container}>
-            <Panel $flex title="Source Code" note={<SizeInfo text={sourceCode} />} withoutTopBorder>
+            <Panel $flex title="Source Code" note={<SizeInfo text={sourceCode} />}>
                 <textarea
                     $flex
                     value={sourceCode}
@@ -57,7 +57,6 @@ export default function JSSizeView() {
                 $flex
                 title="Minified Code"
                 note={<SizeInfo text={minifiedCode} />}
-                withoutTopBorder
             >
                 {isMinifying ? (
                     <textarea
