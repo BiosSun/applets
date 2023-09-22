@@ -6,7 +6,7 @@ import Parser from './parser/javascript.js'
 import dom from '../../utils/dom'
 
 import styles from './index.module.scss'
-import useLocalState from 'utils/use-local-state'
+import useLocalState from '@/utils/use-local-state'
 
 function useRegExpDiagram(containerRef: RefObject<HTMLElement>, expression: string) {
     const [rendering, setRendering] = useState(false)

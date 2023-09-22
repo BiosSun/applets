@@ -10,13 +10,13 @@ import ReactResizeDetector, { useResizeDetector } from 'react-resize-detector'
 
 import { HStack, VStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
-import Panel from 'components/panel'
-import CodeEditor from 'components/code-editor'
-import Input from 'components/input'
+import Panel from '@/components/panel'
+import CodeEditor from '@/components/code-editor'
+import Input from '@/components/input'
 
 import styles from './chart.module.scss'
 
-import { useDataCode } from './data-code'
+import { useDataCode } from './use-data-code'
 
 type Visual = IntervalMark
 

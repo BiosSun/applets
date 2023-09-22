@@ -4,12 +4,12 @@ import dayjs from 'dayjs'
 import { v4 as uuidv4 } from 'uuid'
 
 import { VStack, HStack } from '@nami-ui/stack'
-import Card from '../../components/card'
-import Input from '../../components/input'
-import TextButton from '../../components/text-button'
+import Card from '@/components/card'
+import Input from '@/components/input'
+import TextButton from '@/components/text-button'
 
-import useLocalState, { updateLocalState } from 'utils/use-local-state.ts'
-import useList from 'utils/use-list.ts'
+import useLocalState, { updateLocalState } from '@/utils/use-local-state.ts'
+import useList from '@/utils/use-list.ts'
 
 import styles from './index.module.scss'
 

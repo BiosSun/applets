@@ -7,17 +7,17 @@ import * as Comlink from 'comlink'
 
 import { VStack, HStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
-import { Button } from 'components/button'
-import Panel from 'components/panel'
-import FileSize from 'components/file-size'
-import { Toggle } from 'components/toggle'
+import { Button } from '@/components/button'
+import Panel from '@/components/panel'
+import FileSize from '@/components/file-size'
+import { Toggle } from '@/components/toggle'
 
-import useLocalState from 'utils/use-local-state.ts'
+import useLocalState from '@/utils/use-local-state.ts'
 import Json from './json'
 
 import styles from './index.module.scss'
 
-import FileSizeWorker from 'utils/file-size-worker.js?worker&inline'
+import FileSizeWorker from '@/utils/file-size-worker.js?worker&inline'
 
 const fileSizeWorker = Comlink.wrap(new FileSizeWorker())
 

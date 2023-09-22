@@ -34,8 +34,7 @@ export default defineConfig(({ mode }) => {
         ],
         resolve: {
             alias: {
-                components: path.resolve(__dirname, './src/components'),
-                utils: path.resolve(__dirname, './src/utils'),
+                '@': path.join(__dirname, 'src'),
                 snapsvg: 'snapsvg-cjs',
             },
         },

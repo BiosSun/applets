@@ -5,7 +5,7 @@ import { VStack, HStack } from '@nami-ui/stack'
 import dayjs from 'dayjs'
 
 import styles from './index.module.scss'
-import useForceUpdate from 'utils/use-force-update.ts'
+import useForceUpdate from '@/utils/use-force-update.ts'
 import { useWindowSize } from 'react-use'
 
 function useTicktock(delay = 20) {

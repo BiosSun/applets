@@ -7,8 +7,8 @@ import TextareaAutosize from 'react-autosize-textarea'
 import ReactResizeDetector from 'react-resize-detector'
 import { QRCodeSVG } from 'qrcode.react'
 
-import { Button } from "components/button";
-import useLocalState from 'utils/use-local-state.ts'
+import { Button } from "@/components/button";
+import useLocalState from '@/utils/use-local-state.ts'
 
 import styles from './index.module.scss'
 

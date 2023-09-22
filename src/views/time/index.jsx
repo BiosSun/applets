@@ -9,8 +9,8 @@ import { Toggle } from '../../components/toggle'
 import Input from '../../components/input'
 import TextButton from '../../components/text-button'
 
-import useLocalState, { updateLocalState } from 'utils/use-local-state.ts'
-import useList from 'utils/use-list.ts'
+import useLocalState, { updateLocalState } from '@/utils/use-local-state.ts'
+import useList from '@/utils/use-list.ts'
 import semanticTime from './semantic-time'
 import { maybeMillisecondTimestamp, parseTime, parseTimestamp } from './utils'
 

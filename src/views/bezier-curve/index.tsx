@@ -4,11 +4,11 @@ import { addEventListener } from 'consolidated-events'
 import useResizeObserver from 'use-resize-observer'
 import { VStack, HStack, StackItemProps } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
-import { Button } from 'components/button'
+import { Button } from '@/components/button'
 
 import styles from './index.module.scss'
-import useLocalState from 'utils/use-local-state'
-import Pen from 'utils/pen'
+import useLocalState from '@/utils/use-local-state'
+import Pen from '@/utils/pen'
 
 // 控制点坐标（结点）
 interface Node {

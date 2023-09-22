@@ -3,11 +3,11 @@ import toArrayBuffer from 'to-arraybuffer'
 import { useMemo } from 'react'
 import { VStack, HStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
-import { Button } from "components/button";
+import { Button } from "@/components/button";
 import Panel from '../../components/panel'
 
 import styles from './index.module.scss'
-import useLocalState, { updateLocalState } from 'utils/use-local-state'
+import useLocalState, { updateLocalState } from '@/utils/use-local-state'
 import Mime from './mime'
 
 function string2buffer(str: string) {

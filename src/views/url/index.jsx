@@ -5,10 +5,10 @@ import clsx from 'clsx'
 import URI from 'urijs'
 import { QRCodeSVG } from 'qrcode.react'
 import { useUpdate } from 'react-use'
-import { Button } from "components/button";
+import { Button } from '@/components/button'
 
 import styles from './index.module.scss'
-import useLocalState from 'utils/use-local-state.ts'
+import useLocalState from '@/utils/use-local-state.ts'
 
 // -----------------------------------------------------------------------------
 // - test data:
@@ -44,9 +44,17 @@ export default function URLView() {
         <div className={styles.container}>
             <table className={styles.fields}>
                 <thead>
-                    <Field name="uri" uri={uri} getValue={() => uri.toString()} onChange={set} textarea>
+                    <Field
+                        name="uri"
+                        uri={uri}
+                        getValue={() => uri.toString()}
+                        onChange={set}
+                        textarea
+                    >
                         <div className={styles.actions}>
-                            <div className={styles.length}>{Array.from(uriString).length} 个字符</div>
+                            <div className={styles.length}>
+                                {Array.from(uriString).length} 个字符
+                            </div>
                             <div className={styles.qrcode}>
                                 <Button
                                     className={clsx(styles.qrcodeButton, {
@@ -58,9 +66,15 @@ export default function URLView() {
                                 </Button>
                                 <div className={styles.qrcodePopover}>
                                     {isLongURI ? (
-                                        <p className={styles.qrcodeError}>URL 过长，无法生成二维码</p>
+                                        <p className={styles.qrcodeError}>
+                                            URL 过长，无法生成二维码
+                                        </p>
                                     ) : (
-                                        <QRCodeSVG className={styles.qrcodePayload} value={uriString} size={300} />
+                                        <QRCodeSVG
+                                            className={styles.qrcodePayload}
+                                            value={uriString}
+                                            size={300}
+                                        />
                                     )}
                                 </div>
                             </div>
@@ -114,7 +128,18 @@ Field.defaultProps = {
     indent: 0,
 }
 
-function Field({ name, uri, onChange, getValue, parse, serialize, textarea, indent, invisibleFieldName, children }) {
+function Field({
+    name,
+    uri,
+    onChange,
+    getValue,
+    parse,
+    serialize,
+    textarea,
+    indent,
+    invisibleFieldName,
+    children,
+}) {
     const [focused, setFocus] = useState(false)
     const [value, setValue] = useState('')
     const [error, setError] = useState(null)

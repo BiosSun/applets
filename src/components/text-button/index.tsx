@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { Button, ButtonProps } from 'components/button'
+import { Button, ButtonProps } from '@/components/button'
 import styles from './index.module.scss'
 
 interface TextButtonProps extends ButtonProps {

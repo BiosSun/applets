@@ -3,14 +3,14 @@ import { html as HTMLBeautify } from 'js-beautify'
 import { VStack, HStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
 import { Space } from '@nami-ui/space'
-import { Toggle } from 'components/toggle'
+import { Toggle } from '@/components/toggle'
+import CodeEditor from '@/components/code-editor'
 import useSandbox from './use-sandbox'
-import CodeEditor from 'components/code-editor'
 import RichTextEditor from './rich-text-editor'
 import styles from './index.module.scss'
 
 import DEFAULT_OPTIONS from './default-options-code'
-import useLocalState from 'utils/use-local-state.ts'
+import useLocalState from '@/utils/use-local-state.ts'
 
 export default function XSSView() {
     const [isEnabledXSS, setEnabledXSS] = useLocalState('XSS/isEnabledXSS', true)
