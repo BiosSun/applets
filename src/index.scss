@@ -19,7 +19,23 @@
 }
 
 body {
-    font: 14px/20px sans-serif;
+    font:
+        14px/20px -apple-system,
+        BlinkMacSystemFont,
+        segoe ui,
+        Roboto,
+        helvetica neue,
+        Arial,
+        noto sans,
+        sans-serif,
+        apple color emoji,
+        segoe ui emoji,
+        segoe ui symbol,
+        noto color emoji;
+
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum';
+
     color: #242629;
 }
 

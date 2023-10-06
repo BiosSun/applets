@@ -222,8 +222,11 @@ function TimeInput({ value, valueType, onChange, ...otherProps }) {
                 monospace
                 autoFocus
                 value={value.text}
-                onChange={(text) =>
-                    onChange({ text, isMillisecondTimestamp: maybeMillisecondTimestamp(text) })
+                onChange={(event) =>
+                    onChange({
+                        text: event.target.value,
+                        isMillisecondTimestamp: maybeMillisecondTimestamp(event.target.value),
+                    })
                 }
             />
             {valueType === 'timestamp' ? (

@@ -1,0 +1,39 @@
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    @at-root .formGroupLabel {
+        font-size: 15px;
+        line-height: 1;
+        font-weight: 500;
+    }
+}
+
+.field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    @at-root .filedLabel {
+        font-size: 14px;
+        display: block;
+    }
+
+    @at-root .fieldInput {
+        // 重复的尺寸和字体声明
+        height: 24px;
+        font-family: Hack, Monaco, 'Courier New', monospace, 'Apple Color Emoji';
+    }
+
+    @at-root .fieldSelect {
+        // 和 Input 组件的样式重复
+        height: 24px;
+        padding: 0 5px;
+        border-radius: 2px;
+        border: 1px solid #000;
+        font-size: 12px;
+        line-height: 1;
+        font-family: Hack, Monaco, 'Courier New', monospace, 'Apple Color Emoji';
+    }
+}

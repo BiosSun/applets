@@ -145,7 +145,7 @@ function TimeInput({ value, onChange, ...otherProps }) {
             monospace
             autoFocus
             value={value.text}
-            onChange={(text) => onChange({ text })}
+            onChange={(event) => onChange({ text: event.target.value })}
         />
     )
 }

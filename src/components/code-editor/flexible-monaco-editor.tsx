@@ -8,6 +8,13 @@ export default function FlexibleMonacoEditor({
     onChange,
     style,
     ...otherProps
+}: {
+    readOnly?: boolean
+    language: string
+    value: string
+    onChange: (value: string) => void
+    style?: any
+    [otherProp: string]: any
 }) {
     return (
         <Suspense fallback={<div {...otherProps}>Loading...</div>}>
@@ -22,7 +29,7 @@ export default function FlexibleMonacoEditor({
                             enabled: false,
                         },
                     }}
-                    onChange={onChange}
+                    onChange={onChange as any}
                 />
             </div>
         </Suspense>

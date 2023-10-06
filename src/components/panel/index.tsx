@@ -5,16 +5,19 @@ import styles from './index.module.scss'
 
 interface PanelProps {
     title: string
-    children: any
+    subtitle?: any
     note?: any
+    children: any
     error?: string
     className?: string
+    [otherProp: string]: any
 }
 
 export default function Panel({
     title,
-    children,
+    subtitle,
     note,
+    children,
     error,
     className = undefined,
     ...otherProps
@@ -26,6 +29,7 @@ export default function Panel({
         >
             <div className={styles.titleBar}>
                 <div className={styles.title}>{title}</div>
+                {subtitle ? <div className={styles.subtitle}>{subtitle}</div>: null}
                 {note ? <div className={styles.note}>{note}</div> : null}
             </div>
             {error ? <div className={styles.errorMessage}>{error}</div> : null}

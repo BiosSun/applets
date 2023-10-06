@@ -1,7 +1,12 @@
 {
     "cSpell.words": [
+        "antv",
+        "clsx",
+        "echarts",
+        "immer",
         "jmespath",
         "ntfn",
+        "Outro",
         "timestr"
     ],
     "typescript.tsdk": "node_modules/typescript/lib"

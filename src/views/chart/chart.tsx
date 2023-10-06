@@ -1,179 +1,218 @@
-import { useRef, useEffect, useState, useMemo, useCallback } from 'react'
+import { useRef, useEffect, useState, useMemo, useCallback, Fragment } from 'react'
 import _ from 'lodash'
 import clsx from 'clsx'
-import { produce } from 'immer'
-import dayjs from 'dayjs'
-import { Chart, IntervalMark } from '@antv/g2'
-import { useToggle } from 'react-use'
-import outdent from 'outdent'
-import ReactResizeDetector, { useResizeDetector } from 'react-resize-detector'
+import { useFilePicker } from 'use-file-picker'
+import { FileWithPath } from 'file-selector'
+import { parse as parseCsv } from 'csv-parse/browser/esm/sync'
 
 import { HStack, VStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
 import Panel from '@/components/panel'
 import CodeEditor from '@/components/code-editor'
-import Input from '@/components/input'
+import useLocalState from '@/utils/use-local-state'
 
 import styles from './chart.module.scss'
 
-import { useDataCode } from './use-data-code'
+import { useData } from './use-data-code'
+import { VISUALS } from './visual'
+import { Button } from '@/components/button'
 
-type Visual = IntervalMark
+const DEFAULT_VISUAL_NAME = 'graph'
 
-const DEFAULT_VISUAL: Visual = {
-    type: 'interval',
-    encode: {
-        x: 'x',
-        y: 'y',
-    },
-    transform: [
-        {
-            type: 'sample',
-            strategy: 'max',
-        },
-    ],
-    animate: false,
+interface VisualState {
+    name: string;
+    config: any;
+}
+
+const DEFAULT_VISUAL: VisualState = {
+    name: DEFAULT_VISUAL_NAME,
+    config: VISUALS[DEFAULT_VISUAL_NAME].getDefaultConfig(),
+}
+
+function deserializeVisual(val: VisualState): VisualState {
+    return {
+        name: val.name,
+        config: _.defaultsDeep(val.config, VISUALS[val.name].getDefaultConfig()),
+    }
 }
 
 export default function ChartView() {
-    const dataCode = useDataCode()
-    const [visual, setVisual] = useState<Visual>(DEFAULT_VISUAL)
+    const [visual, setVisual] = useLocalState(
+        'Chart/Visual',
+        DEFAULT_VISUAL,
+        null,
+        deserializeVisual
+    )
+    const { ConfigEditor, Chart, defaultDataCode } = VISUALS[visual.name]
+    const data = useData(defaultDataCode)
+
+    const onConfigChange = useCallback(
+        (config: typeof visual.config) => {
+            setVisual({
+                name: visual.name,
+                config,
+            })
+        },
+        [visual.name, setVisual]
+    )
 
     return (
         <VStack className={styles.container}>
-            <ChartPanel $col={12} $flex data={dataCode.data} visual={visual} />
+            <Panel $flex $col={8} title="图表">
+                <Chart
+                    $flex
+                    config={visual.config as any}
+                    data={data.data}
+                    onConfigChange={onConfigChange}
+                />
+            </Panel>
             <Divider />
-            <HStack $flex $col={12}>
+            <HStack $flex $col={16}>
                 <DataPanel
                     $col={12}
                     $flex
-                    dataCode={dataCode.code}
-                    onDataCodeChange={dataCode.setCode}
+                    data={data.sourceData}
+                    dataCode={data.code}
+                    onDataCodeChange={data.setCode}
+                    onDataChange={data.setSourceData}
+                    onReset={data.reset}
                 />
                 <Divider />
-                <VisualPanel $col={12} $flex value={visual} onChange={setVisual} />
+                <Panel
+                    $flex
+                    $col={12}
+                    title="视图"
+                    note={<Button onClick={() => setVisual(DEFAULT_VISUAL)}>重置</Button>}
+                >
+                    <ConfigEditor value={visual.config as any} onChange={onConfigChange} />
+                </Panel>
             </HStack>
         </VStack>
     )
 }
 
-function ChartPanel(props: { data: any; visual: Visual; [otherProp: string]: any }) {
-    const { data, visual, ...otherProps } = props
+function DataPanel(props: {
+    data: unknown
+    dataCode: string
+    onDataCodeChange: (value: string) => void
+    onDataChange: (data: unknown) => void
+    onReset: () => void
+    [otherProp: string]: any
+}) {
+    const { data, dataCode, onDataChange, onDataCodeChange, onReset, ...otherProps } = props
 
-    const chartEl = useRef<HTMLDivElement>(null)
-    const chart = useRef<Chart>()
+    const { openFilePicker, file, errors, loading } = useDataFilePicker()
+    const mounted = useRef(false)
 
     useEffect(() => {
-        if (!chartEl.current) {
-            throw new Error('图表容器元素不存在')
-        }
-
-        // 初始化图表实例
-        if (!chart.current) {
-            chart.current = new Chart({
-                autoFit: true,
-                container: chartEl.current,
-            })
-        }
-
-        if (!data) {
-            console.info('empty data')
+        if (!mounted.current) {
             return
         }
 
-        const options = { ...visual, data }
+        onDataChange(file?.data)
+    }, [file])
 
-        // 声明可视化
-        chart.current.options(options)
-
-        // 渲染可视化
-        chart.current.render()
-
-        return () => {
-            chart.current?.clear()
-        }
-    }, [chartEl, data, visual])
+    useEffect(() => {
+        mounted.current = true
+    }, [])
 
     return (
-        <Panel title="图表" {...otherProps}>
-            <div $flex className={styles.chartContainer}>
-            <div className={styles.chart} ref={chartEl} />
-            </div>
-        </Panel>
-    )
-}
-
-function DataPanel(props: {
-    dataCode: string
-    onDataCodeChange: (value: string) => void
-    [otherProp: string]: any
-}) {
-    const { dataCode, onDataCodeChange, ...otherProps } = props
-
-    return (
-        <Panel title="数据" {...otherProps}>
+        <Panel
+            title="数据"
+            subtitle={
+                <HStack className={styles.funIntro} spacing="small" align="center">
+                    <span>function generator(</span>
+                    <HStack spacing="tiny">
+                        <div
+                            className={clsx(styles.paramName, { [styles.active]: !!data })}
+                            tabIndex={1}
+                            title={
+                                !data
+                                    ? '选择本地文件作为源数据后，可以点击该参数名查看所上传的数据，也可以在代码中访问该参数。'
+                                    : ''
+                            }
+                        >
+                            source
+                            <pre className={styles.data}>{JSON.stringify(data, null, 4)}</pre>
+                        </div>
+                        <span>:</span>
+                        <button onClick={openFilePicker}>选择本地文件</button>
+                        <span>,</span>
+                    </HStack>
+                    <HStack spacing="tiny">
+                        <span
+                            className={clsx(styles.paramName, styles.active)}
+                            tabIndex={1}
+                            title="提供 lodash 和 dayjs 这两套实用工具，以便于做数据处理。"
+                        >
+                            tools
+                            <pre className={styles.data}>{`{ _: Lodash, dayjs: Dayjs }`}</pre>
+                        </span>
+                        <span>:</span>
+                        <span>Tools</span>
+                    </HStack>
+                    <span>) {`{`}</span>
+                </HStack>
+            }
+            note={<Button onClick={onReset}>重置</Button>}
+            {...otherProps}
+        >
             <CodeEditor $flex language="javascript" value={dataCode} onChange={onDataCodeChange} />
+            <Divider />
+            <HStack className={styles.funOutro} align="center">{`}`}</HStack>
         </Panel>
     )
 }
 
-function VisualPanel(props: {
-    value: Visual
-    onChange: (value: Visual) => void
-    [otherProp: string]: any
-}) {
-    const { value, onChange, ...otherProps } = props
+function useDataFilePicker() {
+    const { filesContent, plainFiles, errors, ...picker } = useFilePicker<DataFileParseError>({
+        accept: ['.json', '.csv'],
+    })
 
-    return (
-        <Panel title="视图" {...otherProps}>
-            <IntervalMarkForm value={value} onChange={onChange} />
-        </Panel>
-    )
-}
+    const rawFile = plainFiles[0]
+    const fileContent = filesContent[0]
 
-function IntervalMarkForm({
-    value,
-    onChange,
-}: {
-    value: IntervalMark
-    onChange: (value: IntervalMark) => void
-}) {
-    return (
-        <div className={styles.formGroup}>
-            <span className={styles.formGroupLabel}>Encode</span>
-            <Field value={value} label="x" path="encode.x" onChange={onChange} />
-            <Field value={value} label="y" path="encode.y" onChange={onChange} />
-        </div>
-    )
-}
+    const file = useMemo(() => {
+        if (!(rawFile && fileContent)) {
+            return undefined
+        }
 
-function Field({
-    value,
-    label,
-    path,
-    onChange,
-}: {
-    value: any
-    label: string
-    path: string
-    onChange: (value: any) => void
-}) {
-    function change(filedValue: any) {
-        onChange(
-            produce(value, (draft: any) => {
-                _.set(draft, path, filedValue)
-            })
-        )
+        const type = rawFile.type
+        const text = fileContent.content
+
+        let data: unknown = undefined
+
+        try {
+            switch (type) {
+                case 'application/json':
+                    data = JSON.parse(text)
+                    break
+                case 'text/csv':
+                    data = parseCsv(text, { cast: true, columns: true })
+                    break
+                default:
+                    throw new Error(`不支持的文件类型：${type}`)
+            }
+        } catch (e) {
+            errors.push(new DataFileParseError(rawFile, e as Error))
+            return undefined
+        }
+
+        return { type, text, data }
+    }, [rawFile, fileContent])
+
+    return {
+        ...picker,
+        file,
+        errors,
     }
+}
 
-    return (
-        <label className={styles.field}>
-            <span className={styles.filedLabel}>{label}</span>
-            <Input
-                className={styles.fieldInput}
-                value={_.get(value, path) ?? ''}
-                onChange={change}
-            />
-        </label>
-    )
+class DataFileParseError extends Error {
+    name = 'DataFileParseError'
+    causedByFile: FileWithPath
+    constructor(file: FileWithPath, error: Error) {
+        super(error.message, { cause: error })
+        this.causedByFile = file
+    }
 }

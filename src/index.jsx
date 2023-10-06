@@ -1,4 +1,4 @@
-import { lazy } from 'react'
+import { lazy, StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
@@ -38,6 +38,7 @@ dayjs.extend(toObject)
 dayjs.extend(dayOfYear)
 
 createRoot(document.getElementById('root')).render(
+    // <StrictMode>
     <BrowserRouter>
         <Routes>
             <Route path="/" element={<App />}>
@@ -57,4 +58,5 @@ createRoot(document.getElementById('root')).render(
             </Route>
         </Routes>
     </BrowserRouter>
+    // </StrictMode>
 )
