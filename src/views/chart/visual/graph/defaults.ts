@@ -7,6 +7,7 @@ export function getDefaultConfig(): Config {
         line: true,
         point: false,
         areaOpacity: 0.1,
+        areaGradient: 0,
         color: 'auto',
         lineWidth: 1,
         nullMode: 'null',
