@@ -18,7 +18,7 @@ import { Button } from '@/components/button'
 import Input from '@/components/input'
 import { Select, SelectOption } from '@/components/select'
 import { Toggle } from '@/components/toggle'
-import { Config } from './interface'
+import { ALL_STAT_METHOD_NAMES, Config, STAT_METHODS } from './interface'
 import styles from './config-editor.module.scss'
 import { verifyConfig } from './verifies'
 
@@ -64,17 +64,24 @@ const Form = memo(function Form() {
     return (
         <VStack padding="middle" spacing="middle" align="start">
             <HStack className={styles.formGroup} spacing="big">
-                <Field type="toggle" label="Bar" name="bar" />
-                <Field type="toggle" label="Line" name="line" />
-                <Field type="toggle" label="Point" name="point" />
+                <Field type="toggle" label="柱状图" name="bar" />
+                <Field type="toggle" label="折线图" name="line" />
+                <Field type="toggle" label="数据点" name="point" />
             </HStack>
             <Divider />
-            <VStack className={styles.formGroup} spacing="middle" align='start'>
+
+            <HStack className={styles.formGroup} spacing="big">
+                <Field type="toggle" label="堆叠" name="stack" />
+                <Field type="toggle" label="百分比堆叠" name="percent" />
+            </HStack>
+            <Divider />
+            <VStack className={styles.formGroup} spacing="middle" align="start">
                 <Field
                     type="select"
-                    label="Line Width"
+                    label="折线宽度"
                     name="lineWidth"
                     options={[
+                        { label: '0', value: 0 },
                         { label: '1', value: 1 },
                         { label: '2', value: 2 },
                         { label: '3', value: 3 },
@@ -89,7 +96,7 @@ const Form = memo(function Form() {
                 />
                 <Field
                     type="select"
-                    label="Area Opacity"
+                    label="填充度"
                     name="areaOpacity"
                     options={[
                         { label: 'None', value: 0 },
@@ -105,13 +112,27 @@ const Form = memo(function Form() {
                         { label: '1.0', value: 1.0 },
                     ]}
                 />
-                <HStack spacing="big">
-                    <Field type="toggle" label="Stack" name="stack" />
-                    <Field type="toggle" label="Percent" name="percent" />
-                </HStack>
                 <Field
                     type="select"
-                    label="Null value"
+                    label="填充渐变度"
+                    name="areaGradient"
+                    options={[
+                        { label: 'None', value: 0 },
+                        { label: '0.1', value: 0.1 },
+                        { label: '0.2', value: 0.2 },
+                        { label: '0.3', value: 0.3 },
+                        { label: '0.4', value: 0.4 },
+                        { label: '0.5', value: 0.5 },
+                        { label: '0.6', value: 0.6 },
+                        { label: '0.7', value: 0.7 },
+                        { label: '0.8', value: 0.8 },
+                        { label: '0.9', value: 0.9 },
+                        { label: '1.0', value: 1.0 },
+                    ]}
+                />
+                <Field
+                    type="select"
+                    label="空值处理"
                     name="nullMode"
                     options={[
                         { label: 'connected', value: 'connected' },
@@ -121,23 +142,25 @@ const Form = memo(function Form() {
                 />
             </VStack>
             <Divider />
-            <VStack className={styles.formGroup} spacing="middle" align='start'>
-                <span className={styles.formGroupLabel}>Legend</span>
-                <Field type="toggle" label="Show" name="legend.show" />
+            <VStack className={styles.formGroup} spacing="middle" align="start">
+                <span className={styles.formGroupLabel}>图例</span>
+                <Field type="toggle" label="是否显示" name="legend.show" />
                 <HStack spacing={{ horizontal: 'big', vertical: 'middle' }} wrap>
-                    <Field type="toggle" label="max" name="legend.max" />
                     <Field type="toggle" label="min" name="legend.min" />
+                    <Field type="toggle" label="max" name="legend.max" />
+                    <Field type="toggle" label="last" name="legend.last" />
+                    <Field type="toggle" label="avg" name="legend.avg" />
+                    <Field type="toggle" label="total" name="legend.total" />
+                </HStack>
+                <HStack spacing={{ horizontal: 'big', vertical: 'middle' }} wrap>
                     <Field type="toggle" label="p50" name="legend.p50" />
                     <Field type="toggle" label="p80" name="legend.p80" />
                     <Field type="toggle" label="p90" name="legend.p90" />
                     <Field type="toggle" label="p99" name="legend.p99" />
                     <Field type="toggle" label="p99.9" name="legend.p999" />
                     <Field type="toggle" label="p99.99" name="legend.p9999" />
-                    <Field type="toggle" label="last" name="legend.last" />
-                    <Field type="toggle" label="total" name="legend.total" />
-                    <Field type="toggle" label="avg" name="legend.avg" />
                 </HStack>
-                <Field type="text" label="Width" name="legend.width" />
+                <Field type="text" label="宽度" name="legend.width" />
             </VStack>
         </VStack>
     )
@@ -193,8 +216,9 @@ function Field({
 
     return (
         <label className={styles.field}>
+            {type === 'toggle' ? controller : null}
             <span className={styles.filedLabel}>{label}</span>
-            {controller}
+            {type !== 'toggle' ? controller : null}
         </label>
     )
 }

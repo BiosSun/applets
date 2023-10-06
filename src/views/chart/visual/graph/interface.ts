@@ -85,6 +85,9 @@ export type Config = {
     /** 若开启折线图，则控制折线填充区域的不透明度 */
     areaOpacity: number
 
+    /** 若开启折线图，则控制折线填充区域的渐变程度 */
+    areaGradient: number
+
     /** 图形的颜色，默认自动分派，也可以强制指定 */
     color: 'auto' | string
 

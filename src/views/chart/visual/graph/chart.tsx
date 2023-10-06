@@ -253,6 +253,7 @@ export function GraphChart({
         const line = config.line || config.point
         const percent = config.stack && config.percent
         const areaOpacity = config.line ? config.areaOpacity : 0
+        const areaGradient = config.line ? config.areaGradient : 0
 
         const option = {
             grid: {
@@ -315,7 +316,31 @@ export function GraphChart({
                     showSymbol: config.point,
                     connectNulls: config.nullMode === 'connected',
                     lineStyle: { width: config.line ? config.lineWidth : 0 },
-                    areaStyle: areaOpacity ? { opacity: areaOpacity } : undefined,
+                    areaStyle: areaOpacity
+                        ? {
+                              opacity: areaGradient ? 1 : areaOpacity,
+                              color: areaGradient
+                                  ? new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                        {
+                                            offset: 0,
+                                            color:
+                                                color +
+                                                Math.round(areaGradient * 0xff)
+                                                    .toString(16)
+                                                    .padStart(2, '0'), // 0% 处的颜色
+                                        },
+                                        {
+                                            offset: 1,
+                                            color:
+                                                color +
+                                                Math.round(areaGradient * 0.3 * 0xff)
+                                                    .toString(16)
+                                                    .padStart(2, '0'), // 100% 处的颜色
+                                        },
+                                    ])
+                                  : undefined,
+                          }
+                        : undefined,
                     emphasis: { disabled: true },
                 })
             }
