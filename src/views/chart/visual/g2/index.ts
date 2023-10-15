@@ -5,7 +5,7 @@ import { Config, Data } from './interface'
 import { verifyData } from './verify-data'
 import { getDefaultConfig, getDefaultDataCode } from './defaults'
 
-const visual: Visual<Config, Data> = {
+export const G2_VISUAL: Visual<'g2', Config, Data> = {
     name: 'g2',
     verifyData,
     getDefaultConfig,
@@ -13,5 +13,3 @@ const visual: Visual<Config, Data> = {
     ConfigEditor: G2ConfigEditor,
     Chart: G2Chart,
 }
-
-export default visual

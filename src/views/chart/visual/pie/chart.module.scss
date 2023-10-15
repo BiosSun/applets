@@ -1,0 +1,10 @@
+@import 'nojiko/sass/nojiko';
+
+.chartContainer {
+    overflow: hidden;
+
+    .chart {
+        width: 100%;
+        height: 100%;
+    }
+}

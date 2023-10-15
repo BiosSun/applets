@@ -2,22 +2,22 @@ import { ChangeEvent, forwardRef } from 'react'
 
 export type SelectValue = string | number
 
-export interface SelectOption {
+export interface SelectOption<V> {
     label: string
-    value: SelectValue
+    value: V
 }
 
-interface SelectProps {
-    value?: SelectValue
-    defaultValue?: SelectValue
+interface SelectProps<V = any> {
+    value?: V
+    defaultValue?: V
     className?: string
-    options: SelectOption[]
+    options: SelectOption<V>[]
     onBlur?: () => void
     onChange?: (
-        value: SelectValue,
-        option: SelectOption,
+        value: V,
+        option: SelectOption<V>,
         index: number,
-        options: SelectOption[]
+        options: SelectOption<V>[]
     ) => void
 }
 

@@ -3,9 +3,9 @@ import { ComponentType } from 'react'
 /**
  * 一个完整的可视化方案
  */
-export interface Visual<Config, Data> {
+export interface Visual<Name extends string, Config, Data> {
     /** 方案名称 */
-    name: string
+    name: Name
 
     /** 校验数据是否符合该方案的要求 */
     verifyData: (data: any) => data is Data

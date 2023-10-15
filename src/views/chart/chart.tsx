@@ -9,48 +9,57 @@ import { HStack, VStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
 import Panel from '@/components/panel'
 import CodeEditor from '@/components/code-editor'
+import { Button } from '@/components/button'
+import { Select } from '@/components/select'
 import useLocalState from '@/utils/use-local-state'
 
 import styles from './chart.module.scss'
 
 import { useData } from './use-data-code'
-import { VISUALS } from './visual'
-import { Button } from '@/components/button'
+import {
+    DEFAULT_VISUALS_STATE,
+    VISUALS,
+    VISUAL_NAMES,
+    VisualConfig,
+    VisualName,
+    VisualsState,
+} from './visual'
 
-const DEFAULT_VISUAL_NAME = 'graph'
-
-interface VisualState {
-    name: string;
-    config: any;
-}
-
-const DEFAULT_VISUAL: VisualState = {
-    name: DEFAULT_VISUAL_NAME,
-    config: VISUALS[DEFAULT_VISUAL_NAME].getDefaultConfig(),
-}
-
-function deserializeVisual(val: VisualState): VisualState {
+function deserializeVisual(val: VisualsState): VisualsState {
     return {
         name: val.name,
-        config: _.defaultsDeep(val.config, VISUALS[val.name].getDefaultConfig()),
+        configs: _.defaultsDeep(val.configs, DEFAULT_VISUALS_STATE.configs),
     }
 }
 
 export default function ChartView() {
-    const [visual, setVisual] = useLocalState(
+    const [visual, setVisual] = useLocalState<VisualsState>(
         'Chart/Visual',
-        DEFAULT_VISUAL,
+        DEFAULT_VISUALS_STATE,
         null,
         deserializeVisual
     )
-    const { ConfigEditor, Chart, defaultDataCode } = VISUALS[visual.name]
+    const { ConfigEditor, Chart, defaultDataCode, getDefaultConfig } = VISUALS[visual.name]
     const data = useData(defaultDataCode)
 
+    const onNameChange = useCallback(
+        (name: VisualName) => {
+            setVisual({
+                name,
+                configs: visual.configs,
+            })
+        },
+        [visual.name, setVisual]
+    )
+
     const onConfigChange = useCallback(
-        (config: typeof visual.config) => {
+        (config: VisualConfig) => {
             setVisual({
                 name: visual.name,
-                config,
+                configs: {
+                    ...visual.configs,
+                    [visual.name]: config,
+                },
             })
         },
         [visual.name, setVisual]
@@ -61,7 +70,7 @@ export default function ChartView() {
             <Panel $flex $col={8} title="图表">
                 <Chart
                     $flex
-                    config={visual.config as any}
+                    config={visual.configs[visual.name] as any}
                     data={data.data}
                     onConfigChange={onConfigChange}
                 />
@@ -82,9 +91,21 @@ export default function ChartView() {
                     $flex
                     $col={12}
                     title="视图"
-                    note={<Button onClick={() => setVisual(DEFAULT_VISUAL)}>重置</Button>}
+                    note={
+                        <HStack align="center" spacing>
+                            <Select
+                                value={visual.name}
+                                options={VISUAL_NAMES.map((name) => ({ label: name, value: name }))}
+                                onChange={onNameChange}
+                            />
+                            <Button onClick={() => onConfigChange(getDefaultConfig())}>重置</Button>
+                        </HStack>
+                    }
                 >
-                    <ConfigEditor value={visual.config as any} onChange={onConfigChange} />
+                    <ConfigEditor
+                        value={visual.configs[visual.name] as any}
+                        onChange={onConfigChange}
+                    />
                 </Panel>
             </HStack>
         </VStack>

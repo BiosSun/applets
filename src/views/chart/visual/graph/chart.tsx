@@ -1,119 +1,19 @@
-import _, { method } from 'lodash'
-import clsx from 'clsx'
+import _ from 'lodash'
 import dayjs from 'dayjs'
-import { produce } from 'immer'
 import * as echarts from 'echarts'
 import { useEffect, useMemo, useRef } from 'react'
-import Color from 'colorjs.io'
-import { assert } from '@/utils/assert'
 import { useResizeDetector } from 'react-resize-detector'
-import { ALL_STAT_METHOD_NAMES, Config, Data, STAT_METHODS, StatMethod } from './interface'
-import styles from './chart.module.scss'
-import { useThrottleCallback } from '@/utils/use-throttle-callback'
 import { HStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
+import { useThrottleCallback } from '@/utils/use-throttle-callback'
+import { pickColor } from '../../utils/color'
+import { numeric } from '../../utils/numeric'
+import { ALL_STAT_METHOD_NAMES, STAT_METHODS, StatMethod } from '../../utils/stat'
+import styles from './chart.module.scss'
+import { Config, Data } from './interface'
 
 function isValidTime(val: string | number): boolean {
     return dayjs(val).isValid()
-}
-
-function quantile(nums: number[], level: number): number {
-    if (nums.length === 0) {
-        throw new Error('Array must not be empty')
-    }
-
-    if (level < 0 || level > 1) {
-        throw new Error('Level must be between 0 and 1')
-    }
-    nums = [...nums]
-    nums.sort((a, b) => a - b)
-
-    const index = level * (nums.length - 1)
-    const lower = Math.floor(index)
-    const upper = lower + 1
-    const weight = index % 1
-
-    if (upper === nums.length) {
-        return nums[lower]
-    }
-
-    return nums[lower] * (1 - weight) + nums[upper] * weight
-}
-
-const COLORS_10 = [
-    '#1783FF',
-    '#00C9C9',
-    '#F0884D',
-    '#D580FF',
-    '#7863FF',
-    '#60C42D',
-    '#BD8F24',
-    '#FF80CA',
-    '#2491B3',
-    '#17C76F',
-]
-
-const COLORS_20 = [
-    '#1783FF',
-    '#00C9C9',
-    '#F0884D',
-    '#D580FF',
-    '#7863FF',
-    '#60C42D',
-    '#BD8F24',
-    '#FF80CA',
-    '#2491B3',
-    '#17C76F',
-    '#AABA01',
-    '#BC7CFC',
-    '#237CBC',
-    '#2DE379',
-    '#CE8032',
-    '#FF7AF4',
-    '#545FD3',
-    '#AFE410',
-    '#D8C608',
-    '#FFA1E0',
-]
-
-// const colorDisk = _.memoize((total: number) => {
-//     const indexes = new Array(total).fill(0).map((_, i) => i)
-//     const groupLength = 3
-//     const groupsCount = Math.ceil(total / groupLength) // 每三个颜色一组
-//     const groups = _.chain(indexes)
-//         .groupBy((index) => index % groupsCount)
-//         .values()
-//         .map((group, groupIndex) => {
-//             for (let i = 0; i < groupIndex % groupLength; i++) {
-//                 const index = group.pop()!
-//                 group.unshift(index)
-//             }
-//             return group
-//         })
-//         .flatten()
-//         .value()
-
-//     return groups
-// })
-
-// function pickColor(i: number, total: number): string {
-//     const groups = colorDisk(total)
-//     const index = groups[i]
-
-//     const interval = 360 / total
-//     const color = new Color(`oklch(0.65 0.3 ${(interval * index + 239) % 360})`).toString()
-
-//     console.info(color)
-
-//     return color
-// }
-
-function pickColor(i: number, t: number): string {
-    if (t <= 10) {
-        return COLORS_10[i]
-    } else {
-        return COLORS_20[i % 20]
-    }
 }
 
 export function GraphChart({
@@ -244,7 +144,6 @@ export function GraphChart({
 
         return {
             xAxis,
-            fields: fieldNames,
             series,
         }
     }, [data, validStatMethods, config.sort, config.sortDire])
@@ -437,7 +336,7 @@ export function GraphChart({
                                     <td align="left">{series.name}</td>
                                     {visibleStatMethods.map((method) => (
                                         <td key={method} align="right">
-                                            <Numeric num={(series as any)[method]} />
+                                            <span>{numeric((series as any)[method])}</span>
                                         </td>
                                     ))}
                                 </tr>
@@ -448,15 +347,4 @@ export function GraphChart({
             ) : null}
         </HStack>
     )
-}
-
-function Numeric({ num }: { num: number }) {
-    const str = useMemo(() => {
-        return Intl.NumberFormat('zh-Hans-CN', {
-            style: 'decimal',
-            maximumFractionDigits: 4,
-        }).format(num)
-    }, [num])
-
-    return <span>{str}</span>
 }

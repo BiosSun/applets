@@ -5,7 +5,7 @@ import { Config, Data } from './interface'
 import { verifyData } from './verifies'
 import { getDefaultConfig, getDefaultDataCode } from './defaults'
 
-const visual: Visual<Config, Data> = {
+export const GRAPH_VISUAL: Visual<'graph', Config, Data> = {
     name: 'graph',
     verifyData,
     getDefaultConfig,
@@ -14,4 +14,4 @@ const visual: Visual<Config, Data> = {
     Chart: GraphChart,
 }
 
-export default visual
+export type { Config as GraphVisualConfig }

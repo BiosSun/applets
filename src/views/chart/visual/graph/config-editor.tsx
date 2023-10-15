@@ -1,24 +1,10 @@
 import _ from 'lodash'
-import dayjs from 'dayjs'
-import { Fragment, memo, useEffect } from 'react'
-import produce from 'immer'
-import {
-    useForm,
-    SubmitHandler,
-    FormProvider,
-    useFieldArray,
-    useFormContext,
-    useWatch,
-    Controller,
-} from 'react-hook-form'
-import { IntervalMark } from '@antv/g2'
+import { memo, useEffect } from 'react'
+import { useForm, FormProvider, useWatch } from 'react-hook-form'
 import { Divider } from '@nami-ui/divider'
 import { HStack, VStack } from '@nami-ui/stack'
-import { Button } from '@/components/button'
-import Input from '@/components/input'
-import { Select, SelectOption } from '@/components/select'
-import { Toggle } from '@/components/toggle'
-import { ALL_STAT_METHOD_NAMES, Config, STAT_METHODS } from './interface'
+import { Field } from '../../components/field'
+import { Config } from './interface'
 import styles from './config-editor.module.scss'
 import { verifyConfig } from './verifies'
 
@@ -53,7 +39,7 @@ export function GraphConfigEditor({
 
     return (
         <FormProvider {...methods}>
-            <div>
+            <div {...otherProps}>
                 <Form />
             </div>
         </FormProvider>
@@ -165,60 +151,3 @@ const Form = memo(function Form() {
         </VStack>
     )
 })
-
-function Field({
-    label,
-    name,
-    type = 'text',
-    options,
-}: {
-    label: string
-    name: string
-    type?: 'text' | 'toggle' | 'select'
-    options?: SelectOption[]
-}) {
-    let controller
-
-    switch (type) {
-        case 'text':
-            const { register } = useFormContext()
-            controller = <Input className={styles.fieldInput} {...register(name)} />
-            break
-        case 'toggle':
-            controller = (
-                <Controller
-                    name={name}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <Toggle value={value} onChange={onChange} onBlur={onBlur} />
-                    )}
-                />
-            )
-            break
-        case 'select':
-            controller = (
-                <Controller
-                    name={name}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <Select
-                            value={value}
-                            options={options!}
-                            onChange={onChange}
-                            onBlur={onBlur}
-                        />
-                    )}
-                />
-            )
-            break
-        default:
-            throw new Error('未知的 Field 类型')
-            break
-    }
-
-    return (
-        <label className={styles.field}>
-            {type === 'toggle' ? controller : null}
-            <span className={styles.filedLabel}>{label}</span>
-            {type !== 'toggle' ? controller : null}
-        </label>
-    )
-}
