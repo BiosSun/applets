@@ -62,5 +62,15 @@ export function PieConfigEditor({
 }
 
 const Form = memo(function Form() {
-    return <VStack padding="middle" spacing="middle" align="start"></VStack>
+    return (
+        <VStack padding="middle" spacing="middle" align="start">
+            <Divider />
+            <div className={styles.formGroup}>
+                <span className={styles.formGroupLabel}>数据要求</span>
+                <ul className={styles.note}>
+                    <li>可以返回一个简单的对象，对象的 key 为数据项名称，value 为数据项的值；</li>
+                </ul>
+            </div>
+        </VStack>
+    )
 })

@@ -7,9 +7,6 @@ export function getDefaultConfig(): Config {
 
 export function getDefaultDataCode(): string {
     return outdent`
-        // Pie 视图的规则：
-        // 1. 可以返回一个简单的对象，对象的 key 为数据项名称，value 为数据项的值；
-
         const { _, dayjs } = tools
 
         // 示例一：

@@ -91,16 +91,14 @@ export default function ChartView() {
                     $flex
                     $col={12}
                     title="视图"
-                    note={
-                        <HStack align="center" spacing>
-                            <Select
-                                value={visual.name}
-                                options={VISUAL_NAMES.map((name) => ({ label: name, value: name }))}
-                                onChange={onNameChange}
-                            />
-                            <Button onClick={() => onConfigChange(getDefaultConfig())}>重置</Button>
-                        </HStack>
+                    subtitle={
+                        <Select
+                            value={visual.name}
+                            options={VISUAL_NAMES.map((name) => ({ label: name, value: name }))}
+                            onChange={onNameChange}
+                        />
                     }
+                    note={<Button onClick={() => onConfigChange(getDefaultConfig())}>重置</Button>}
                 >
                     <ConfigEditor
                         value={visual.configs[visual.name] as any}

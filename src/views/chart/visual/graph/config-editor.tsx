@@ -148,6 +148,22 @@ const Form = memo(function Form() {
                 </HStack>
                 <Field type="text" label="宽度" name="legend.width" />
             </VStack>
+            <Divider />
+            <div className={styles.formGroup}>
+                <span className={styles.formGroupLabel}>数据要求</span>
+                <ul className={styles.note}>
+                    <li>应当返回一个数组，其元素为对象；</li>
+                    <li>对象中字段的值只能为字符串、数值或 null；</li>
+                    <li>值为字符串的字段将视为维度；</li>
+                    <li>值为数值的则视为指标（另外所有值都为 null 的字段，也会被视为指标）；</li>
+                    <li>第一个维度用于渲染 X 轴；</li>
+                    <li>
+                        若有某个字段的名称是 time、t 或
+                        date，且其所有值都可以解析为一个有效的日期（`dayjs(val).isValid()`），
+                        则强制作为维度，并用于渲染 X 轴（且此时 X 轴将渲染为时间轴）。{' '}
+                    </li>
+                </ul>
+            </div>
         </VStack>
     )
 })

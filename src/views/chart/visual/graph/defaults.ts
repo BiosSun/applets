@@ -36,15 +36,6 @@ export function getDefaultConfig(): Config {
 
 export function getDefaultDataCode(): string {
     return outdent`
-        // Graph 视图的规则：
-        // 1. 应当返回一个数组，其元素为对象；
-        // 2. 对象中字段的值只能为字符串、数值或 null；
-        // 3. 值为字符串的字段将视为维度；
-        // 4. 值为数值的则视为指标（另外所有值都为 null 的字段，也会被视为指标）；
-        // 5. 第一个维度用于渲染 X 轴；
-        // 6. 若有某个字段的名称是 time、t 或 date，且其所有值都可以解析为一个有效的日期（\`dayjs(val).isValid()\`），
-        //    则强制作为维度，并用于渲染 X 轴（且此时 X 轴将渲染为时间轴）。
-
         const { _, dayjs } = tools
 
         // 示例一：
