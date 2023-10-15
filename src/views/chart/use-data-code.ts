@@ -27,8 +27,11 @@ export function useData(defaultDataCode: string) {
             return
         }
 
+        // 确保 sourceData 不会被修改
+        const source = window.structuredClone(sourceData)
+
         try {
-            const result = exec({ source: sourceData, tools: { _, dayjs } }, normalizedCode)
+            const result = exec({ source, tools: { _, dayjs } }, normalizedCode)
             setState('success')
             setData(result)
         } catch (e) {
@@ -50,8 +53,8 @@ export function useData(defaultDataCode: string) {
     }
 
     function reset() {
-        setCode(defaultDataCode);
-        setSourceData(undefined);
+        setCode(defaultDataCode)
+        setSourceData(undefined)
     }
 
     return {
