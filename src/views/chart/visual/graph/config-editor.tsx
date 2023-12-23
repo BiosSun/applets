@@ -62,59 +62,15 @@ const Form = memo(function Form() {
             </HStack>
             <Divider />
             <VStack className={styles.formGroup} spacing="middle" align="start">
+                <Field type="number" label="折线宽度" name="lineWidth" min={0} max={10} step={1} />
+                <Field type="number" label="填充度" name="areaOpacity" min={0} max={1} step={0.1} />
                 <Field
-                    type="select"
-                    label="折线宽度"
-                    name="lineWidth"
-                    options={[
-                        { label: '0', value: 0 },
-                        { label: '1', value: 1 },
-                        { label: '2', value: 2 },
-                        { label: '3', value: 3 },
-                        { label: '4', value: 4 },
-                        { label: '5', value: 5 },
-                        { label: '6', value: 6 },
-                        { label: '7', value: 7 },
-                        { label: '8', value: 8 },
-                        { label: '9', value: 9 },
-                        { label: '10', value: 10 },
-                    ]}
-                />
-                <Field
-                    type="select"
-                    label="填充度"
-                    name="areaOpacity"
-                    options={[
-                        { label: 'None', value: 0 },
-                        { label: '0.1', value: 0.1 },
-                        { label: '0.2', value: 0.2 },
-                        { label: '0.3', value: 0.3 },
-                        { label: '0.4', value: 0.4 },
-                        { label: '0.5', value: 0.5 },
-                        { label: '0.6', value: 0.6 },
-                        { label: '0.7', value: 0.7 },
-                        { label: '0.8', value: 0.8 },
-                        { label: '0.9', value: 0.9 },
-                        { label: '1.0', value: 1.0 },
-                    ]}
-                />
-                <Field
-                    type="select"
+                    type="number"
                     label="填充渐变度"
                     name="areaGradient"
-                    options={[
-                        { label: 'None', value: 0 },
-                        { label: '0.1', value: 0.1 },
-                        { label: '0.2', value: 0.2 },
-                        { label: '0.3', value: 0.3 },
-                        { label: '0.4', value: 0.4 },
-                        { label: '0.5', value: 0.5 },
-                        { label: '0.6', value: 0.6 },
-                        { label: '0.7', value: 0.7 },
-                        { label: '0.8', value: 0.8 },
-                        { label: '0.9', value: 0.9 },
-                        { label: '1.0', value: 1.0 },
-                    ]}
+                    min={0}
+                    max={1}
+                    step={0.1}
                 />
                 <Field
                     type="select"
@@ -146,7 +102,14 @@ const Form = memo(function Form() {
                     <Field type="toggle" label="p99.9" name="legend.p999" />
                     <Field type="toggle" label="p99.99" name="legend.p9999" />
                 </HStack>
-                <Field type="text" label="宽度" name="legend.width" />
+                <Field
+                    type="number"
+                    label="宽度"
+                    name="legend.width"
+                    min={0}
+                    max={1440}
+                    step={10}
+                />
             </VStack>
             <Divider />
             <div className={styles.formGroup}>
