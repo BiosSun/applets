@@ -1,7 +1,8 @@
 import _ from 'lodash'
+import clsx from 'clsx'
 import dayjs from 'dayjs'
 import * as echarts from 'echarts'
-import { useEffect, useMemo, useRef } from 'react'
+import { MouseEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useResizeDetector } from 'react-resize-detector'
 import { HStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
@@ -32,6 +33,8 @@ export function GraphChart({
     const containerEl = useRef<HTMLDivElement>(null)
     const chartEl = useRef<HTMLDivElement>(null)
     const chart = useRef<echarts.ECharts>()
+
+    const [selectedSeries, setSelectedSeries] = useState<string[]>([])
 
     const visibleStatMethods = useMemo(() => {
         const methods: StatMethod[] = []
@@ -107,6 +110,7 @@ export function GraphChart({
 
         type Series = {
             name: string
+            color: string
             data: (readonly [string | number, number])[]
         } & {
             [key in StatMethod]?: number
@@ -119,6 +123,7 @@ export function GraphChart({
                 const data = items.map((d) => [d[xAxis.name], d[metric] as number] as const)
                 const seriesItem: Series = {
                     name: key ? key + ' - ' + metric : metric,
+                    color: '',
                     data,
                 }
 
@@ -133,6 +138,8 @@ export function GraphChart({
                 series.push(seriesItem)
             }
         }
+
+        series.forEach((series, index, { length }) => (series.color = pickColor(index, length)))
 
         if (config.sort !== 'default') {
             series.sort((a, b) =>
@@ -178,7 +185,7 @@ export function GraphChart({
                     return [point[0] + 16, point[1] + 16]
                 },
             },
-            animationDuration: 300,
+            animationDuration: 0,
             series: [] as echarts.SeriesOption[],
         }
 
@@ -192,9 +199,14 @@ export function GraphChart({
         }
 
         for (let i = 0, t = series.length; i < t; i++) {
-            const name = series[i].name
-            const color = pickColor(i, t)
+            const { name, color } = series[i]
             let data = series[i].data
+
+            if (selectedSeries.length) {
+                if (!selectedSeries.includes(name)) {
+                    continue
+                }
+            }
 
             if (percent) {
                 data = data.map(([key, val], index) => [key, (val as number) / totalData[index]])
@@ -259,7 +271,7 @@ export function GraphChart({
         }
 
         return option
-    }, [xAxis, series, config])
+    }, [xAxis, series, selectedSeries, config])
 
     useEffect(() => {
         if (!chartEl.current) {
@@ -299,6 +311,26 @@ export function GraphChart({
         onConfigChange(newConfig)
     }
 
+    function selectSeries(event: MouseEvent<HTMLDivElement>, seriesName: string) {
+        let newVal: string[]
+
+        if (event.metaKey) {
+            if (selectedSeries.includes(seriesName)) {
+                newVal = selectedSeries.filter((i) => i !== seriesName)
+            } else {
+                newVal = [...selectedSeries, seriesName]
+            }
+        } else {
+            if (selectedSeries.includes(seriesName)) {
+                newVal = []
+            } else {
+                newVal = [seriesName]
+            }
+        }
+
+        setSelectedSeries(newVal)
+    }
+
     return (
         <HStack className={className} {...otherProps}>
             <div $flex ref={containerEl} className={styles.chartContainer}>
@@ -332,8 +364,26 @@ export function GraphChart({
                         </thead>
                         <tbody>
                             {series.map((series) => (
-                                <tr key={series.name}>
-                                    <td align="left">{series.name}</td>
+                                <tr
+                                    key={series.name}
+                                    className={clsx({
+                                        [styles.hideRow]:
+                                            selectedSeries.length &&
+                                            !selectedSeries.includes(series.name),
+                                    })}
+                                >
+                                    <td
+                                        align="left"
+                                        onClick={(event) => selectSeries(event, series.name)}
+                                    >
+                                        <div
+                                            className={styles.colorIndicator}
+                                            style={{ backgroundColor: series.color }}
+                                        >
+                                            {series.color}
+                                        </div>
+                                        {series.name}
+                                    </td>
                                     {visibleStatMethods.map((method) => (
                                         <td key={method} align="right">
                                             <span>{numeric((series as any)[method])}</span>

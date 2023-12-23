@@ -66,4 +66,18 @@
     .sortFlag {
         color: #2f81c4;
     }
+
+    .colorIndicator {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 12px;
+        font: 0/0 a;
+        vertical-align: middle;
+        margin-right: 8px;
+    }
+
+    .hideRow {
+        color: #aaa;
+    }
 }
