@@ -6,13 +6,12 @@ import { Divider } from '@nami-ui/divider'
 import TextareaAutosize from 'react-autosize-textarea'
 import ReactResizeDetector from 'react-resize-detector'
 import { QRCodeSVG } from 'qrcode.react'
+import { ErrorBoundary } from 'react-error-boundary'
 
-import { Button } from "@/components/button";
+import { Button } from '@/components/button'
 import useLocalState from '@/utils/use-local-state.ts'
 
 import styles from './index.module.scss'
-
-const MAX_TEXT_LENGTH = 1024
 
 function createNode() {
     return {
@@ -135,21 +134,25 @@ function Display({ value = '', level, className }) {
                 <VStack>
                     {!value ? (
                         <div $flex className={styles.qrcodePlaceholder} style={{ width: height }} />
-                    ) : value.length > MAX_TEXT_LENGTH ? (
-                        <div className={styles.qrcodePlaceholder} style={{ width: height }}>
-                            <span $flex className={clsx(className, styles.dangerMessage)}>
-                                不可超过 1024 个字符
-                            </span>
-                        </div>
                     ) : (
-                        <QRCodeSVG
-                            $flex
-                            className={clsx(className, styles.qrcode)}
-                            value={value}
-                            size={height}
-                            level={level}
-                            bgColor="transparent"
-                        />
+                        <ErrorBoundary
+                            key={value}
+                            fallbackRender={({ error }) => (
+                                <div className={styles.qrcodePlaceholder} style={{ width: height }}>
+                                    <span $flex className={clsx(className, styles.dangerMessage)}>
+                                        {error?.message ?? '渲染错误'}
+                                    </span>
+                                </div>
+                            )}
+                        >
+                            <QRCodeSVG
+                                className={clsx(className, styles.qrcode)}
+                                value={value}
+                                size={height}
+                                level={level}
+                                bgColor="transparent"
+                            />
+                        </ErrorBoundary>
                     )}
                 </VStack>
             )}
