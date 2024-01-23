@@ -17,6 +17,15 @@
 .times {
     height: 162px;
     overflow: hidden;
+
+    em {
+        font-style: normal;
+        opacity: 0.5;
+        &::before,
+        &::after{
+            content: ' ';
+        }
+    }
 }
 
 .expandedTimes {

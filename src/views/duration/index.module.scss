@@ -16,6 +16,11 @@
 
 .content {
     min-height: 272px;
+
+    em {
+        font-style: normal;
+        opacity: 0.5;
+    }
 }
 
 .label {

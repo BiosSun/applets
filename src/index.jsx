@@ -10,6 +10,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import toArray from 'dayjs/plugin/toArray'
 import toObject from 'dayjs/plugin/toObject'
 import dayOfYear from 'dayjs/plugin/dayOfYear'
+import utc from 'dayjs/plugin/utc'
 
 import './index.scss'
 
@@ -36,6 +37,7 @@ dayjs.extend(relativeTime)
 dayjs.extend(toArray)
 dayjs.extend(toObject)
 dayjs.extend(dayOfYear)
+dayjs.extend(utc)
 
 createRoot(document.getElementById('root')).render(
     // <StrictMode>

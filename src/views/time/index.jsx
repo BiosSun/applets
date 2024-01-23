@@ -191,12 +191,25 @@ function Item({ value, onChange, onRemove, onCopy, disabledRemove }) {
                     >
                         <Label title="format">{time.format('YYYY-MM-DD ddd HH:mm:ss.SSS Z')}</Label>
                         <hr />
-                        <Label title="ISO8601 (UTC)">{time.toISOString()}</Label>
+                        <Label title="ISO8601 (UTC)">
+                            {time.utc().format('YYYY-MM-DD')}
+                            <em>T</em>
+                            {time.utc().format('HH:mm:ss.SSS')}
+                            <em>Z</em>
+                        </Label>
                         <Label title="ISO8601 (Local)">
-                            {time.format('YYYY-MM-DDTHH:mm:ss.SSSZZ')}
+                            {time.format('YYYY-MM-DD')}
+                            <em>T</em>
+                            {time.format('HH:mm:ss.SSS')}
+                            <em>{time.format('ZZ')}</em>
                         </Label>
                         <Label title="Unix timestamp">
-                            {time.valueOf()} <em>({time.unix()})</em>
+                            {time.valueOf()}
+                            <span style={{ userSelect: 'none' }}>s</span>
+                            <em>
+                                ({time.unix()}
+                                <span style={{ userSelect: 'none' }}>ms</span>)
+                            </em>
                         </Label>
                         <Label title="From Now">{time.fromNow()}</Label>
                         <Label title="Week Of Year">{time.week()}</Label>
