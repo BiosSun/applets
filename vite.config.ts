@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+
 import { defineConfig } from 'vite'
 import path from 'path'
 import react from '@vitejs/plugin-react-swc'
@@ -13,6 +15,7 @@ const configs: {
     }
 } = {
     development: {},
+    test: {},
     production: {
         base: 'https://cdn-m.biossun.xyz/applets',
         customDistPath(root) {
@@ -32,11 +35,16 @@ export default defineConfig(({ mode }) => {
                 customDistPath: configs[mode].customDistPath,
             }),
         ],
+
         resolve: {
             alias: {
                 '@': path.join(__dirname, 'src'),
                 snapsvg: 'snapsvg-cjs',
             },
         },
+
+        test: {
+            include: ['src/**/*.{test,spec}.?(c|m)[jt]s?(x)']
+        }
     }
 })
