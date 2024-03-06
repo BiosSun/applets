@@ -100,10 +100,12 @@ export default function ChartView() {
                     }
                     note={<Button onClick={() => onConfigChange(getDefaultConfig())}>重置</Button>}
                 >
+                    <div $flex className={styles.configEditorContainer}>
                     <ConfigEditor
                         value={visual.configs[visual.name] as any}
                         onChange={onConfigChange}
                     />
+                    </div>
                 </Panel>
             </HStack>
         </VStack>
