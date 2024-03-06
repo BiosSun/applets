@@ -33,6 +33,12 @@ export type Config = {
     /** 当堆叠时，是否按百分比显示 */
     percent: boolean
 
+    /** 控制是否需要显示数值标签 */
+    valueLabels: {
+        show: boolean
+        position: 'top' | 'left' | 'right' | 'bottom'
+    }
+
     /**
      * X-轴类型：
      * - time: 时间轴；
@@ -42,9 +48,9 @@ export type Config = {
 
     /** Y-轴配置 */
     yAxis: {
-        min: number | null;
-        max: number | null;
-    },
+        min: number | null
+        max: number | null
+    }
 
     /** 图例 */
     legend: {

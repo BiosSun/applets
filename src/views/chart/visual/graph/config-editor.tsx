@@ -91,6 +91,22 @@ const Form = memo(function Form() {
             </VStack>
             <Divider />
             <VStack className={styles.formGroup} spacing="middle" align="start">
+                <span className={styles.formGroupLabel}>标签</span>
+                <Field type="toggle" label="是否显示" name="valueLabels.show" />
+                <Field
+                    type="select"
+                    label="位置"
+                    name="valueLabels.position"
+                    options={[
+                        { label: '上', value: 'top' },
+                        { label: '下', value: 'bottom' },
+                        { label: '左', value: 'left' },
+                        { label: '右', value: 'right' },
+                    ]}
+                />
+            </VStack>
+            <Divider />
+            <VStack className={styles.formGroup} spacing="middle" align="start">
                 <span className={styles.formGroupLabel}>图例</span>
                 <Field type="toggle" label="是否显示" name="legend.show" />
                 <HStack spacing={{ horizontal: 'big', vertical: 'middle' }} wrap>

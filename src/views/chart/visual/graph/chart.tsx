@@ -227,6 +227,10 @@ export function GraphChart({
                     stack: config.stack ? 'line' : undefined,
                     showSymbol: config.point,
                     connectNulls: config.nullMode === 'connected',
+                    label: {
+                        show: config.valueLabels.show,
+                        position: config.valueLabels.position,
+                    },
                     lineStyle: { width: config.line ? config.lineWidth : 0 },
                     areaStyle: areaOpacity
                         ? {

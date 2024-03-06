@@ -20,6 +20,10 @@ export function getDefaultConfig(): Config {
             min: null,
             max: null,
         },
+        valueLabels: {
+            show: false,
+            position: 'top',
+        },
         legend: {
             show: true,
             min: true,
