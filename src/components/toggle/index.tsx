@@ -4,11 +4,12 @@ interface ToggleProps {
     className?: string
     label?: string
     value: boolean
+    disabled?: boolean
     onChange: (value: boolean) => void
     onBlur?: () => void
 }
 
-export function Toggle({ value, className, label, onChange, onBlur, ...otherProps }: ToggleProps) {
+export function Toggle({ value, className, label, disabled, onChange, onBlur, ...otherProps }: ToggleProps) {
     return (
         <HStack
             className={className}
@@ -20,6 +21,7 @@ export function Toggle({ value, className, label, onChange, onBlur, ...otherProp
             <input
                 type="checkbox"
                 checked={value}
+                disabled={disabled}
                 onChange={(event) => onChange(event.target.checked)}
                 onBlur={() => onBlur?.()}
             />

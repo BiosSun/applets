@@ -90,22 +90,7 @@ const Form = memo(function Form() {
                 <Field type="number" label="最大值" name="yAxis.max" />
             </VStack>
             <Divider />
-            <VStack className={styles.formGroup} spacing="middle" align="start">
-                <span className={styles.formGroupLabel}>标签</span>
-                <Field type="toggle" label="是否显示" name="valueLabels.show" />
-                <Field
-                    type="select"
-                    label="位置"
-                    name="valueLabels.position"
-                    options={[
-                        { label: '上', value: 'top' },
-                        { label: '下', value: 'bottom' },
-                        { label: '左', value: 'left' },
-                        { label: '右', value: 'right' },
-                    ]}
-                />
-            </VStack>
-            <Divider />
+            <ValueLabelsFormSection />
             <VStack className={styles.formGroup} spacing="middle" align="start">
                 <span className={styles.formGroupLabel}>图例</span>
                 <Field type="toggle" label="是否显示" name="legend.show" />
@@ -152,3 +137,29 @@ const Form = memo(function Form() {
         </VStack>
     )
 })
+
+function ValueLabelsFormSection() {
+    const point = useWatch({ name: 'point' }) as boolean
+
+    return (
+        <>
+            <VStack className={styles.formGroup} spacing="middle" align="start">
+                <span className={styles.formGroupLabel}>标签</span>
+                <Field type="toggle" label="是否显示" name="valueLabels.show" disabled={!point} />
+                <Field
+                    type="select"
+                    label="位置"
+                    name="valueLabels.position"
+                    disabled={!point}
+                    options={[
+                        { label: '上', value: 'top' },
+                        { label: '下', value: 'bottom' },
+                        { label: '左', value: 'left' },
+                        { label: '右', value: 'right' },
+                    ]}
+                />
+            </VStack>
+            <Divider />
+        </>
+    )
+}

@@ -11,12 +11,13 @@ interface InputProps {
     type?: string
     min?: number | string
     max?: number | string
+    disabled?: boolean
     onBlur?: (value: FocusEvent<HTMLInputElement>) => void
     onChange?: (value: ChangeEvent<HTMLInputElement>) => void
 }
 
 export default forwardRef<HTMLInputElement, InputProps>(function Input(
-    { className, value, defaultValue, placeholder, monospace, onChange, ...otherProps },
+    { className, value, defaultValue, placeholder, monospace, disabled, onChange, ...otherProps },
     ref
 ) {
     return (
@@ -26,6 +27,7 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
             placeholder={placeholder}
             value={value}
             defaultValue={defaultValue}
+            disabled={disabled}
             onChange={(event) => onChange?.(event)}
             {...otherProps}
         />

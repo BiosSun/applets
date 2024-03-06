@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import clsx from 'clsx'
 import { useFormContext, Controller } from 'react-hook-form'
 import Input from '@/components/input'
 import { Select, SelectOption, SelectValue } from '@/components/select'
@@ -13,6 +14,7 @@ export function Field({
     min,
     max,
     step,
+    disabled,
 }: {
     label: string
     name: string
@@ -21,21 +23,35 @@ export function Field({
     min?: number
     max?: number
     step?: number
+    disabled?: boolean
 }) {
     let controller
 
     switch (type) {
         case 'text': {
             const { register } = useFormContext()
-            controller = <Input className={styles.fieldInput} {...register(name)} />
+            controller = (
+                <Input
+                    className={styles.fieldInput}
+                    {...register(name, {
+                        disabled,
+                    })}
+                />
+            )
             break
         }
         case 'toggle':
             controller = (
                 <Controller
                     name={name}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <Toggle value={value} onChange={onChange} onBlur={onBlur} />
+                    disabled={disabled}
+                    render={({ field: { onChange, onBlur, value, disabled } }) => (
+                        <Toggle
+                            value={value}
+                            disabled={disabled}
+                            onChange={onChange}
+                            onBlur={onBlur}
+                        />
                     )}
                 />
             )
@@ -44,10 +60,12 @@ export function Field({
             controller = (
                 <Controller
                     name={name}
-                    render={({ field: { onChange, onBlur, value } }) => (
+                    disabled={disabled}
+                    render={({ field: { onChange, onBlur, value, disabled } }) => (
                         <Select
                             value={value}
                             options={options!}
+                            disabled={disabled}
                             onChange={onChange}
                             onBlur={onBlur}
                         />
@@ -60,7 +78,8 @@ export function Field({
                 controller = (
                     <Controller
                         name={name}
-                        render={({ field: { onChange, onBlur, value } }) => (
+                        disabled={disabled}
+                        render={({ field: { onChange, onBlur, value, disabled } }) => (
                             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                                 <input
                                     type="range"
@@ -69,6 +88,7 @@ export function Field({
                                     step={step}
                                     style={{ width: 200 }}
                                     value={value}
+                                    disabled={disabled}
                                     onChange={(event) => onChange(event.target.valueAsNumber)}
                                     onBlur={onBlur}
                                 />
@@ -81,19 +101,21 @@ export function Field({
                 controller = (
                     <Controller
                         name={name}
-                        render={({ field: { onChange, onBlur, value } }) => {
+                        disabled={disabled}
+                        render={({ field: { onChange, onBlur, value, disabled } }) => {
                             return (
                                 <Input
                                     className={styles.fieldInput}
+                                    type="number"
+                                    min={min}
+                                    max={max}
+                                    disabled={disabled}
                                     value={Number.isFinite(value) ? value : ''}
                                     onBlur={onBlur}
                                     onChange={(event) => {
                                         const value = event.target.valueAsNumber
                                         onChange(Number.isFinite(value) ? value : null)
                                     }}
-                                    type="number"
-                                    min={min}
-                                    max={max}
                                 />
                             )
                         }}
@@ -107,7 +129,7 @@ export function Field({
     }
 
     return (
-        <label className={styles.field}>
+        <label className={clsx(styles.field, { [styles.disabled]: disabled })}>
             {type === 'toggle' ? controller : null}
             <span className={styles.filedLabel}>{label}</span>
             {type !== 'toggle' ? controller : null}

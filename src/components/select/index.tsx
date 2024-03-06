@@ -12,6 +12,7 @@ interface SelectProps<V = any> {
     defaultValue?: V
     className?: string
     options: SelectOption<V>[]
+    disabled?: boolean
     onBlur?: () => void
     onChange?: (
         value: V,
@@ -22,7 +23,7 @@ interface SelectProps<V = any> {
 }
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select(
-    { value, defaultValue, className, options, onChange: _onChange, ...otherProps },
+    { value, defaultValue, className, options, disabled, onChange: _onChange, ...otherProps },
     ref
 ) {
     function onChange(event: ChangeEvent<HTMLSelectElement>) {
@@ -37,6 +38,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
             className={className}
             value={value}
             defaultValue={defaultValue}
+            disabled={disabled}
             onChange={onChange}
             {...otherProps}
         >
