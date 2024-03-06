@@ -205,10 +205,10 @@ function Item({ value, onChange, onRemove, onCopy, disabledRemove }) {
                         </Label>
                         <Label title="Unix timestamp">
                             {time.valueOf()}
-                            <span style={{ userSelect: 'none' }}>s</span>
+                            <span style={{ userSelect: 'none' }}>ms</span>
                             <em>
                                 ({time.unix()}
-                                <span style={{ userSelect: 'none' }}>ms</span>)
+                                <span style={{ userSelect: 'none' }}>s</span>)
                             </em>
                         </Label>
                         <Label title="From Now">{time.fromNow()}</Label>
