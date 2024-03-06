@@ -56,11 +56,8 @@ const Form = memo(function Form() {
             </HStack>
             <Divider />
 
-            <HStack className={styles.formGroup} spacing="big">
-                <Field type="toggle" label="堆叠" name="stack" />
-                <Field type="toggle" label="百分比堆叠" name="percent" />
-            </HStack>
-            <Divider />
+            <StackFormSection />
+
             <VStack className={styles.formGroup} spacing="middle" align="start">
                 <Field type="number" label="折线宽度" name="lineWidth" min={0} max={10} step={1} />
                 <Field type="number" label="填充度" name="areaOpacity" min={0} max={1} step={0.1} />
@@ -137,6 +134,20 @@ const Form = memo(function Form() {
         </VStack>
     )
 })
+
+function StackFormSection() {
+    const stack = useWatch({ name: 'stack' }) as boolean
+
+    return (
+        <>
+            <HStack className={styles.formGroup} spacing="big">
+                <Field type="toggle" label="堆叠" name="stack" />
+                <Field type="toggle" label="百分比堆叠" name="percent" disabled={!stack} />
+            </HStack>
+            <Divider />
+        </>
+    )
+}
 
 function ValueLabelsFormSection() {
     const point = useWatch({ name: 'point' }) as boolean
