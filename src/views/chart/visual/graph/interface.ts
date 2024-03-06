@@ -40,6 +40,12 @@ export type Config = {
      */
     xAxisMode: 'time' | 'category'
 
+    /** Y-轴配置 */
+    yAxis: {
+        min: number | null;
+        max: number | null;
+    },
+
     /** 图例 */
     legend: {
         /** 是否显示图例 */

@@ -174,7 +174,8 @@ export function GraphChart({
             },
             yAxis: {
                 type: 'value',
-                max: percent ? 1 : undefined,
+                max: percent ? 1 : config.yAxis.max,
+                min: config.yAxis.min,
             },
             tooltip: {
                 trigger: 'axis',

@@ -4,7 +4,6 @@ import Input from '@/components/input'
 import { Select, SelectOption, SelectValue } from '@/components/select'
 import { Toggle } from '@/components/toggle'
 import styles from './index.module.scss'
-import { assert } from '@/utils/assert'
 
 export function Field({
     label,
@@ -57,31 +56,50 @@ export function Field({
             )
             break
         case 'number': {
-            assert(
-                Number.isFinite(max) && Number.isFinite(min),
-                'number 类型的 Field 必须设置 min 和 max'
-            )
-            const { register } = useFormContext()
-            controller = (
-                <Controller
-                    name={name}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                            <input
-                                type="range"
-                                min={min}
-                                max={max}
-                                step={step}
-                                style={{ width: 200 }}
-                                value={value}
-                                onChange={(event) => onChange(event.target.valueAsNumber)}
-                                onBlur={onBlur}
-                            />
-                            {value}
-                        </div>
-                    )}
-                />
-            )
+            if (Number.isFinite(max) && Number.isFinite(min)) {
+                controller = (
+                    <Controller
+                        name={name}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                <input
+                                    type="range"
+                                    min={min}
+                                    max={max}
+                                    step={step}
+                                    style={{ width: 200 }}
+                                    value={value}
+                                    onChange={(event) => onChange(event.target.valueAsNumber)}
+                                    onBlur={onBlur}
+                                />
+                                {value}
+                            </div>
+                        )}
+                    />
+                )
+            } else {
+                controller = (
+                    <Controller
+                        name={name}
+                        render={({ field: { onChange, onBlur, value } }) => {
+                            return (
+                                <Input
+                                    className={styles.fieldInput}
+                                    value={Number.isFinite(value) ? value : ''}
+                                    onBlur={onBlur}
+                                    onChange={(event) => {
+                                        const value = event.target.valueAsNumber
+                                        onChange(Number.isFinite(value) ? value : null)
+                                    }}
+                                    type="number"
+                                    min={min}
+                                    max={max}
+                                />
+                            )
+                        }}
+                    />
+                )
+            }
             break
         }
         default:

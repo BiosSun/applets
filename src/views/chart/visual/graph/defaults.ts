@@ -16,6 +16,10 @@ export function getDefaultConfig(): Config {
         xAxisMode: 'category',
         sort: 'default',
         sortDire: 'desc',
+        yAxis: {
+            min: null,
+            max: null,
+        },
         legend: {
             show: true,
             min: true,

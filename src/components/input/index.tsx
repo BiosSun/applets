@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { forwardRef, ChangeEvent } from 'react'
+import { forwardRef, ChangeEvent, FocusEvent } from 'react'
 import styles from './index.module.scss'
 
 interface InputProps {
@@ -8,6 +8,10 @@ interface InputProps {
     className?: string
     placeholder?: string
     monospace?: boolean
+    type?: string
+    min?: number | string
+    max?: number | string
+    onBlur?: (value: FocusEvent<HTMLInputElement>) => void
     onChange?: (value: ChangeEvent<HTMLInputElement>) => void
 }
 

@@ -85,6 +85,12 @@ const Form = memo(function Form() {
             </VStack>
             <Divider />
             <VStack className={styles.formGroup} spacing="middle" align="start">
+                <span className={styles.formGroupLabel}>Y 轴</span>
+                <Field type="number" label="最小值" name="yAxis.min" />
+                <Field type="number" label="最大值" name="yAxis.max" />
+            </VStack>
+            <Divider />
+            <VStack className={styles.formGroup} spacing="middle" align="start">
                 <span className={styles.formGroupLabel}>图例</span>
                 <Field type="toggle" label="是否显示" name="legend.show" />
                 <HStack spacing={{ horizontal: 'big', vertical: 'middle' }} wrap>
