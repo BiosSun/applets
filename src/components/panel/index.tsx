@@ -29,7 +29,7 @@ export default function Panel({
         >
             <div className={styles.titleBar}>
                 <div className={styles.title}>{title}</div>
-                {subtitle ? <div className={styles.subtitle}>{subtitle}</div>: null}
+                {subtitle ? <div className={styles.subtitle}>{subtitle}</div> : null}
                 {note ? <div className={styles.note}>{note}</div> : null}
             </div>
             {error ? <div className={styles.errorMessage}>{error}</div> : null}

@@ -7,6 +7,11 @@ import { parse as parseCsv } from 'csv-parse/browser/esm/sync'
 
 import { HStack, VStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
+import {
+    Panel as RPanel,
+    PanelGroup as RPanelGroup,
+    PanelResizeHandle as RPanelResizeHandle,
+} from 'react-resizable-panels'
 import Panel from '@/components/panel'
 import CodeEditor from '@/components/code-editor'
 import { Button } from '@/components/button'
@@ -66,49 +71,66 @@ export default function ChartView() {
     )
 
     return (
-        <VStack className={styles.container}>
-            <Panel $flex $col={8} title="图表">
-                <Chart
-                    $flex
-                    config={visual.configs[visual.name] as any}
-                    data={data.data}
-                    onConfigChange={onConfigChange}
-                />
-            </Panel>
-            <Divider />
-            <HStack $flex $col={16}>
-                <DataPanel
-                    $col={12}
-                    $flex
-                    data={data.sourceData}
-                    dataCode={data.code}
-                    onDataCodeChange={data.setCode}
-                    onDataChange={data.setSourceData}
-                    onReset={data.reset}
-                />
-                <Divider />
-                <Panel
-                    $flex
-                    $col={12}
-                    title="视图"
-                    subtitle={
-                        <Select
-                            value={visual.name}
-                            options={VISUAL_NAMES.map((name) => ({ label: name, value: name }))}
-                            onChange={onNameChange}
-                        />
-                    }
-                    note={<Button onClick={() => onConfigChange(getDefaultConfig())}>重置</Button>}
-                >
-                    <div $flex className={styles.configEditorContainer}>
-                    <ConfigEditor
-                        value={visual.configs[visual.name] as any}
-                        onChange={onConfigChange}
+        <RPanelGroup direction="vertical" className={styles.container} autoSaveId="chartContainer">
+            <RPanel defaultSize={35} minSize={20}>
+                <Panel title="图表">
+                    <Chart
+                        $flex
+                        config={visual.configs[visual.name] as any}
+                        data={data.data}
+                        onConfigChange={onConfigChange}
                     />
-                    </div>
                 </Panel>
-            </HStack>
-        </VStack>
+            </RPanel>
+
+            <Divider direction="horizontal" />
+            <RPanelResizeHandle />
+
+            <RPanel minSize={20}>
+                <RPanelGroup direction="horizontal" autoSaveId="chartEditorContainer">
+                    <RPanel minSize={30}>
+                        <DataPanel
+                            data={data.sourceData}
+                            dataCode={data.code}
+                            onDataCodeChange={data.setCode}
+                            onDataChange={data.setSourceData}
+                            onReset={data.reset}
+                        />
+                    </RPanel>
+
+                    <Divider direction="vertical" />
+                    <RPanelResizeHandle />
+
+                    <RPanel minSize={30}>
+                        <Panel
+                            title="视图"
+                            subtitle={
+                                <Select
+                                    value={visual.name}
+                                    options={VISUAL_NAMES.map((name) => ({
+                                        label: name,
+                                        value: name,
+                                    }))}
+                                    onChange={onNameChange}
+                                />
+                            }
+                            note={
+                                <Button onClick={() => onConfigChange(getDefaultConfig())}>
+                                    重置
+                                </Button>
+                            }
+                        >
+                            <div $flex className={styles.configEditorContainer}>
+                                <ConfigEditor
+                                    value={visual.configs[visual.name] as any}
+                                    onChange={onConfigChange}
+                                />
+                            </div>
+                        </Panel>
+                    </RPanel>
+                </RPanelGroup>
+            </RPanel>
+        </RPanelGroup>
     )
 }
 
