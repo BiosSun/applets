@@ -12,6 +12,11 @@ import { numeric } from '../../utils/numeric'
 import { ALL_STAT_METHOD_NAMES, STAT_METHODS, StatMethod } from '../../utils/stat'
 import styles from './chart.module.scss'
 import { Config, Data } from './interface'
+import {
+    Panel as RPanel,
+    PanelGroup as RPanelGroup,
+    PanelResizeHandle as RPanelResizeHandle,
+} from 'react-resizable-panels'
 
 function isValidTime(val: string | number): boolean {
     return dayjs(val).isValid()
@@ -337,69 +342,84 @@ export function GraphChart({
     }
 
     return (
-        <HStack className={className} {...otherProps}>
-            <div $flex ref={containerEl} className={styles.chartContainer}>
-                <div className={styles.chart} ref={chartEl} />
-            </div>
-            {config.legend.show ? <Divider /> : null}
-            {config.legend.show ? (
-                <div className={styles.legendTable} style={{ width: config.legend.width }}>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th align="left">&nbsp;</th>
-                                {visibleStatMethods.map((method) => (
-                                    <th
-                                        key={method}
-                                        className={styles.methodTh}
-                                        align="right"
-                                        tabIndex={1}
-                                        onClick={() => setSort(method)}
-                                    >
-                                        {STAT_METHODS[method].name}
-                                        &nbsp;
-                                        {config.sort === method ? (
-                                            <span className={styles.sortFlag}>
-                                                {config.sortDire === 'asc' ? '▲' : '▼'}
-                                            </span>
-                                        ) : null}
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {series.map((series) => (
-                                <tr
-                                    key={series.name}
-                                    className={clsx({
-                                        [styles.hideRow]:
-                                            selectedSeries.length &&
-                                            !selectedSeries.includes(series.name),
-                                    })}
-                                >
-                                    <td
-                                        align="left"
-                                        onClick={(event) => selectSeries(event, series.name)}
-                                    >
-                                        <div
-                                            className={styles.colorIndicator}
-                                            style={{ backgroundColor: series.color }}
-                                        >
-                                            {series.color}
-                                        </div>
-                                        {series.name}
-                                    </td>
-                                    {visibleStatMethods.map((method) => (
-                                        <td key={method} align="right">
-                                            <span>{numeric((series as any)[method])}</span>
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+        <RPanelGroup
+            className={className}
+            {...otherProps}
+            autoSaveId="chartGraphContainer"
+            direction="horizontal"
+        >
+            <RPanel>
+                <div ref={containerEl} className={styles.chartContainer}>
+                    <div className={styles.chart} ref={chartEl} />
                 </div>
+            </RPanel>
+
+            {config.legend.show ? (
+                <>
+                    <RPanelResizeHandle />
+                    <Divider direction="vertical" />
+                    <RPanel minSize={10}>
+                        <div className={styles.legendTable}>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th align="left">&nbsp;</th>
+                                        {visibleStatMethods.map((method) => (
+                                            <th
+                                                key={method}
+                                                className={styles.methodTh}
+                                                align="right"
+                                                tabIndex={1}
+                                                onClick={() => setSort(method)}
+                                            >
+                                                {STAT_METHODS[method].name}
+                                                &nbsp;
+                                                {config.sort === method ? (
+                                                    <span className={styles.sortFlag}>
+                                                        {config.sortDire === 'asc' ? '▲' : '▼'}
+                                                    </span>
+                                                ) : null}
+                                            </th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {series.map((series) => (
+                                        <tr
+                                            key={series.name}
+                                            className={clsx({
+                                                [styles.hideRow]:
+                                                    selectedSeries.length &&
+                                                    !selectedSeries.includes(series.name),
+                                            })}
+                                        >
+                                            <td
+                                                align="left"
+                                                onClick={(event) =>
+                                                    selectSeries(event, series.name)
+                                                }
+                                            >
+                                                <div
+                                                    className={styles.colorIndicator}
+                                                    style={{ backgroundColor: series.color }}
+                                                >
+                                                    {series.color}
+                                                </div>
+                                                {series.name}
+                                            </td>
+                                            {visibleStatMethods.map((method) => (
+                                                <td key={method} align="right">
+                                                    <span>{numeric((series as any)[method])}</span>
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </RPanel>
+                </>
             ) : null}
-        </HStack>
+        </RPanelGroup>
     )
 }

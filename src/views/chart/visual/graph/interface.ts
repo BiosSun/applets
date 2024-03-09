@@ -56,7 +56,6 @@ export type Config = {
     legend: {
         /** 是否显示图例 */
         show: boolean
-        width: string
     } & {
         [key in StatMethod]: boolean
     }

@@ -37,7 +37,6 @@ export function getDefaultConfig(): Config {
             p999: false,
             p9999: false,
             total: false,
-            width: '400px',
         },
     }
 }

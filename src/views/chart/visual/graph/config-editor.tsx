@@ -106,14 +106,6 @@ const Form = memo(function Form() {
                     <Field type="toggle" label="p99.9" name="legend.p999" />
                     <Field type="toggle" label="p99.99" name="legend.p9999" />
                 </HStack>
-                <Field
-                    type="number"
-                    label="宽度"
-                    name="legend.width"
-                    min={0}
-                    max={1440}
-                    step={10}
-                />
             </VStack>
             <Divider />
             <div className={styles.formGroup}>
