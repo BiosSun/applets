@@ -143,17 +143,20 @@ function StackFormSection() {
 
 function ValueLabelsFormSection() {
     const point = useWatch({ name: 'point' }) as boolean
+    const line = useWatch({ name: 'line' }) as boolean
 
     return (
         <>
             <VStack className={styles.formGroup} spacing="middle" align="start">
-                <span className={styles.formGroupLabel}>标签</span>
-                <Field type="toggle" label="是否显示" name="valueLabels.show" disabled={!point} />
+                <span className={styles.formGroupLabel}>
+                    标签
+                    {point ? '' : line ? '（鼠标交互时显示）' : '（开启折线图或数据点时生效）'}
+                </span>
+                <Field type="toggle" label="是否显示" name="valueLabels.show" />
                 <Field
                     type="select"
                     label="位置"
                     name="valueLabels.position"
-                    disabled={!point}
                     options={[
                         { label: '上', value: 'top' },
                         { label: '下', value: 'bottom' },
