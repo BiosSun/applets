@@ -1,0 +1,85 @@
+@import 'nojiko/sass/nojiko';
+
+.chartContainer {
+    height: 100%;
+    overflow: hidden;
+
+    .chart {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.legendTable {
+    height: 100%;
+    overflow: auto;
+
+    table {
+        table-layout: fixed;
+        border-spacing: 0;
+        border-collapse: collapse;
+        min-width: 100%;
+        position: relative;
+        z-index: 0;
+    }
+
+    thead {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    th,
+    td {
+        background: #fff;
+        height: 27px;
+        line-height: 27px;
+        font-size: 13px;
+        padding: 0 8px;
+        width: 170px;
+    }
+
+    th {
+        background: #f6f6f7;
+    }
+
+    th,
+    td {
+        &:nth-child(1) {
+            max-width: 170px;
+            @include text-overflow-ellipsis();
+            position: sticky;
+            left: 0;
+        }
+    }
+
+    tbody tr:nth-child(2n) td {
+        background: #f6f6f7;
+    }
+
+    tbody tr:hover td {
+        background: #f0f0f2;
+    }
+
+    .methodTh {
+        cursor: default;
+    }
+
+    .sortFlag {
+        color: #2f81c4;
+    }
+
+    .colorIndicator {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 12px;
+        font: 0/0 a;
+        vertical-align: middle;
+        margin-right: 8px;
+    }
+
+    .hideRow {
+        color: #aaa;
+    }
+}

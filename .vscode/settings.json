@@ -7,6 +7,7 @@
         "jmespath",
         "ntfn",
         "Outro",
+        "quantile",
         "timestr"
     ],
     "typescript.tsdk": "node_modules/typescript/lib"
