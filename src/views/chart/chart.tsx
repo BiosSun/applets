@@ -93,6 +93,7 @@ export default function ChartView() {
                             data={data.sourceData}
                             dataCode={data.code}
                             onDataCodeChange={data.setCode}
+                            onDataCodeConfirm={data.execCode}
                             onDataChange={data.setSourceData}
                             onReset={data.reset}
                         />
@@ -138,11 +139,20 @@ function DataPanel(props: {
     data: unknown
     dataCode: string
     onDataCodeChange: (value: string) => void
+    onDataCodeConfirm: () => void
     onDataChange: (data: unknown) => void
     onReset: () => void
     [otherProp: string]: any
 }) {
-    const { data, dataCode, onDataChange, onDataCodeChange, onReset, ...otherProps } = props
+    const {
+        data,
+        dataCode,
+        onDataChange,
+        onDataCodeChange,
+        onDataCodeConfirm,
+        onReset,
+        ...otherProps
+    } = props
 
     const { openFilePicker, file, errors, loading } = useDataFilePicker()
     const mounted = useRef(false)
@@ -200,7 +210,13 @@ function DataPanel(props: {
             note={<Button onClick={onReset}>重置</Button>}
             {...otherProps}
         >
-            <CodeEditor $flex language="javascript" value={dataCode} onChange={onDataCodeChange} />
+            <CodeEditor
+                $flex
+                language="javascript"
+                value={dataCode}
+                onChange={onDataCodeChange}
+                onBlur={onDataCodeConfirm}
+            />
             <Divider />
             <HStack className={styles.funOutro} align="center">{`}`}</HStack>
         </Panel>

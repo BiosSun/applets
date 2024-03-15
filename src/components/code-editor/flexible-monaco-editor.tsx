@@ -6,6 +6,7 @@ export default function FlexibleMonacoEditor({
     language,
     value,
     onChange,
+    onBlur,
     style,
     ...otherProps
 }: {
@@ -13,6 +14,7 @@ export default function FlexibleMonacoEditor({
     language: string
     value: string
     onChange: (value: string) => void
+    onBlur?: () => void
     style?: any
     [otherProp: string]: any
 }) {
@@ -29,6 +31,7 @@ export default function FlexibleMonacoEditor({
                             enabled: false,
                         },
                     }}
+                    wrapperProps={{ onBlur }}
                     onChange={onChange as any}
                 />
             </div>
