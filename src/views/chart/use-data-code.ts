@@ -13,9 +13,9 @@ export function useData(defaultDataCode: string) {
     const [data, setData] = useState<any>(undefined)
     const [error, setError] = useState<Error | undefined>(undefined)
 
-    useDebounce(execCode, 500, [sourceData])
+    useDebounce(() => execCode(code), 500, [sourceData])
 
-    function execCode() {
+    function execCode(code: string) {
         setState('parsing')
         setData(undefined)
         setError(undefined)
@@ -55,13 +55,13 @@ export function useData(defaultDataCode: string) {
     function reset() {
         setCode(defaultDataCode)
         setSourceData(undefined)
-        execCode()
+        execCode(defaultDataCode)
     }
 
     return {
         code,
         setCode,
-        execCode,
+        execCode: () => execCode(code),
         sourceData,
         setSourceData,
         state,
