@@ -34,6 +34,7 @@ function deserializeVisual(val: VisualsState): VisualsState {
     return {
         name: val.name,
         configs: _.defaultsDeep(val.configs, DEFAULT_VISUALS_STATE.configs),
+        codes: _.defaultsDeep(val.codes, DEFAULT_VISUALS_STATE.codes),
     }
 }
 
@@ -45,30 +46,45 @@ export default function ChartView() {
         deserializeVisual
     )
     const { ConfigEditor, Chart, defaultDataCode, getDefaultConfig } = VISUALS[visual.name]
-    const data = useData(defaultDataCode)
 
     const onNameChange = useCallback(
         (name: VisualName) => {
             setVisual({
+                ...visual,
                 name,
-                configs: visual.configs,
             })
+            data.execCode()
         },
-        [visual.name, setVisual]
+        [visual, setVisual]
     )
 
     const onConfigChange = useCallback(
         (config: VisualConfig) => {
             setVisual({
-                name: visual.name,
+                ...visual,
                 configs: {
                     ...visual.configs,
                     [visual.name]: config,
                 },
             })
         },
-        [visual.name, setVisual]
+        [visual, setVisual]
     )
+
+    const onCodeChange = useCallback(
+        (code: string) => {
+            setVisual({
+                ...visual,
+                codes: {
+                    ...visual.codes,
+                    [visual.name]: code,
+                },
+            })
+        },
+        [visual, setVisual]
+    )
+
+    const data = useData(visual.codes[visual.name], defaultDataCode, onCodeChange)
 
     return (
         <RPanelGroup direction="vertical" className={styles.container} autoSaveId="chartContainer">

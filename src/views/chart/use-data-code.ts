@@ -1,21 +1,20 @@
 import _ from 'lodash'
 import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
-import outdent from 'outdent'
-import { useDebounce, useMount } from 'react-use'
+import { useState } from 'react'
+import { useDebounce } from 'react-use'
 import { exec } from '@/utils/use-exec'
-import useLocalState from '@/utils/use-local-state'
+import { useForceTrigger } from '@/utils/use-force-update'
 
-export function useData(defaultDataCode: string) {
-    const [code, setCode] = useLocalState<string>('Chart/code', defaultDataCode)
-    const [sourceData, setSourceData] = useLocalState<unknown>('Chart/sourceData', undefined)
+export function useData(code: string = '', defaultDataCode: string, setCode: (code: string) => void) {
+    const [codeVersion, applyExecCode] = useForceTrigger()
+    const [sourceData, setSourceData] = useState<unknown>(undefined)
     const [state, setState] = useState<'idle' | 'parsing' | 'success' | 'error'>('idle')
     const [data, setData] = useState<any>(undefined)
     const [error, setError] = useState<Error | undefined>(undefined)
 
-    useDebounce(() => execCode(code), 500, [sourceData])
+    useDebounce(execCode, 100, [codeVersion, sourceData])
 
-    function execCode(code: string) {
+    function execCode() {
         setState('parsing')
         setData(undefined)
         setError(undefined)
@@ -55,13 +54,13 @@ export function useData(defaultDataCode: string) {
     function reset() {
         setCode(defaultDataCode)
         setSourceData(undefined)
-        execCode(defaultDataCode)
+        applyExecCode()
     }
 
     return {
         code,
         setCode,
-        execCode: () => execCode(code),
+        execCode: applyExecCode,
         sourceData,
         setSourceData,
         state,

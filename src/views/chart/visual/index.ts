@@ -17,6 +17,11 @@ export interface VisualsState {
         [PIE_VISUAL.name]: PieVisualConfig
         [HISTOGRAM_VISUAL.name]: HistogramVisualConfig
     }
+    codes: {
+        [GRAPH_VISUAL.name]: string
+        [PIE_VISUAL.name]: string
+        [HISTOGRAM_VISUAL.name]: string
+    }
 }
 
 export const VISUALS = {
@@ -35,5 +40,10 @@ export const DEFAULT_VISUALS_STATE: VisualsState = {
         [GRAPH_VISUAL.name]: GRAPH_VISUAL.getDefaultConfig(),
         [PIE_VISUAL.name]: PIE_VISUAL.getDefaultConfig(),
         [HISTOGRAM_VISUAL.name]: HISTOGRAM_VISUAL.getDefaultConfig(),
+    },
+    codes: {
+        [GRAPH_VISUAL.name]: GRAPH_VISUAL.defaultDataCode,
+        [PIE_VISUAL.name]: PIE_VISUAL.defaultDataCode,
+        [HISTOGRAM_VISUAL.name]: HISTOGRAM_VISUAL.defaultDataCode,
     },
 }
