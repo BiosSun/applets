@@ -28,7 +28,7 @@ export function HistogramChart({
 
     const option = useMemo(() => {
         if (!Array.isArray(data)) {
-            return null
+            return {}
         }
 
         const counts = data.map((item) => item.count)
