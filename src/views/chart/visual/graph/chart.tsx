@@ -358,7 +358,7 @@ export function GraphChart({
                 <>
                     <RPanelResizeHandle />
                     <Divider direction="vertical" />
-                    <RPanel minSize={10}>
+                    <RPanel defaultSize={20} minSize={10}>
                         <div className={styles.legendTable}>
                             <table>
                                 <thead>
