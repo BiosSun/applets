@@ -73,7 +73,19 @@ export default function ChartView() {
     return (
         <RPanelGroup direction="vertical" className={styles.container} autoSaveId="chartContainer">
             <RPanel defaultSize={35} minSize={20}>
-                <Panel title="图表">
+                <Panel
+                    title="图表"
+                    subtitle={
+                        <Select
+                            value={visual.name}
+                            options={VISUAL_NAMES.map((name) => ({
+                                label: name,
+                                value: name,
+                            }))}
+                            onChange={onNameChange}
+                        />
+                    }
+                >
                     <Chart
                         $flex
                         config={visual.configs[visual.name] as any}
@@ -105,16 +117,6 @@ export default function ChartView() {
                     <RPanel minSize={30}>
                         <Panel
                             title="视图"
-                            subtitle={
-                                <Select
-                                    value={visual.name}
-                                    options={VISUAL_NAMES.map((name) => ({
-                                        label: name,
-                                        value: name,
-                                    }))}
-                                    onChange={onNameChange}
-                                />
-                            }
                             note={
                                 <Button onClick={() => onConfigChange(getDefaultConfig())}>
                                     重置
