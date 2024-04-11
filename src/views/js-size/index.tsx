@@ -5,14 +5,13 @@ import { HStack } from '@nami-ui/stack'
 import { Divider } from '@nami-ui/divider'
 import FileSize from '@/components/file-size'
 import Panel from '@/components/panel'
-import useLocalState from '@/utils/use-local-state.ts'
+import useLocalState from '@/utils/use-local-state'
+import { uglifyWorker } from "./uglify-main";
 
 import styles from './index.module.scss'
 
-import UglifyWorker from './uglify-worker.js?worker&inline'
 import FileSizeWorker from '@/utils/file-size-worker.js?worker&inline'
 
-const uglifyWorker = Comlink.wrap(new UglifyWorker())
 const fileSizeWorker = Comlink.wrap(new FileSizeWorker())
 
 export default function JSSizeView() {

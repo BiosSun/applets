@@ -17,7 +17,7 @@ import './index.scss'
 import App from './App'
 
 const WelcomeView = lazy(() => import(/* webpackChunkName: "views_welcome", webpackPrefetch: true */ './views/welcome')) // prettier-ignore
-const JSSizeView = lazy(() => import(/* webpackChunkName: "views_js-size", webpackPrefetch: true */ './views/js-size')) // prettier-ignore
+const JSSizeView = lazy(() => import(/* webpackChunkName: "views_js-size", webpackPrefetch: true */ './views/js-size/index.tsx')) // prettier-ignore
 const QRCodeView = lazy(() => import(/* webpackChunkName: "views_qrcode", webpackPrefetch: true */ './views/qrcode')) // prettier-ignore
 const URLView = lazy(() => import(/* webpackChunkName: "views_url", webpackPrefetch: true */ './views/url')) // prettier-ignore
 const XSSView = lazy(() => import(/* webpackChunkName: "views_xss", webpackPrefetch: true */ './views/xss')) // prettier-ignore
