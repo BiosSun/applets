@@ -1,22 +1,7 @@
 import _ from 'lodash'
-import { Fragment, memo, useEffect, useMemo } from 'react'
-import produce from 'immer'
-import {
-    useForm,
-    SubmitHandler,
-    FormProvider,
-    useFieldArray,
-    useFormContext,
-    useWatch,
-} from 'react-hook-form'
-import { IntervalMark } from '@antv/g2'
-import { Divider } from '@nami-ui/divider'
-import { VStack } from '@nami-ui/stack'
-import { Button } from '@/components/button'
-import Input from '@/components/input'
+import { useMemo } from 'react'
 import CodeEditor from '@/components/code-editor'
 import { Config } from './interface'
-import styles from './config-editor.module.scss'
 
 export function G2ConfigEditor({
     value,

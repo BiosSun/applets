@@ -1,12 +1,11 @@
 import _ from 'lodash'
 import { memo, useEffect } from 'react'
 import { useForm, FormProvider, useWatch } from 'react-hook-form'
-import { Divider } from '@nami-ui/divider'
-import { HStack, VStack } from '@nami-ui/stack'
+import { Box, Flex, Separator } from '@radix-ui/themes'
 import { Field } from '../../components/field'
 import { Config } from './interface'
-import styles from './config-editor.module.scss'
 import { verifyConfig } from './verifies'
+import styles from './config-editor.module.scss'
 
 export function GraphConfigEditor({
     value,
@@ -48,17 +47,18 @@ export function GraphConfigEditor({
 
 const Form = memo(function Form() {
     return (
-        <VStack padding="middle" spacing="middle" align="start">
-            <HStack className={styles.formGroup} spacing="big">
+        <Flex direction={'column'} p={'3'} gap={'3'} align="start">
+            <Flex className={styles.formGroup} gap={'5'}>
                 <Field type="toggle" label="柱状图" name="bar" />
                 <Field type="toggle" label="折线图" name="line" />
                 <Field type="toggle" label="数据点" name="point" />
-            </HStack>
-            <Divider />
+            </Flex>
+
+            <Separator size="4" />
 
             <StackFormSection />
 
-            <VStack className={styles.formGroup} spacing="middle" align="start">
+            <Flex className={styles.formGroup} direction={'column'} gap="3" align="start">
                 <Field type="number" label="折线宽度" name="lineWidth" min={0} max={10} step={1} />
                 <Field type="number" label="填充度" name="areaOpacity" min={0} max={1} step={0.1} />
                 <Field
@@ -79,35 +79,40 @@ const Form = memo(function Form() {
                         { label: 'null as zero', value: 'zero' },
                     ]}
                 />
-            </VStack>
-            <Divider />
-            <VStack className={styles.formGroup} spacing="middle" align="start">
+            </Flex>
+
+            <Separator size="4" />
+
+            <Flex className={styles.formGroup} direction="column" gap="3" align="start">
                 <span className={styles.formGroupLabel}>Y 轴</span>
                 <Field type="number" label="最小值" name="yAxis.min" />
                 <Field type="number" label="最大值" name="yAxis.max" />
-            </VStack>
-            <Divider />
+            </Flex>
+
+            <Separator size="4" />
+
             <ValueLabelsFormSection />
-            <VStack className={styles.formGroup} spacing="middle" align="start">
+
+            <Flex className={styles.formGroup} direction="column" gap="3" align="start">
                 <span className={styles.formGroupLabel}>图例</span>
                 <Field type="toggle" label="是否显示" name="legend.show" />
-                <HStack spacing={{ horizontal: 'big', vertical: 'middle' }} wrap>
+                <Flex gapX="5" gapY="3" wrap="wrap">
                     <Field type="toggle" label="min" name="legend.min" />
                     <Field type="toggle" label="max" name="legend.max" />
                     <Field type="toggle" label="last" name="legend.last" />
                     <Field type="toggle" label="avg" name="legend.avg" />
                     <Field type="toggle" label="total" name="legend.total" />
-                </HStack>
-                <HStack spacing={{ horizontal: 'big', vertical: 'middle' }} wrap>
+                </Flex>
+                <Flex gapX="5" gapY="3" wrap="wrap">
                     <Field type="toggle" label="p50" name="legend.p50" />
                     <Field type="toggle" label="p80" name="legend.p80" />
                     <Field type="toggle" label="p90" name="legend.p90" />
                     <Field type="toggle" label="p99" name="legend.p99" />
                     <Field type="toggle" label="p99.9" name="legend.p999" />
                     <Field type="toggle" label="p99.99" name="legend.p9999" />
-                </HStack>
-            </VStack>
-            <Divider />
+                </Flex>
+            </Flex>
+            <Separator size="4" />
             <div className={styles.formGroup}>
                 <span className={styles.formGroupLabel}>数据要求</span>
                 <ul className={styles.note}>
@@ -123,7 +128,7 @@ const Form = memo(function Form() {
                     </li>
                 </ul>
             </div>
-        </VStack>
+        </Flex>
     )
 })
 
@@ -132,11 +137,11 @@ function StackFormSection() {
 
     return (
         <>
-            <HStack className={styles.formGroup} spacing="big">
+            <Flex className={styles.formGroup} gap="5">
                 <Field type="toggle" label="堆叠" name="stack" />
                 <Field type="toggle" label="百分比堆叠" name="percent" disabled={!stack} />
-            </HStack>
-            <Divider />
+            </Flex>
+            <Separator size="4" />
         </>
     )
 }
@@ -147,7 +152,7 @@ function ValueLabelsFormSection() {
 
     return (
         <>
-            <VStack className={styles.formGroup} spacing="middle" align="start">
+            <Flex className={styles.formGroup} direction="column" gap="3" align="start">
                 <span className={styles.formGroupLabel}>
                     标签
                     {point ? '' : line ? '（鼠标交互时显示）' : '（开启折线图或数据点时生效）'}
@@ -164,8 +169,8 @@ function ValueLabelsFormSection() {
                         { label: '右', value: 'right' },
                     ]}
                 />
-            </VStack>
-            <Divider />
+            </Flex>
+            <Separator size="4" />
         </>
     )
 }

@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { v4 as uuidv4 } from 'uuid'
 
-import { VStack, HStack } from '@nami-ui/stack'
+import { Flex, Separator } from '@radix-ui/themes'
 import Card from '@/components/card'
 import Input from '@/components/input'
 import TextButton from '@/components/text-button'
@@ -89,21 +89,21 @@ function Item({ value, onChange, onRemove, disabledRemove }) {
     }, [value])
 
     return (
-        <VStack className={styles.item} spacing="small">
-            <HStack className={styles.itemActions} justify="end" spacing>
+        <Flex className={styles.item} direction={'column'} gap={'2'}>
+            <Flex className={styles.itemActions} justify="end" gap={'3'}>
                 <TextButton onClick={onRemove} disabled={disabledRemove}>
                     删除 x
                 </TextButton>
-            </HStack>
+            </Flex>
             <Card>
                 <TimeInput value={value} onChange={onChange} />
                 <div className={styles.content}>
                     {!duration ? null : !Number.isFinite(duration.milliseconds()) ? (
                         <span>无效的时间</span>
                     ) : (
-                        <VStack spacing>
+                        <Flex direction={'column'} gap={'3'}>
                             <Label title="Humanize">{duration.humanize()}</Label>
-                            <hr />
+                            <Separator size={'4'} />
                             <Label title="Years">
                                 {duration.years()} <em>( as {Math.floor(duration.asYears())} )</em>
                             </Label>
@@ -117,7 +117,7 @@ function Item({ value, onChange, onRemove, disabledRemove }) {
                             <Label title="Days">
                                 {duration.days()} <em>( as {Math.floor(duration.asDays())} )</em>
                             </Label>
-                            <hr />
+                            <Separator size={'4'} />
                             <Label title="Hours">
                                 {duration.hours()} <em>( as {Math.floor(duration.asHours())} )</em>
                             </Label>
@@ -129,11 +129,11 @@ function Item({ value, onChange, onRemove, disabledRemove }) {
                                 {duration.milliseconds()}{' '}
                                 <em>( as {Math.floor(duration.asMilliseconds())} )</em>
                             </Label>
-                        </VStack>
+                        </Flex>
                     )}
                 </div>
             </Card>
-        </VStack>
+        </Flex>
     )
 }
 
@@ -152,16 +152,9 @@ function TimeInput({ value, onChange, ...otherProps }) {
 
 function Label({ title, children, pre, className, ...otherProps }) {
     return (
-        <HStack
-            key="array"
-            className={clsx(styles.label, className)}
-            spacing="small"
-            {...otherProps}
-        >
+        <Flex key="array" className={clsx(styles.label, className)} gap={'2'} {...otherProps}>
             <span className={styles.labelTitle}>{title}:</span>
-            <span className={clsx(styles.labelValue, pre && styles.labelPreValue)} $flex>
-                {children}
-            </span>
-        </HStack>
+            <span className={clsx(styles.labelValue, pre && styles.labelPreValue)}>{children}</span>
+        </Flex>
     )
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import TextareaAutosize from 'react-autosize-textarea'
+import TextareaAutosize from 'react-textarea-autosize'
 import _ from 'lodash'
 import clsx from 'clsx'
 import URI from 'urijs'

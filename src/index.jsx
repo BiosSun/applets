@@ -1,4 +1,4 @@
-import { lazy, StrictMode } from 'react'
+import { lazy } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
@@ -12,8 +12,10 @@ import toObject from 'dayjs/plugin/toObject'
 import dayOfYear from 'dayjs/plugin/dayOfYear'
 import utc from 'dayjs/plugin/utc'
 
+import '@radix-ui/themes/styles.css'
 import './index.scss'
 
+import { Theme } from '@radix-ui/themes'
 import App from './App'
 
 const WelcomeView = lazy(() => import(/* webpackChunkName: "views_welcome", webpackPrefetch: true */ './views/welcome')) // prettier-ignore
@@ -40,25 +42,25 @@ dayjs.extend(dayOfYear)
 dayjs.extend(utc)
 
 createRoot(document.getElementById('root')).render(
-    // <StrictMode>
-    <BrowserRouter>
-        <Routes>
-            <Route path="/" element={<App />}>
-                <Route index element={<WelcomeView />} />
-                <Route path="js-size" element={<JSSizeView />} />
-                <Route path="/qrcode" element={<QRCodeView />} />
-                <Route path="/url" element={<URLView />} />
-                <Route path="/json" element={<JSONView />} />
-                <Route path="/base64" element={<Base64View />} />
-                <Route path="/regexp" element={<RegExpView />} />
-                <Route path="/chart" element={<ChartView />} />
-                <Route path="/clock" element={<ClockView />} />
-                <Route path="/time" element={<TimeView />} />
-                <Route path="/duration" element={<DurationView />} />
-                <Route path="/bezier-curve" element={<BezierCurveView />} />
-                <Route path="/xss" element={<XSSView />} />
-            </Route>
-        </Routes>
-    </BrowserRouter>
-    // </StrictMode>
+    <Theme accentColor="gray">
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<App />}>
+                    <Route index element={<WelcomeView />} />
+                    <Route path="js-size" element={<JSSizeView />} />
+                    <Route path="/qrcode" element={<QRCodeView />} />
+                    <Route path="/url" element={<URLView />} />
+                    <Route path="/json" element={<JSONView />} />
+                    <Route path="/base64" element={<Base64View />} />
+                    <Route path="/regexp" element={<RegExpView />} />
+                    <Route path="/chart" element={<ChartView />} />
+                    <Route path="/clock" element={<ClockView />} />
+                    <Route path="/time" element={<TimeView />} />
+                    <Route path="/duration" element={<DurationView />} />
+                    <Route path="/bezier-curve" element={<BezierCurveView />} />
+                    <Route path="/xss" element={<XSSView />} />
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    </Theme>
 )

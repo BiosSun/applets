@@ -1,12 +1,11 @@
 import { useState, useEffect, useMemo } from 'react'
 import clsx from 'clsx'
 import * as Comlink from 'comlink'
-import { HStack } from '@nami-ui/stack'
-import { Divider } from '@nami-ui/divider'
+import { Box, Flex, Separator } from '@radix-ui/themes'
 import FileSize from '@/components/file-size'
 import Panel from '@/components/panel'
 import useLocalState from '@/utils/use-local-state'
-import { uglifyWorker } from "./uglify-main";
+import { uglifyWorker } from './uglify-main'
 
 import styles from './index.module.scss'
 
@@ -40,10 +39,13 @@ export default function JSSizeView() {
     }, [sourceCode])
 
     return (
-        <HStack className={styles.container}>
-            <Panel $flex title="Source Code" note={<SizeInfo text={sourceCode} />}>
+        <Flex className={styles.container}>
+            <Panel
+                title="Source Code"
+                note={<SizeInfo text={sourceCode} />}
+                style={{ flex: '1 1 0', minWidth: '0' }}
+            >
                 <textarea
-                    $flex
                     value={sourceCode}
                     className={styles.code}
                     onChange={(e) => setSourceCode(e.target.value)}
@@ -51,27 +53,31 @@ export default function JSSizeView() {
                     spellCheck={false}
                 />
             </Panel>
-            <Divider />
+            <Separator orientation="vertical" size="4" />
             <Panel
-                $flex
                 title="Minified Code"
                 note={<SizeInfo text={minifiedCode} />}
+                style={{ flex: '1 1 0', minWidth: '0' }}
             >
                 {isMinifying ? (
                     <textarea
-                        $flex
                         value={''}
                         className={styles.minCode}
                         placeholder="代码压缩中…"
                         readOnly
                     />
                 ) : !minifiedError ? (
-                    <textarea $flex value={minifiedCode} className={styles.minCode} readOnly />
+                    <textarea
+                        value={minifiedCode}
+                        className={styles.minCode}
+                        style={{ height: '100%' }}
+                        readOnly
+                    />
                 ) : (
-                    <ParseErrorInfo $flex error={minifiedError} />
+                    <ParseErrorInfo style={{ height: '100%' }} error={minifiedError} />
                 )}
             </Panel>
-        </HStack>
+        </Flex>
     )
 }
 

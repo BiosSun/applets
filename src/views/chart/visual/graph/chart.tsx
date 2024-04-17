@@ -4,19 +4,18 @@ import dayjs from 'dayjs'
 import * as echarts from 'echarts'
 import { MouseEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useResizeDetector } from 'react-resize-detector'
-import { HStack } from '@nami-ui/stack'
-import { Divider } from '@nami-ui/divider'
-import { useThrottleCallback } from '@/utils/use-throttle-callback'
-import { pickColor } from '../../utils/color'
-import { numeric } from '../../utils/numeric'
-import { ALL_STAT_METHOD_NAMES, STAT_METHODS, StatMethod } from '../../utils/stat'
-import styles from './chart.module.scss'
-import { Config, Data } from './interface'
 import {
     Panel as RPanel,
     PanelGroup as RPanelGroup,
     PanelResizeHandle as RPanelResizeHandle,
 } from 'react-resizable-panels'
+import { Separator } from '@radix-ui/themes'
+import { useThrottleCallback } from '@/utils/use-throttle-callback'
+import { pickColor } from '../../utils/color'
+import { numeric } from '../../utils/numeric'
+import { ALL_STAT_METHOD_NAMES, STAT_METHODS, StatMethod } from '../../utils/stat'
+import { Config, Data } from './interface'
+import styles from './chart.module.scss'
 
 function isValidTime(val: string | number): boolean {
     return dayjs(val).isValid()
@@ -357,7 +356,7 @@ export function GraphChart({
             {config.legend.show ? (
                 <>
                     <RPanelResizeHandle />
-                    <Divider direction="vertical" />
+                    <Separator orientation={'vertical'} size="4" />
                     <RPanel defaultSize={20} minSize={10}>
                         <div className={styles.legendTable}>
                             <table>

@@ -1,8 +1,7 @@
 import _ from 'lodash'
 import { memo, useEffect } from 'react'
 import { useForm, FormProvider, useWatch } from 'react-hook-form'
-import { Divider } from '@nami-ui/divider'
-import { VStack } from '@nami-ui/stack'
+import { Box, Flex, Separator } from '@radix-ui/themes'
 import { Config } from './interface'
 import styles from './config-editor.module.scss'
 import { verifyConfig } from './verifies'
@@ -47,8 +46,8 @@ export function GraphConfigEditor({
 
 const Form = memo(function Form() {
     return (
-        <VStack padding="middle" spacing="middle" align="start">
-            <Divider />
+        <Flex direction="column" p="3" gap="3" align="start">
+            <Separator size="4" />
             <div className={styles.formGroup}>
                 <span className={styles.formGroupLabel}>数据要求</span>
                 <ul className={styles.note}>
@@ -63,6 +62,6 @@ const Form = memo(function Form() {
                     </li>
                 </ul>
             </div>
-        </VStack>
+        </Flex>
     )
 })

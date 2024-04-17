@@ -1,19 +1,22 @@
 import clsx from 'clsx'
 import { Suspense } from 'react'
 import { Link, Outlet, useResolvedPath, useMatch } from 'react-router-dom'
-import { VStack } from '@nami-ui/stack'
-import { Divider } from '@nami-ui/divider'
+import { Box, Flex, Separator } from '@radix-ui/themes'
 import Loading from './components/loading'
 
 import styles from './app.module.scss'
 
 export default function App() {
     return (
-        <VStack className={styles.view}>
+        <Flex className={styles.view} direction={'column'}>
             <nav className={styles.nav}>
                 <ul>
                     <NavItem to="/" title="Home" />
-                    <NavItem to="/js-size" title="JS Size" description="计算某段 JS 代码的源文件大小，压缩后大小及 gzip 之后的大小" />
+                    <NavItem
+                        to="/js-size"
+                        title="JS Size"
+                        description="计算某段 JS 代码的源文件大小，压缩后大小及 gzip 之后的大小"
+                    />
                     <NavItem to="/qrcode" title="QRCode" description="生成二维码" />
                     <NavItem to="/url" title="URL" description="解析 URL" />
                     <NavItem to="/json" title="JSON" description="解析 JSON 字符串" />
@@ -23,17 +26,23 @@ export default function App() {
                     <NavItem to="/clock" title="Clock" />
                     <NavItem to="/time" title="Time" description="解析时间" />
                     <NavItem to="/duration" title="Duration" description="解析时长" />
-                    <NavItem to="/bezier-curve" title="Bezier Curve" description="贝塞尔曲线：定义结点，绘制曲线" />
+                    <NavItem
+                        to="/bezier-curve"
+                        title="Bezier Curve"
+                        description="贝塞尔曲线：定义结点，绘制曲线"
+                    />
                     <NavItem to="/xss" title="XSS" description="为 HTML 添加 XSS 过滤" />
                 </ul>
             </nav>
 
-            <Divider />
+            <Separator orientation="horizontal" size="4" />
 
-            <Suspense fallback={<Loading />}>
-                <Outlet />
-            </Suspense>
-        </VStack>
+            <Box className={styles.main}>
+                <Suspense fallback={<Loading />}>
+                    <Outlet />
+                </Suspense>
+            </Box>
+        </Flex>
     )
 }
 

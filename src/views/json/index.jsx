@@ -5,8 +5,7 @@ import dayjs from 'dayjs'
 import { useToggle } from 'react-use'
 import * as Comlink from 'comlink'
 
-import { VStack, HStack } from '@nami-ui/stack'
-import { Divider } from '@nami-ui/divider'
+import { Box, Flex, Separator } from '@radix-ui/themes'
 import { Button } from '@/components/button'
 import Panel from '@/components/panel'
 import FileSize from '@/components/file-size'
@@ -131,8 +130,8 @@ export default function JSONView() {
 
     return (
         <JSONContext.Provider value={JSON}>
-            <VStack className={styles.container}>
-                <HStack spacing padding wrap align="center">
+            <Flex className={styles.container} direction={'column'}>
+                <Flex gap={'3'} p={'3'} wrap={'wrap'} align="center">
                     <Toggle
                         label="解码字符串"
                         title="对于字符串类型的值，尝试使用 decodeURIComponent 进行解码"
@@ -187,29 +186,46 @@ export default function JSONView() {
                     >
                         过滤数据
                     </Button>
-                </HStack>
-                <Divider />
-                <HStack $flex className={styles.panels}>
+                </Flex>
+                <Separator size="4" />
+                <Flex className={styles.panels} flexGrow={'1'}>
                     {displaySourceCode ? (
-                        <JSONInput $flex $col={10} value={text} onChange={setText} />
+                        <Box
+                            asChild
+                            flexGrow={'10'}
+                            flexShrink={'1'}
+                            flexBasis={'0'}
+                            minWidth={'0'}
+                        >
+                            <JSONInput value={text} onChange={setText} />
+                        </Box>
                     ) : null}
-                    {displaySourceCode ? <Divider /> : null}
-                    <VStack $flex $col={displaySourceCode ? 14 : null}>
+                    {displaySourceCode ? <Separator orientation="vertical" size="4" /> : null}
+                    <Flex
+                        direction="column"
+                        flexGrow={displaySourceCode ? '14' : '1'}
+                        flexShrink={'1'}
+                        flexBasis={'0'}
+                        minWidth={'0'}
+                    >
                         {filterable ? (
-                            <FilterInput value={filterText} onChange={setFilterText} />
+                            <Box asChild flexGrow="4" flexShrink="0" flexBasis="0" minHeight="0">
+                                <FilterInput value={filterText} onChange={setFilterText} />
+                            </Box>
                         ) : null}
-                        <Display
-                            $flex
-                            data={data}
-                            error={error}
-                            decode={decode}
-                            timestamp={timestamp}
-                            sortProps={sortProps}
-                            arrayIndex={arrayIndex}
-                        />
-                    </VStack>
-                </HStack>
-            </VStack>
+                        <Box asChild flexGrow="20" flexShrink="1" flexBasis="0" minHeight="0">
+                            <Display
+                                data={data}
+                                error={error}
+                                decode={decode}
+                                timestamp={timestamp}
+                                sortProps={sortProps}
+                                arrayIndex={arrayIndex}
+                            />
+                        </Box>
+                    </Flex>
+                </Flex>
+            </Flex>
         </JSONContext.Provider>
     )
 }
@@ -218,7 +234,6 @@ function JSONInput({ value, onChange, ...otherProps }) {
     return (
         <Panel title="源码" note={<SizesInfo sourceCode={value} />} {...otherProps}>
             <textarea
-                $flex
                 className={styles.input}
                 placeholder="请输入 JSON 内容"
                 value={value}
@@ -381,7 +396,7 @@ function Display({ data, error, decode, timestamp, sortProps, arrayIndex, ...oth
         <DisplayContext.Provider value={context}>
             <Panel title="显示" error={error?.message} {...otherProps}>
                 {data !== undefined ? (
-                    <div $flex className={styles.display}>
+                    <div className={styles.display}>
                         <PropertyValue value={data} />
                     </div>
                 ) : null}

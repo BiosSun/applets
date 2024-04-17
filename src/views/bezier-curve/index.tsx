@@ -2,13 +2,13 @@ import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import clsx from 'clsx'
 import { addEventListener } from 'consolidated-events'
 import useResizeObserver from 'use-resize-observer'
-import { VStack, HStack, StackItemProps } from '@nami-ui/stack'
-import { Divider } from '@nami-ui/divider'
+import { Box, Flex, Separator } from '@radix-ui/themes'
 import { Button } from '@/components/button'
 
-import styles from './index.module.scss'
 import useLocalState from '@/utils/use-local-state'
 import Pen from '@/utils/pen'
+
+import styles from './index.module.scss'
 
 // 控制点坐标（结点）
 interface Node {
@@ -153,26 +153,29 @@ export default function BezierCurveView() {
     }
 
     return (
-        <VStack className={styles.container}>
+        <Flex className={styles.container} direction={'column'}>
             {controlNodes.length === 0 ? (
-                <HStack spacing padding>
+                <Flex p={'3'} gap={'3'}>
                     <em>随便在下面点几个点试试~~~</em>
-                </HStack>
+                </Flex>
             ) : (
-                <HStack spacing padding>
+                <Flex p={'3'} gap={'3'}>
                     <Button onClick={resetControlNodes}>重置</Button>
                     <span>{controlNodes.length}个控制点</span>
-                    <Slide $flex value={progress} onChange={setProgress} />
-                </HStack>
+                    <Box asChild flexGrow={'1'}>
+                        <Slide value={progress} onChange={setProgress} />
+                    </Box>
+                </Flex>
             )}
-            <Divider />
-            <Canvas
-                $flex
-                controlNodes={controlNodes}
-                progress={progress}
-                onChangeControlNodes={setControlNodes}
-            />
-        </VStack>
+            <Separator size={'4'} />
+            <Box asChild flexGrow={'1'}>
+                <Canvas
+                    controlNodes={controlNodes}
+                    progress={progress}
+                    onChangeControlNodes={setControlNodes}
+                />
+            </Box>
+        </Flex>
     )
 }
 
@@ -181,15 +184,14 @@ function Slide({
     value,
     onChange,
     ...otherProps
-}: StackItemProps & {
+}: {
     className?: string
     value: number
     onChange(value: number): void
 }) {
     return (
-        <HStack spacing="small" className={className} {...otherProps}>
+        <Box asChild className={className} flexGrow={'1'} {...otherProps}>
             <input
-                $flex
                 type="range"
                 min={0}
                 max={1}
@@ -197,7 +199,7 @@ function Slide({
                 value={value}
                 onChange={(e) => onChange(e.target.valueAsNumber)}
             />
-        </HStack>
+        </Box>
     )
 }
 
@@ -207,7 +209,7 @@ function Canvas({
     controlNodes,
     onChangeControlNodes,
     ...otherProps
-}: StackItemProps & {
+}: {
     className?: string
     progress: number
     controlNodes: Node[]

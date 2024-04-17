@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import _ from 'lodash'
 import clsx from 'clsx'
-import { VStack, HStack } from '@nami-ui/stack'
 import dayjs from 'dayjs'
+import { useWindowSize } from 'react-use'
+import { Flex } from '@radix-ui/themes'
+
+import useForceUpdate from '@/utils/use-force-update.ts'
 
 import styles from './index.module.scss'
-import useForceUpdate from '@/utils/use-force-update.ts'
-import { useWindowSize } from 'react-use'
 
 function useTicktock(delay = 20) {
     const forceUpdate = useForceUpdate()
@@ -36,15 +37,15 @@ export default function Clock({ ...otherProps }) {
     }
 
     return (
-        <VStack className={styles.container} justify="center" align="center">
-            <HStack className={styles.time} style={timeStyle}>
+        <Flex className={styles.container} direction={'column'} justify="center" align="center">
+            <Flex className={styles.time} style={timeStyle}>
                 <span className={clsx(styles.num)}>{now.format('HH')}</span>
                 <span className={styles.sep}>:</span>
                 <span className={clsx(styles.num)}>{now.format('mm')}</span>
                 <span className={styles.sep}>:</span>
                 <span className={clsx(styles.num)}>{now.format('ss')}</span>
-            </HStack>
-            <HStack className={styles.date} style={dateStyle}>
+            </Flex>
+            <Flex className={styles.date} style={dateStyle}>
                 <span className={clsx(styles.num)}>{now.format('YYYY')}</span>
                 <span className={styles.sep}>年</span>
                 <span className={clsx(styles.num)}>{now.format('MM')}</span>
@@ -53,8 +54,8 @@ export default function Clock({ ...otherProps }) {
                 <span className={styles.sep}>日</span>
                 <span className={styles.sep}>　</span>
                 <Week className={clsx(styles.num)} time={now} />
-            </HStack>
-        </VStack>
+            </Flex>
+        </Flex>
     )
 }
 

@@ -1,9 +1,8 @@
 import { useMemo } from 'react'
 import clsx from 'clsx'
 import { v4 as uuidv4 } from 'uuid'
-import dayjs from 'dayjs'
 
-import { VStack, HStack } from '@nami-ui/stack'
+import { Flex, Box, Separator } from '@radix-ui/themes'
 import Card from '../../components/card'
 import { Toggle } from '../../components/toggle'
 import Input from '../../components/input'
@@ -15,7 +14,6 @@ import semanticTime from './semantic-time'
 import { maybeMillisecondTimestamp, parseTime, parseTimestamp } from './utils'
 
 import styles from './index.module.scss'
-import { Divider } from '@nami-ui/divider'
 
 function createValue(text = '') {
     return {
@@ -70,7 +68,7 @@ export default function TimeView() {
     }
 
     return (
-        <VStack>
+        <Flex direction={'column'}>
             <div className={styles.track}>
                 {list.items.map((node) => (
                     <Item
@@ -86,7 +84,7 @@ export default function TimeView() {
                     + 添加
                 </TextButton>
             </div>
-            <Divider />
+            <Separator size={'4'} />
             <div className={styles.tutorial}>
                 支持格式如下所示：
                 <dl>
@@ -132,7 +130,7 @@ export default function TimeView() {
                     <dd>2023y 2M 20d 19h 20m 34s 192ms -1d</dd>
                 </dl>
             </div>
-        </VStack>
+        </Flex>
     )
 }
 
@@ -165,13 +163,10 @@ function Item({ value, onChange, onRemove, onCopy, disabledRemove }) {
     }, [value])
 
     return (
-        <VStack className={styles.item} spacing="small">
-            <HStack className={styles.itemActions} justify="end" spacing>
+        <Flex className={styles.item} direction={'column'} gap={'2'}>
+            <Flex className={styles.itemActions} gap={'3'} justify="end">
                 {time && time.isValid() ? (
-                    <TextButton
-                        $align="end"
-                        onClick={() => onChange({ ...value, isExpand: !value.isExpand })}
-                    >
+                    <TextButton onClick={() => onChange({ ...value, isExpand: !value.isExpand })}>
                         {value.isExpand ? '收起 ^' : '展开 v'}
                     </TextButton>
                 ) : null}
@@ -179,18 +174,19 @@ function Item({ value, onChange, onRemove, onCopy, disabledRemove }) {
                 <TextButton onClick={onRemove} disabled={disabledRemove}>
                     删除 x
                 </TextButton>
-            </HStack>
+            </Flex>
             <Card style={{ minHeight: 232 }}>
                 <TimeInput value={value} valueType={valueType} onChange={onChange} />
                 {!time ? null : !time.isValid() ? (
                     <span>{message ?? '无效的时间'}</span>
                 ) : (
-                    <VStack
-                        spacing
+                    <Flex
                         className={clsx(styles.times, { [styles.expandedTimes]: value.isExpand })}
+                        direction={'column'}
+                        gap={'3'}
                     >
                         <Label title="format">{time.format('YYYY-MM-DD ddd HH:mm:ss.SSS Z')}</Label>
-                        <hr />
+                        <Separator size={'4'} />
                         <Label title="ISO8601 (UTC)">
                             {time.utc().format('YYYY-MM-DD')}
                             <em>T</em>
@@ -212,36 +208,43 @@ function Item({ value, onChange, onRemove, onCopy, disabledRemove }) {
                             </em>
                         </Label>
                         <Label title="From Now">{time.fromNow()}</Label>
-                        <Label title="Week Of Year">{time.week()}</Label>
-                        <Label title="Day Of Year">{time.dayOfYear()}</Label>
-                        <hr />
-                        <Label title="Array">{JSON.stringify(time.toArray(), null, 4)}</Label>
-                        <Label title="Object" pre>
-                            {JSON.stringify(time.toObject(), null, 4)}
-                        </Label>
-                    </VStack>
+                        {value.isExpand ? (
+                            <>
+                                <Label title="Week Of Year">{time.week()}</Label>
+                                <Label title="Day Of Year">{time.dayOfYear()}</Label>
+                                <Separator size={'4'} />
+                                <Label title="Array">
+                                    {JSON.stringify(time.toArray(), null, 4)}
+                                </Label>
+                                <Label title="Object" pre>
+                                    {JSON.stringify(time.toObject(), null, 4)}
+                                </Label>
+                            </>
+                        ) : null}
+                    </Flex>
                 )}
             </Card>
-        </VStack>
+        </Flex>
     )
 }
 
 function TimeInput({ value, valueType, onChange, ...otherProps }) {
     return (
-        <HStack {...otherProps} spacing>
-            <Input
-                $flex
-                placeholder="输入一个时间，任意格式"
-                monospace
-                autoFocus
-                value={value.text}
-                onChange={(event) =>
-                    onChange({
-                        text: event.target.value,
-                        isMillisecondTimestamp: maybeMillisecondTimestamp(event.target.value),
-                    })
-                }
-            />
+        <Flex {...otherProps} gap={'3'}>
+            <Box asChild flexGrow={'1'}>
+                <Input
+                    placeholder="输入一个时间，任意格式"
+                    monospace
+                    autoFocus
+                    value={value.text}
+                    onChange={(event) =>
+                        onChange({
+                            text: event.target.value,
+                            isMillisecondTimestamp: maybeMillisecondTimestamp(event.target.value),
+                        })
+                    }
+                />
+            </Box>
             {valueType === 'timestamp' ? (
                 <Toggle
                     label="毫秒时间戳"
@@ -251,22 +254,17 @@ function TimeInput({ value, valueType, onChange, ...otherProps }) {
                     }
                 />
             ) : null}
-        </HStack>
+        </Flex>
     )
 }
 
 function Label({ title, children, pre, className, ...otherProps }) {
     return (
-        <HStack
-            key="array"
-            className={clsx(styles.label, className)}
-            spacing="small"
-            {...otherProps}
-        >
+        <Flex key="array" className={clsx(styles.label, className)} gap={'2'} {...otherProps}>
             <span className={styles.labelTitle}>{title}:</span>
-            <span className={clsx(styles.labelValue, pre && styles.labelPreValue)} $flex>
+            <span className={clsx(styles.labelValue, pre && styles.labelPreValue)}>
                 {children}
             </span>
-        </HStack>
+        </Flex>
     )
 }

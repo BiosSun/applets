@@ -1,4 +1,4 @@
-import { HStack } from '@nami-ui/stack'
+import { Flex } from '@radix-ui/themes'
 
 interface ToggleProps {
     className?: string
@@ -9,23 +9,27 @@ interface ToggleProps {
     onBlur?: () => void
 }
 
-export function Toggle({ value, className, label, disabled, onChange, onBlur, ...otherProps }: ToggleProps) {
+export function Toggle({
+    value,
+    className,
+    label,
+    disabled,
+    onChange,
+    onBlur,
+    ...otherProps
+}: ToggleProps) {
     return (
-        <HStack
-            className={className}
-            component="label"
-            align="center"
-            spacing="small"
-            {...otherProps}
-        >
-            <input
-                type="checkbox"
-                checked={value}
-                disabled={disabled}
-                onChange={(event) => onChange(event.target.checked)}
-                onBlur={() => onBlur?.()}
-            />
-            {label}
-        </HStack>
+        <Flex className={className} asChild align="center" gap={'2'} {...otherProps}>
+            <label>
+                <input
+                    type="checkbox"
+                    checked={value}
+                    disabled={disabled}
+                    onChange={(event) => onChange(event.target.checked)}
+                    onBlur={() => onBlur?.()}
+                />
+                {label}
+            </label>
+        </Flex>
     )
 }

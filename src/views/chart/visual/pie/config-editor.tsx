@@ -1,24 +1,7 @@
 import _ from 'lodash'
-import dayjs from 'dayjs'
-import { Fragment, memo, useEffect } from 'react'
-import produce from 'immer'
-import {
-    useForm,
-    SubmitHandler,
-    FormProvider,
-    useFieldArray,
-    useFormContext,
-    useWatch,
-    Controller,
-} from 'react-hook-form'
-import { IntervalMark } from '@antv/g2'
-import { Divider } from '@nami-ui/divider'
-import { HStack, VStack } from '@nami-ui/stack'
-import { Button } from '@/components/button'
-import Input from '@/components/input'
-import { Select, SelectOption } from '@/components/select'
-import { Toggle } from '@/components/toggle'
-import { Field } from '../../components/field'
+import { memo, useEffect } from 'react'
+import { useForm, FormProvider, useWatch } from 'react-hook-form'
+import { Box, Flex, Separator } from '@radix-ui/themes'
 import { Config } from './interface'
 import { verifyConfig } from './verifies'
 import styles from './config-editor.module.scss'
@@ -63,14 +46,14 @@ export function PieConfigEditor({
 
 const Form = memo(function Form() {
     return (
-        <VStack padding="middle" spacing="middle" align="start">
-            <Divider />
+        <Flex direction={'column'} p="3" gap="3" align="start">
+            <Separator size="4" />
             <div className={styles.formGroup}>
                 <span className={styles.formGroupLabel}>数据要求</span>
                 <ul className={styles.note}>
                     <li>可以返回一个简单的对象，对象的 key 为数据项名称，value 为数据项的值；</li>
                 </ul>
             </div>
-        </VStack>
+        </Flex>
     )
 })

@@ -1,6 +1,5 @@
 import clsx from 'clsx'
-import { VStack } from '@nami-ui/stack'
-import { Divider } from '@nami-ui/divider'
+import { Flex, Separator } from '@radix-ui/themes'
 import styles from './index.module.scss'
 
 interface PanelProps {
@@ -23,8 +22,9 @@ export default function Panel({
     ...otherProps
 }: PanelProps) {
     return (
-        <VStack
+        <Flex
             className={clsx(styles.panel, { [styles.error]: error }, className)}
+            direction="column"
             {...otherProps}
         >
             <div className={styles.titleBar}>
@@ -33,8 +33,8 @@ export default function Panel({
                 {note ? <div className={styles.note}>{note}</div> : null}
             </div>
             {error ? <div className={styles.errorMessage}>{error}</div> : null}
-            <Divider />
+            <Separator orientation="horizontal" size="4" />
             {children}
-        </VStack>
+        </Flex>
     )
 }

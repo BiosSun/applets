@@ -1,14 +1,14 @@
 import { Buffer } from 'buffer'
 import toArrayBuffer from 'to-arraybuffer'
 import { useMemo } from 'react'
-import { VStack, HStack } from '@nami-ui/stack'
-import { Divider } from '@nami-ui/divider'
-import { Button } from "@/components/button";
+import { Box, Flex, Separator } from '@radix-ui/themes'
+import { Button } from '@/components/button'
 import Panel from '../../components/panel'
 
-import styles from './index.module.scss'
 import useLocalState, { updateLocalState } from '@/utils/use-local-state'
 import Mime from './mime'
+
+import styles from './index.module.scss'
 
 function string2buffer(str: string) {
     return toArrayBuffer(Buffer.from(str, 'utf8'))
@@ -174,41 +174,46 @@ export default function Base64View() {
     }
 
     return (
-        <VStack className={styles.container}>
-            <HStack spacing padding align="center">
-                <HStack component="label" spacing="small" align="center">
-                    <input
-                        type="checkbox"
-                        checked={isDataUrl}
-                        onChange={(event) => setIsDataUrl(event.target.checked)}
-                    />
-                    Data URLs
-                </HStack>
-                <Divider />
+        <Flex className={styles.container} direction={'column'}>
+            <Flex gap={'3'} p={'3'} align="center">
+                <Flex asChild gap={'2'} align="center">
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={isDataUrl}
+                            onChange={(event) => setIsDataUrl(event.target.checked)}
+                        />
+                        Data URLs
+                    </label>
+                </Flex>
+                <Separator orientation="vertical" size="4" />
                 <input
                     type="file"
                     accept="image/*"
                     onChange={(event) => fromFile(event.target.files?.[0])}
                     onClick={(event) => ((event.target as HTMLInputElement)!.value = null as any)}
                 />
-                <Divider />
+                <Separator orientation="vertical" size="4" />
                 type: {mime.type}
-                <Divider />
+                <Separator orientation="vertical" size="4" />
                 <Button onClick={clean}>Clean</Button>
-            </HStack>
-            <Divider />
-            <HStack $flex className={styles.panels}>
-                <SourcePanel $flex {...source} mime={mime} onChange={fromText} />
-                <Divider />
-                <Base64Panel
-                    $flex
-                    {...base64}
-                    mime={mime}
-                    isDataUrl={isDataUrl}
-                    onChange={fromBase64}
-                />
-            </HStack>
-        </VStack>
+            </Flex>
+            <Separator size="4" />
+            <Flex flexGrow="1" className={styles.panels}>
+                <Box asChild flexGrow={'1'} flexShrink={'1'} flexBasis={'0'} minWidth={'0'}>
+                    <SourcePanel {...source} mime={mime} onChange={fromText} />
+                </Box>
+                <Separator orientation={'vertical'} size="4" />
+                <Box asChild flexGrow={'1'} flexShrink={'1'} flexBasis={'0'} minWidth={'0'}>
+                    <Base64Panel
+                        {...base64}
+                        mime={mime}
+                        isDataUrl={isDataUrl}
+                        onChange={fromBase64}
+                    />
+                </Box>
+            </Flex>
+        </Flex>
     )
 }
 
@@ -235,14 +240,14 @@ function SourcePanel(props: {
         <Panel title="源码" error={error} {...otherProps}>
             {mime.is('text') || !value ? (
                 <textarea
-                    $flex
                     className={styles.textarea}
+                    style={{ height: '100%' }}
                     placeholder="请输入源码"
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
                 />
             ) : (
-                <div $flex className={styles.imageBox}>
+                <div className={styles.imageBox} style={{ height: '100%' }}>
                     <img className={styles.image} src={value} alt="" />
                 </div>
             )}
@@ -267,8 +272,8 @@ function Base64Panel(props: {
     return (
         <Panel title="编码" error={error} {...otherProps}>
             <textarea
-                $flex
                 className={styles.textarea}
+                style={{ height: '100%' }}
                 placeholder="请输入编码"
                 value={value}
                 onChange={(e) => onChange(e.target.value)}

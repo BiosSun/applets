@@ -1,5 +1,5 @@
 .view {
-    min-height: 100vh;
+    height: 100dvh;
 }
 
 .nav {
@@ -34,4 +34,10 @@
         background: #242629;
         color: #fff;
     }
+}
+
+.main {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow: auto;
 }

@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { RefObject, useEffect, useRef, useState } from 'react'
-import { VStack, HStack } from '@nami-ui/stack'
+import { Flex } from '@radix-ui/themes'
 // @ts-ignore
 import Parser from './parser/javascript.js'
 import dom from '../../utils/dom'
@@ -77,7 +77,7 @@ export default function RegExpView() {
     const render = useRegExpDiagram(diagramRef, expr)
 
     return (
-        <VStack padding spacing>
+        <Flex direction={'column'} p={'3'} gap={'3'}>
             <strong>
                 绘制语法图的代码是直接从 Jeff Avallone 的{' '}
                 <a href="https://regexper.com/" target="__blank">
@@ -85,15 +85,12 @@ export default function RegExpView() {
                 </a>{' '}
                 项目中搬运过来的，如果你认为这个东西很好用，那么感谢他吧。
             </strong>
-            <HStack align="center">
-                <input
-                    $flex
-                    className={styles.input}
-                    placeholder="请输入正则表达式"
-                    value={expr}
-                    onChange={(event) => setExpr(event.target.value)}
-                />
-            </HStack>
+            <input
+                className={styles.input}
+                placeholder="请输入正则表达式"
+                value={expr}
+                onChange={(event) => setExpr(event.target.value)}
+            />
             <div className={styles.diagramWrap}>
                 <div className={styles.diagram} ref={diagramRef} />
                 {render.rendering ? (
@@ -108,6 +105,6 @@ export default function RegExpView() {
                     </div>
                 ) : null}
             </div>
-        </VStack>
+        </Flex>
     )
 }

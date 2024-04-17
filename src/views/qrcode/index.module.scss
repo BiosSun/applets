@@ -9,7 +9,7 @@
     padding: 0;
     background: transparent;
     border: 0;
-    color: var(--nami-primary-700);
+    color: var(--accent-11);
     font-size: 14px;
     line-height: 20px;
 
@@ -19,7 +19,7 @@
         }
 
         &:active {
-            color: var(--nami-primary-800);
+            color: var(--accent-12);
         }
     }
 
@@ -41,7 +41,8 @@
 }
 
 .qrcodePlaceholder {
-    background: var(--nami-paper-200);
+    flex: 1 1 0;
+    background: var(--gray-3);
 }
 
 .qrcode {

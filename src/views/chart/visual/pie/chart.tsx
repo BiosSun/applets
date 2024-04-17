@@ -1,12 +1,11 @@
 import _ from 'lodash'
-import dayjs from 'dayjs'
 import * as echarts from 'echarts'
 import { useEffect, useMemo, useRef } from 'react'
 import { useResizeDetector } from 'react-resize-detector'
+import { Flex } from '@radix-ui/themes'
+import { useThrottleCallback } from '@/utils/use-throttle-callback'
 import { Config, Data } from './interface'
 import styles from './chart.module.scss'
-import { useThrottleCallback } from '@/utils/use-throttle-callback'
-import { HStack } from '@nami-ui/stack'
 import { pickColor } from '../../utils/color'
 
 export function PieChart({
@@ -112,10 +111,10 @@ export function PieChart({
     })
 
     return (
-        <HStack className={className} {...otherProps}>
-            <div $flex ref={containerEl} className={styles.chartContainer}>
+        <Flex className={className} {...otherProps}>
+            <div ref={containerEl} className={styles.chartContainer} style={{flex: '1 1 0'}}>
                 <div className={styles.chart} ref={chartEl} />
             </div>
-        </HStack>
+        </Flex>
     )
 }

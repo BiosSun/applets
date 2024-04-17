@@ -1,10 +1,9 @@
 import clsx from 'clsx'
 import { v4 as uuidv4 } from 'uuid'
-import produce from 'immer'
-import { VStack, HStack } from '@nami-ui/stack'
-import { Divider } from '@nami-ui/divider'
-import TextareaAutosize from 'react-autosize-textarea'
-import ReactResizeDetector from 'react-resize-detector'
+import { produce } from 'immer'
+import { Box, Flex, Separator } from '@radix-ui/themes'
+import TextareaAutosize from 'react-textarea-autosize'
+import { useResizeDetector } from 'react-resize-detector'
 import { QRCodeSVG } from 'qrcode.react'
 import { ErrorBoundary } from 'react-error-boundary'
 
@@ -61,23 +60,23 @@ export default function QRCodeView() {
     }
 
     return (
-        <VStack>
-            <HStack spacing padding align="center">
+        <Flex direction={'column'}>
+            <Flex p={'3'} gap={'3'} align="center">
                 Level:
-                <HStack component="label" spacing="small" align="center">
+                <Flex component="label" gap={'2'} align={'center'}>
                     <input type="radio" checked={level === 'L'} onChange={() => setLevel('L')} />L
-                </HStack>
-                <HStack component="label" spacing="small" align="center">
+                </Flex>
+                <Flex component="label" gap={'2'} align={'center'}>
                     <input type="radio" checked={level === 'M'} onChange={() => setLevel('M')} />M
-                </HStack>
-                <HStack component="label" spacing="small" align="center">
+                </Flex>
+                <Flex component="label" gap={'2'} align={'center'}>
                     <input type="radio" checked={level === 'Q'} onChange={() => setLevel('Q')} />Q
-                </HStack>
-                <HStack component="label" spacing="small" align="center">
+                </Flex>
+                <Flex component="label" gap={'2'} align={'center'}>
                     <input type="radio" checked={level === 'H'} onChange={() => setLevel('H')} />H
-                </HStack>
-            </HStack>
-            <Divider />
+                </Flex>
+            </Flex>
+            <Separator size={'4'} />
             <div className={styles.track}>
                 {textList.map((node) => (
                     <Item
@@ -93,23 +92,23 @@ export default function QRCodeView() {
                     + 添加
                 </Button>
             </div>
-        </VStack>
+        </Flex>
     )
 }
 
 function Item({ text, level, onChange, onRemove, disabledRemove }) {
     return (
-        <VStack className={styles.card} spacing="small">
-            <HStack className={styles.cardActions} justify="end">
+        <Flex className={styles.card} direction={'column'} gap={'2'}>
+            <Flex className={styles.cardActions} justify="end">
                 <Button className={styles.button} onClick={onRemove} disabled={disabledRemove}>
                     删除 ↓
                 </Button>
-            </HStack>
-            <HStack className={styles.item} spacing>
+            </Flex>
+            <Flex className={styles.item} gap={'3'}>
                 <Input value={text} onChange={onChange} />
                 <Display value={text} level={level} />
-            </HStack>
-        </VStack>
+            </Flex>
+        </Flex>
     )
 }
 
@@ -120,7 +119,7 @@ function Input({ value, onChange, className }) {
             value={value}
             onChange={(e) => onChange(e.target.value)}
             placeholder="请输入文本"
-            rows={5}
+            minRows={5}
         />
     )
 }
@@ -128,34 +127,37 @@ function Input({ value, onChange, className }) {
 function Display({ value = '', level, className }) {
     value = value.trim()
 
+    const { height: containerHeight, ref: containerEl } = useResizeDetector({ handleWidth: false })
+
     return (
-        <ReactResizeDetector handleHeight>
-            {({ height }) => (
-                <VStack>
-                    {!value ? (
-                        <div $flex className={styles.qrcodePlaceholder} style={{ width: height }} />
-                    ) : (
-                        <ErrorBoundary
-                            key={value}
-                            fallbackRender={({ error }) => (
-                                <div className={styles.qrcodePlaceholder} style={{ width: height }}>
-                                    <span $flex className={clsx(className, styles.dangerMessage)}>
-                                        {error?.message ?? '渲染错误'}
-                                    </span>
-                                </div>
-                            )}
-                        >
-                            <QRCodeSVG
-                                className={clsx(className, styles.qrcode)}
-                                value={value}
-                                size={height}
-                                level={level}
-                                bgColor="transparent"
-                            />
-                        </ErrorBoundary>
-                    )}
-                </VStack>
-            )}
-        </ReactResizeDetector>
+        <Flex asChild direction={'column'}>
+            <div ref={containerEl}>
+                {!value ? (
+                    <Box className={styles.qrcodePlaceholder} style={{ width: containerHeight }} />
+                ) : (
+                    <ErrorBoundary
+                        key={value}
+                        fallbackRender={({ error }) => (
+                            <div
+                                className={styles.qrcodePlaceholder}
+                                style={{ width: containerHeight }}
+                            >
+                                <span className={clsx(className, styles.dangerMessage)}>
+                                    {error?.message ?? '渲染错误'}
+                                </span>
+                            </div>
+                        )}
+                    >
+                        <QRCodeSVG
+                            className={clsx(className, styles.qrcode)}
+                            value={value}
+                            size={containerHeight}
+                            level={level}
+                            bgColor="transparent"
+                        />
+                    </ErrorBoundary>
+                )}
+            </div>
+        </Flex>
     )
 }

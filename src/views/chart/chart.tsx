@@ -5,20 +5,17 @@ import { useFilePicker } from 'use-file-picker'
 import { FileWithPath } from 'file-selector'
 import { parse as parseCsv } from 'csv-parse/browser/esm/sync'
 
-import { HStack, VStack } from '@nami-ui/stack'
-import { Divider } from '@nami-ui/divider'
 import {
     Panel as RPanel,
     PanelGroup as RPanelGroup,
     PanelResizeHandle as RPanelResizeHandle,
 } from 'react-resizable-panels'
+import { Flex, Separator } from '@radix-ui/themes'
 import Panel from '@/components/panel'
 import CodeEditor from '@/components/code-editor'
 import { Button } from '@/components/button'
 import { Select } from '@/components/select'
 import useLocalState from '@/utils/use-local-state'
-
-import styles from './chart.module.scss'
 
 import { useData } from './use-data-code'
 import {
@@ -29,6 +26,8 @@ import {
     VisualName,
     VisualsState,
 } from './visual'
+
+import styles from './chart.module.scss'
 
 function deserializeVisual(val: VisualsState): VisualsState {
     return {
@@ -103,7 +102,7 @@ export default function ChartView() {
                     }
                 >
                     <Chart
-                        $flex
+                        style={{ height: '100%' }}
                         config={visual.configs[visual.name] as any}
                         data={data.data}
                         onConfigChange={onConfigChange}
@@ -111,7 +110,7 @@ export default function ChartView() {
                 </Panel>
             </RPanel>
 
-            <Divider direction="horizontal" />
+            <Separator size="4" />
             <RPanelResizeHandle />
 
             <RPanel minSize={20}>
@@ -127,7 +126,7 @@ export default function ChartView() {
                         />
                     </RPanel>
 
-                    <Divider direction="vertical" />
+                    <Separator orientation="vertical" size="4" />
                     <RPanelResizeHandle />
 
                     <RPanel minSize={30}>
@@ -139,7 +138,10 @@ export default function ChartView() {
                                 </Button>
                             }
                         >
-                            <div $flex className={styles.configEditorContainer}>
+                            <div
+                                className={styles.configEditorContainer}
+                                style={{ height: '100%' }}
+                            >
                                 <ConfigEditor
                                     value={visual.configs[visual.name] as any}
                                     onChange={onConfigChange}
@@ -191,9 +193,9 @@ function DataPanel(props: {
         <Panel
             title="数据"
             subtitle={
-                <HStack className={styles.funIntro} spacing="small" align="center">
+                <Flex className={styles.funIntro} gap="2" align="center">
                     <span>function generator(</span>
-                    <HStack spacing="tiny">
+                    <Flex gap="1">
                         <div
                             className={clsx(styles.paramName, { [styles.active]: !!data })}
                             tabIndex={1}
@@ -209,8 +211,8 @@ function DataPanel(props: {
                         <span>:</span>
                         <button onClick={openFilePicker}>选择本地文件</button>
                         <span>,</span>
-                    </HStack>
-                    <HStack spacing="tiny">
+                    </Flex>
+                    <Flex gap="1">
                         <span
                             className={clsx(styles.paramName, styles.active)}
                             tabIndex={1}
@@ -221,22 +223,22 @@ function DataPanel(props: {
                         </span>
                         <span>:</span>
                         <span>Tools</span>
-                    </HStack>
+                    </Flex>
                     <span>) {`{`}</span>
-                </HStack>
+                </Flex>
             }
             note={<Button onClick={onReset}>重置</Button>}
             {...otherProps}
         >
             <CodeEditor
-                $flex
+                style={{ height: '100%' }}
                 language="javascript"
                 value={dataCode}
                 onChange={onDataCodeChange}
                 onBlur={onDataCodeConfirm}
             />
-            <Divider />
-            <HStack className={styles.funOutro} align="center">{`}`}</HStack>
+            <Separator size="4" />
+            <Flex className={styles.funOutro} align="center">{`}`}</Flex>
         </Panel>
     )
 }

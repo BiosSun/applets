@@ -1,42 +1,9 @@
-@use '@nami-ui/styles/index' as nami;
-
 @import 'normalize.css/normalize.css';
-
-:root {
-    @include nami.variables();
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        @include nami.light-variables();
-    }
-}
 
 *,
 *:before,
 *:after {
     box-sizing: border-box;
-}
-
-body {
-    font:
-        14px/20px -apple-system,
-        BlinkMacSystemFont,
-        segoe ui,
-        Roboto,
-        helvetica neue,
-        Arial,
-        noto sans,
-        sans-serif,
-        apple color emoji,
-        segoe ui emoji,
-        segoe ui symbol,
-        noto color emoji;
-
-    font-variant-numeric: tabular-nums;
-    font-feature-settings: 'tnum';
-
-    color: #242629;
 }
 
 h1,
@@ -46,6 +13,15 @@ h2 {
 
 input {
     accent-color: #242629;
+}
+
+.radix-themes {
+    --default-font-size: var(--font-size-2);
+    --default-line-height: var(--line-height-2);
+
+    // TODO 需要去掉吗？
+    -webkit-font-smoothing: unset;
+    -moz-osx-font-smoothing: unset;
 }
 
 .monaco-aria-container {

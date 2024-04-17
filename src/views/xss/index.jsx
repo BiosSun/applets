@@ -1,16 +1,15 @@
-import React, { useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { html as HTMLBeautify } from 'js-beautify'
-import { VStack, HStack } from '@nami-ui/stack'
-import { Divider } from '@nami-ui/divider'
-import { Space } from '@nami-ui/space'
+import { Flex, Box, Separator } from '@radix-ui/themes'
+import useLocalState from '@/utils/use-local-state.ts'
 import { Toggle } from '@/components/toggle'
 import CodeEditor from '@/components/code-editor'
+import { Space } from '@/components/space'
 import useSandbox from './use-sandbox'
 import RichTextEditor from './rich-text-editor'
 import styles from './index.module.scss'
 
 import DEFAULT_OPTIONS from './default-options-code'
-import useLocalState from '@/utils/use-local-state.ts'
 
 export default function XSSView() {
     const [isEnabledXSS, setEnabledXSS] = useLocalState('XSS/isEnabledXSS', true)
@@ -30,8 +29,8 @@ export default function XSSView() {
     }, [isEnabledBeautify, xssedHTML])
 
     return (
-        <VStack className={styles.container} spacing padding>
-            <HStack spacing align="center">
+        <Flex direction={'column'} className={styles.container} p={'3'} gap={'3'}>
+            <Flex gap={'3'} align={'center'}>
                 <Toggle value={isEnabledXSS} label="Enabled XSS" onChange={setEnabledXSS} />
                 <Toggle
                     label="Enabled Beautify"
@@ -45,79 +44,85 @@ export default function XSSView() {
                     </span>
                 ) : null}
 
-                <Space $flex />
+                <Space />
 
                 <Toggle
                     value={isDisplayOptionsEditor}
                     label="显示 XSS 配置编辑器"
                     onChange={setDisplayOptionsEditor}
                 />
-            </HStack>
+            </Flex>
 
-            <HStack $flex>
-                {isDisplayOptionsEditor ? <Divider /> : null}
+            <Flex flexGrow="1" align={'stretch'}>
+                {isDisplayOptionsEditor ? <Separator orientation="vertical" size={'4'} /> : null}
 
                 {isDisplayOptionsEditor ? (
-                    <VStack $flex $col={14}>
-                        <Divider />
+                    <Flex direction={'column'} flexGrow={'3'} flexShrink={'1'} flexBasis={'0'} minWidth={'0'}>
+                        <Separator orientation={'horizontal'} size={'4'} />
 
-                        <CodeEditor
-                            $flex
-                            language="javascript"
-                            value={optionsCode}
-                            onChange={setOptionsCode}
-                        />
+                        <Box asChild flexGrow={'1'}>
+                            <CodeEditor
+                                language="javascript"
+                                value={optionsCode}
+                                onChange={setOptionsCode}
+                            />
+                        </Box>
 
-                        <Divider />
-                    </VStack>
+                        <Separator orientation={'horizontal'} size={'4'} />
+                    </Flex>
                 ) : null}
 
-                <Divider />
+                <Separator orientation="vertical" size={'4'} />
 
-                <VStack $flex>
-                    <Divider />
+                <Flex flexGrow={'2'} flexShrink={'1'} flexBasis={'0'} direction={'column'} minWidth={'0'}>
+                    <Separator orientation={'horizontal'} size={'4'} />
 
-                    <CodeEditor
-                        $flex
-                        language="html"
-                        value={originalHTML}
-                        onChange={setOriginalHTML}
-                    />
-
-                    <Divider />
-
-                    <CodeEditor $flex language="html" readOnly value={transformedHTML} />
-
-                    <Divider />
-                </VStack>
-
-                <Divider />
-
-                {!isDisplayOptionsEditor ? (
-                    <VStack $flex>
-                        <Divider />
-
-                        <RichTextEditor
-                            $flex
-                            className={styles.originalRichTextPanel}
+                    <Box asChild flexGrow={'1'}>
+                        <CodeEditor
+                            language="html"
                             value={originalHTML}
                             onChange={setOriginalHTML}
                         />
+                    </Box>
 
-                        <Divider />
+                    <Separator orientation={'horizontal'} size={'4'} />
 
-                        <RichTextEditor
-                            $flex
-                            className={styles.transformedRichTextPanel}
-                            value={transformedHTML}
-                        />
+                    <Box asChild flexGrow={'1'}>
+                        <CodeEditor language="html" readOnly value={transformedHTML} />
+                    </Box>
 
-                        <Divider />
-                    </VStack>
+                    <Separator orientation={'horizontal'} size={'4'} />
+                </Flex>
+
+                <Separator orientation="vertical" size={'4'} />
+
+                {!isDisplayOptionsEditor ? (
+                    <Flex flexGrow={'2'} flexShrink={'1'} flexBasis={'0'} direction={'column'} minWidth={'0'}>
+                        <Separator orientation={'horizontal'} size={'4'} />
+
+                        <Box asChild flexGrow={'1'}>
+                            <RichTextEditor
+                                className={styles.originalRichTextPanel}
+                                value={originalHTML}
+                                onChange={setOriginalHTML}
+                            />
+                        </Box>
+
+                        <Separator orientation={'horizontal'} size={'4'} />
+
+                        <Box asChild flexGrow={'1'}>
+                            <RichTextEditor
+                                className={styles.transformedRichTextPanel}
+                                value={transformedHTML}
+                            />
+                        </Box>
+
+                        <Separator orientation={'horizontal'} size={'4'} />
+                    </Flex>
                 ) : null}
 
-                {!isDisplayOptionsEditor ? <Divider /> : null}
-            </HStack>
-        </VStack>
+                {!isDisplayOptionsEditor ? <Separator orientation={'vertical'} size={'4'} /> : null}
+            </Flex>
+        </Flex>
     )
 }

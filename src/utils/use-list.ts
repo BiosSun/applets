@@ -1,11 +1,11 @@
-import produce, { Draft } from 'immer'
+import { produce, Draft } from 'immer'
 import { Identifiable } from '@/types/identifiable'
 
 type StateSetter<T> = (newValue: T) => void
 
 export default function useList<T extends Identifiable, Key extends keyof T>([items, setItems]: [
     T[],
-    StateSetter<T[]>
+    StateSetter<T[]>,
 ]) {
     const length = items.length
 

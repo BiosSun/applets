@@ -1,4 +1,4 @@
-import React, { useRef, lazy, Suspense } from 'react'
+import { Suspense } from 'react'
 import Editor from '@monaco-editor/react'
 
 export default function FlexibleMonacoEditor({

@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { VStack } from '@nami-ui/stack'
+import { Flex } from '@radix-ui/themes'
 import styles from './index.module.scss'
 
 interface CardProps {
@@ -9,8 +9,14 @@ interface CardProps {
 
 export default function Card({ children, className, ...otherProps }: CardProps) {
     return (
-        <VStack className={clsx(styles.card, className)} spacing padding {...otherProps}>
+        <Flex
+            direction="column"
+            className={clsx(styles.card, className)}
+            p="3"
+            gap="3"
+            {...otherProps}
+        >
             {children}
-        </VStack>
+        </Flex>
     )
 }
