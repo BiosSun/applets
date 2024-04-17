@@ -42,7 +42,7 @@ dayjs.extend(dayOfYear)
 dayjs.extend(utc)
 
 createRoot(document.getElementById('root')).render(
-    <Theme accentColor="gray">
+    <Theme>
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<App />}>
