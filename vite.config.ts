@@ -17,7 +17,7 @@ const configs: {
     development: {},
     test: {},
     production: {
-        base: 'https://cdn-m.biossun.xyz/applets',
+        base: '/',
         customDistPath(root) {
             return path.join(root, 'dist', 'monacoeditorwork')
         },
