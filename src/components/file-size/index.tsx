@@ -17,11 +17,11 @@ const SIZES = [
 
 const FIRST_SIZE = SIZES[0]
 
-function findMatchSize(bytes) {
+function findMatchSize(bytes: any) {
     return SIZES.find(size => size.start <= bytes && bytes < size.end)
 }
 
-function findNextSize(bytes, size) {
+function findNextSize(bytes: any, size: any) {
     const index = SIZES.indexOf(size)
     const nextSize = SIZES[(index + 1) % SIZES.length]
     const nextValue = format(bytes, nextSize)
@@ -33,7 +33,7 @@ function findNextSize(bytes, size) {
     }
 }
 
-function format(bytes, size) {
+function format(bytes: any, size: any) {
     if (size.key === 'bytes') {
         return bytes
     } else {
@@ -41,7 +41,7 @@ function format(bytes, size) {
     }
 }
 
-export default function FileSizeText({ bytes, ...otherProps }) {
+export default function FileSizeText({ bytes, ...otherProps }: any) {
     const [size, setSize] = useState(() => findMatchSize(bytes))
     const [value, setValue] = useState(() => format(bytes, size))
 
@@ -59,7 +59,7 @@ export default function FileSizeText({ bytes, ...otherProps }) {
 
     return (
         <span onClick={switchSize} {...otherProps}>
-            {value} {size.key}
+            {value} {size?.key}
         </span>
     )
 }

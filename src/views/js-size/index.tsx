@@ -25,7 +25,7 @@ export default function JSSizeView() {
 
         uglifyWorker
             .minify(sourceCode)
-            .then((code) => {
+            .then((code: any) => {
                 setMinifiedCode(code)
                 setMinifiedError(null)
             })
@@ -81,11 +81,11 @@ export default function JSSizeView() {
     )
 }
 
-function SizeInfo({ text }) {
+function SizeInfo({ text }: any) {
     const [size, setSize] = useState({ original: 0, gzip: 0 })
 
     useEffect(() => {
-        fileSizeWorker
+        (fileSizeWorker as any)
             .size(text)
             .then(setSize)
             .catch(() => {
@@ -102,7 +102,7 @@ function SizeInfo({ text }) {
     )
 }
 
-function ParseErrorInfo({ className, error, ...otherProps }) {
+function ParseErrorInfo({ className, error, ...otherProps }: any) {
     const info = useMemo(() => {
         const message = error.message
 
