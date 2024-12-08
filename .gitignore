@@ -146,4 +146,3 @@ Temporary Items
 .env.production.local
 
 package-lock.json
-yarn.lock
